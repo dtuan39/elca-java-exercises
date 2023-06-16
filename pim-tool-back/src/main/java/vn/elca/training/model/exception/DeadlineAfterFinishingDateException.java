@@ -1,6 +1,6 @@
 /*
  * EmptyDeadlineNotAllow
- * 
+ *
  * Project: KStA ZHQUEST
  *
  * Copyright 2014 by ELCA Informatik AG
@@ -8,7 +8,7 @@
  * All rights reserved.
  *
  * This software is the confidential and proprietary information
- * of ELCA Informatik AG ("Confidential Information"). You 
+ * of ELCA Informatik AG ("Confidential Information"). You
  * shall not disclose such "Confidential Information" and shall
  * use it only in accordance with the terms of the license
  * agreement you entered into with ELCA.
@@ -20,7 +20,6 @@ import java.time.LocalDate;
 
 /**
  * @author vlp
- *
  */
 public class DeadlineAfterFinishingDateException extends Exception {
     private final LocalDate projectFinishingDate;

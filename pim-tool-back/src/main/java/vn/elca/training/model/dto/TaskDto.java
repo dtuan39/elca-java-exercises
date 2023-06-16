@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 /**
  * @author gtn
- *
  */
 public class TaskDto {
     private Long id;

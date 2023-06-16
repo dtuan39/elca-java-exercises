@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * @author gtn
- *
  */
 public interface UserService {
     User findOne(Long id);

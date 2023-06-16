@@ -1,8 +1,8 @@
 /*
  * TaskAudit
- * 
+ *
  * Project: Training
- * 
+ *
  * Copyright 2015 by ELCA
  * All rights reserved.
  *
@@ -15,18 +15,12 @@
 
 package vn.elca.training.model.entity;
 
-import java.time.LocalDate;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 /**
  * @author vlp
- *
  */
 @Entity
 public class TaskAudit {
@@ -56,15 +50,8 @@ public class TaskAudit {
     @Column(length = 1000)
     private String message;
 
-    public enum AuditType {
-        INSERT, UPDATE, DELETE;
+    public TaskAudit() {
     }
-
-    public enum Status {
-        SUCCESS, FAILED;
-    }
-
-    public TaskAudit() {}
 
     public TaskAudit(Task task, AuditType auditType, Status status, String message) {
         setProjectId(task.getProject().getId());
@@ -129,5 +116,13 @@ public class TaskAudit {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public enum AuditType {
+        INSERT, UPDATE, DELETE
+    }
+
+    public enum Status {
+        SUCCESS, FAILED
     }
 }

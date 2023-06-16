@@ -4,7 +4,6 @@ import java.util.List;
 
 /**
  * @author gtn
- *
  */
 public class UserDto {
     private Long id;

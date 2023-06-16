@@ -1,8 +1,8 @@
 /*
  * ITaskAuditService
- * 
+ *
  * Project: Training
- * 
+ *
  * Copyright 2015 by ELCA
  * All rights reserved.
  *
@@ -21,7 +21,6 @@ import vn.elca.training.model.entity.TaskAudit.Status;
 
 /**
  * @author vlp
- *
  */
 public interface AuditService {
     void saveAuditDataForTask(Task task, AuditType auditType, Status status, String message);

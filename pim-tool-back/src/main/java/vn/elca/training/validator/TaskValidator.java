@@ -1,8 +1,8 @@
 /*
  * TaskDeadlineConstraintValidator
- * 
+ *
  * Project: Training
- * 
+ *
  * Copyright 2015 by ELCA
  * All rights reserved.
  *
@@ -21,7 +21,6 @@ import vn.elca.training.model.exception.DeadlineAfterFinishingDateException;
 
 /**
  * @author gtn
- *
  */
 @Component
 public class TaskValidator {

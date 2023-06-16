@@ -14,7 +14,6 @@ import java.util.List;
 
 /**
  * @author gtn
- *
  */
 @Service
 @Transactional
@@ -46,7 +45,10 @@ public class UserServiceImpl implements UserService {
         List<Task> tasks = taskRepository.findAllById(taskIds);
         User user = findOne(username);
         user.setTasks(tasks);
-
+        //new code
+        for(Task task : tasks){
+            task.setUser(user);
+        }
         return user;
     }
 

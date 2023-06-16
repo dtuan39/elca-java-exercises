@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication;
 
 /**
  * @author vlp
- *
  */
 public class ApplicationLauncher {
     public static void main(String[] args) {

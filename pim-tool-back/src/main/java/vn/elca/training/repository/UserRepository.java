@@ -8,7 +8,6 @@ import vn.elca.training.model.entity.User;
 
 /**
  * @author gtn
- *
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredicateExecutor<User> {

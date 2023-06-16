@@ -3,23 +3,15 @@ package vn.elca.training.web;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vn.elca.training.model.dto.UserDto;
 import vn.elca.training.model.entity.User;
 import vn.elca.training.service.UserService;
-import vn.elca.training.util.ApplicationMapper;
 
 import java.util.List;
 
 /**
  * @author gtn
- *
  */
 @RestController
 @RequestMapping("/users")
@@ -56,7 +48,7 @@ public class UserController extends AbstractApplicationController {
         if (user == null) {
             throw new IllegalArgumentException("Invalid request! User not found");
         }
-
         return userService.update(user);
     }
+
 }

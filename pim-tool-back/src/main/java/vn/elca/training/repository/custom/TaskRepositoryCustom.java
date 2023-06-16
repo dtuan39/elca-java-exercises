@@ -7,7 +7,6 @@ import java.util.List;
 
 /**
  * @author gtn
- *
  */
 public interface TaskRepositoryCustom {
     List<Project> findProjectsByTaskName(String taskName);

@@ -1,14 +1,16 @@
 package vn.elca.training.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 
 /**
  * @author gtn
- *
  */
 public class ProjectDto {
     private Long id;
     private String name;
+    @JsonFormat(pattern = "d/M/yyyy")
     private LocalDate finishingDate;
 
     public Long getId() {

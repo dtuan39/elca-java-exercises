@@ -1,22 +1,13 @@
 package vn.elca.training.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * @author vlp
- *
  */
 @Entity
 public class Task implements Serializable {
@@ -37,6 +28,8 @@ public class Task implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
+    @JsonIgnore //solution for infinity loop of entity in fetching data
+    // the @JsonIgnore should be placed at children entity property ('Many' side)
     private User user;
 
     public Task(Project project, String name) {
@@ -45,7 +38,8 @@ public class Task implements Serializable {
         this.deadline = LocalDate.now();
     }
 
-    public Task() {}
+    public Task() {
+    }
 
     public Project getProject() {
         return project;

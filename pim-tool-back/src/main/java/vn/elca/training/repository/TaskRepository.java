@@ -8,7 +8,6 @@ import vn.elca.training.repository.custom.TaskRepositoryCustom;
 
 /**
  * @author vlp
- *
  */
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long>, QuerydslPredicateExecutor<Task>, TaskRepositoryCustom {

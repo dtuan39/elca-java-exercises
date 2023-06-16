@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author gtn
- *
  */
 public abstract class AbstractDummyProjectService {
-    private Log logger = LogFactory.getLog(getClass());
+    private final Log logger = LogFactory.getLog(getClass());
 
     @Value("${spring.profiles.active}")
     private String activeProfiles;
