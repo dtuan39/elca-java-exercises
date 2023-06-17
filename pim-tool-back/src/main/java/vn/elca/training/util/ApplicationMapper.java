@@ -24,7 +24,7 @@ public class ApplicationMapper {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setFinishingDate(entity.getFinishingDate());
-
+        dto.setCustomer(entity.getCustomer());
         return dto;
     }
 
