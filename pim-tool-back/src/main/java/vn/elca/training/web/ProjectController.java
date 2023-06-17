@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author gtn
- *
+ * @author thomas.dang
  */
 @RestController
 @RequestMapping("/projects")
