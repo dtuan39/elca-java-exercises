@@ -1,5 +1,7 @@
 package vn.elca.training.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import vn.elca.training.model.entity.Project;
@@ -14,8 +16,10 @@ import java.util.List;
  */
 @Service
 @Profile("!dummy | dev")
+@Primary
 public class ProjectServiceImpl implements ProjectService {
 
+    @Autowired
     private ProjectRepository projectRepository;
 
     @Override
@@ -27,4 +31,17 @@ public class ProjectServiceImpl implements ProjectService {
     public long count() {
         return projectRepository.count();
     }
+
+    @Override
+    public Project findById(long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    }
+
+    @Override
+    public Project update(Project project) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    }
+
 }

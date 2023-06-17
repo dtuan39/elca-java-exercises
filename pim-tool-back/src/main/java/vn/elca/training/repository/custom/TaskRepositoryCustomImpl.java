@@ -15,7 +15,7 @@ import java.util.List;
  *
  */
 // Rename this class so that Spring can scan and wire this component correctly
-public class RenameThisClass implements TaskRepositoryCustom {
+public class TaskRepositoryCustomImpl implements TaskRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
 
