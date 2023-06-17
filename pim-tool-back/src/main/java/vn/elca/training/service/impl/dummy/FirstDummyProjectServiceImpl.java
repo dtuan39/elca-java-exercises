@@ -1,8 +1,10 @@
 package vn.elca.training.service.impl.dummy;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import vn.elca.training.model.entity.Project;
+import vn.elca.training.repository.ProjectRepository;
 import vn.elca.training.service.ProjectService;
 
 import java.util.List;
@@ -14,6 +16,9 @@ import java.util.List;
 @Component
 @Profile("dummy")
 public class FirstDummyProjectServiceImpl extends AbstractDummyProjectService implements ProjectService {
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     @Override
     public List<Project> findAll() {
@@ -28,13 +33,11 @@ public class FirstDummyProjectServiceImpl extends AbstractDummyProjectService im
 
     @Override
     public Project findById(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return projectRepository.findById(id).orElse(null);
     }
 
     @Override
     public Project update(Project project) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        return projectRepository.save(project);
     }
 }
