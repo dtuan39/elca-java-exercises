@@ -1,0 +1,108 @@
+{
+	"info": {
+		"_postman_id": "d66fe7d2-8526-4d01-8caa-35a569369541",
+		"name": "pimtool",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22821874"
+	},
+	"item": [
+		{
+			"name": "main",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/main",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"main"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "projects/search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/projects/search?keyword=IOC",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projects",
+						"search"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "IOC"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "project/search/{id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/project/id/5",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"project",
+						"id",
+						"5"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update project",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 5,\n    \"name\": \"TRADEECO_changed\",\n    \"finishingDate\": \"08/06/2020\",\n    \"customer\": null\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/project/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"project",
+						"update"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
