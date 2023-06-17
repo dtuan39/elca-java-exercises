@@ -25,4 +25,16 @@ public class FirstDummyProjectServiceImpl extends AbstractDummyProjectService im
         printCurrentActiveProfiles();
         throw new UnsupportedOperationException("This is first dummy service");
     }
+
+    @Override
+    public Project findById(long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    }
+
+    @Override
+    public Project update(Project project) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    }
 }
