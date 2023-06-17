@@ -1,6 +1,7 @@
 package vn.elca.training.service.impl.dummy;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import vn.elca.training.model.entity.Project;
@@ -22,13 +23,14 @@ public class FirstDummyProjectServiceImpl extends AbstractDummyProjectService im
 
     @Override
     public List<Project> findAll() {
-        throw new UnsupportedOperationException("This is first dummy service");
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
 
     @Override
     public long count() {
-        printCurrentActiveProfiles();
-        throw new UnsupportedOperationException("This is first dummy service");
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'count'");
     }
 
     @Override
@@ -40,4 +42,5 @@ public class FirstDummyProjectServiceImpl extends AbstractDummyProjectService im
     public Project update(Project project) {
         return projectRepository.save(project);
     }
+
 }

@@ -1,9 +1,9 @@
 package vn.elca.training.web;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,17 +25,21 @@ import vn.elca.training.service.ProjectService;
 public class ProjectController extends AbstractApplicationController {
 
     @Autowired
+    @Qualifier("firstDummyProjectServiceImpl")
     private ProjectService projectService;
 
     @GetMapping("/id/{id}")
-    public List<ProjectDto> searchById(@PathVariable long id) {
-        return projectService.findAll()
-                .stream()
-                .filter(project -> {
-                    return project.getId() == id;
-                })
-                .map(mapper::projectToProjectDto)
-                .collect(Collectors.toList());
+    public ResponseEntity<ProjectDto> searchById(@PathVariable long id) {
+        Logger.getLogger(ProjectController.class.getName())
+                .log(Level.CONFIG, "using " + projectService.getClass().getName());
+        // Find current project by id in database
+        Project found = projectService.findById(id);
+
+        if (found == null) {
+            return ResponseEntity.notFound().build();
+        } // not found
+
+        return ResponseEntity.ok(mapper.projectToProjectDto(found));
     }
 
     @PutMapping("/update")
@@ -51,7 +55,7 @@ public class ProjectController extends AbstractApplicationController {
         found.setName(projectDto.getName());
         found.setFinishingDate(projectDto.getFinishingDate());
 
-        // try to save to database using project service
+        // try to save to database
         Project response = projectService.update(found);
 
         if (response == null) {
