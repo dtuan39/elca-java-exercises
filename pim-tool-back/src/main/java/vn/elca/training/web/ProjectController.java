@@ -2,6 +2,7 @@ package vn.elca.training.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,17 @@ public class ProjectController extends AbstractApplicationController {
                 .stream()
                 .filter(product -> product.getName().trim().toLowerCase()
                         .contains(keyword.trim().toLowerCase()))
+                .map(mapper::projectToProjectDto)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/id/{id}")
+    public List<ProjectDto> searchById(@PathVariable long id) {
+        return projectService.findAll()
+                .stream()
+                .filter(project -> {
+                    return project.getId() == id;
+                })
                 .map(mapper::projectToProjectDto)
                 .collect(Collectors.toList());
     }
