@@ -49,7 +49,7 @@ import java.util.UUID;
  *
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = {DeadlineAfterFinishingDateException.class, RuntimeException.class, Error.class})
 public class TaskServiceImpl implements TaskService {
 	private Log logger = LogFactory.getLog(getClass());
 	private static final int FETCH_LIMIT = 10;
