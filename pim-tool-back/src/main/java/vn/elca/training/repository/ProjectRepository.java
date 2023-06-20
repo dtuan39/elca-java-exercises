@@ -12,4 +12,5 @@ import vn.elca.training.model.entity.Project;
  */
 public interface ProjectRepository extends JpaRepository<Project, Long>, QuerydslPredicateExecutor<Project> {
     List<Project> findByNameContainingIgnoreCase(String keyword);
+    Project findByName(String name);
 }
