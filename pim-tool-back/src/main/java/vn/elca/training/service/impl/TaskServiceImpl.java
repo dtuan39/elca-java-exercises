@@ -16,6 +16,7 @@
 
 package vn.elca.training.service.impl;
 
+import com.querydsl.jpa.impl.JPAQuery;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Hibernate;
@@ -23,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.elca.training.model.entity.Project;
+import vn.elca.training.model.entity.QProject;
+import vn.elca.training.model.entity.QTask;
 import vn.elca.training.model.entity.Task;
 import vn.elca.training.model.entity.TaskAudit.AuditType;
 import vn.elca.training.model.entity.TaskAudit.Status;
@@ -33,6 +36,8 @@ import vn.elca.training.repository.TaskRepository;
 import vn.elca.training.service.AuditService;
 import vn.elca.training.service.TaskService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +54,8 @@ public class TaskServiceImpl implements TaskService {
 	private Log logger = LogFactory.getLog(getClass());
 	private static final int FETCH_LIMIT = 10;
 
+	@PersistenceContext
+	private EntityManager em;
 	@Autowired
 	private TaskRepository taskRepository;
 	@Autowired
@@ -76,7 +83,13 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	public List<String> listProjectNameOfRecentTasks() {
 		List<String> projectNames = new ArrayList<>(FETCH_LIMIT);
-		List<Task> tasks = taskRepository.listRecentTasks(FETCH_LIMIT);
+		List<Task> tasks = new JPAQuery<Task>(em)
+				.from(QTask.task)
+				.join(QTask.task.project, QProject.project)
+				.fetchJoin()
+				.orderBy(QTask.task.id.desc())
+				.limit(FETCH_LIMIT)
+				.fetch();
 		for (Task task : tasks) {
 			projectNames.add(task.getProject().getName());
 		}
