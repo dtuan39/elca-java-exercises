@@ -1,5 +1,6 @@
 package vn.elca.training.web;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,13 +25,11 @@ public class ProjectsController extends AbstractApplicationController {
 
     @GetMapping("/search")
     public List<ProjectDto> search(@RequestParam String keyword) {
-        if (keyword.isBlank()) {
+        if (StringUtils.isBlank(keyword)) {
             return new ArrayList<>();
         }
-        return projectService.findAll()
+        return projectService.findByKeyword(keyword)
                 .stream()
-                .filter(product -> product.getName().trim().toLowerCase()
-                        .contains(keyword.trim().toLowerCase()))
                 .map(mapper::projectToProjectDto)
                 .collect(Collectors.toList());
     }

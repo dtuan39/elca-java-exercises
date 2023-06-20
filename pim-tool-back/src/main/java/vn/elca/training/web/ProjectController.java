@@ -1,7 +1,7 @@
 package vn.elca.training.web;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import vn.elca.training.exception.ProjectNotFoundException;
+import vn.elca.training.exception.UpdateProjectException;
 import vn.elca.training.model.dto.ProjectDto;
 import vn.elca.training.model.entity.Project;
 import vn.elca.training.service.ProjectService;
@@ -23,45 +25,32 @@ import vn.elca.training.service.ProjectService;
 @RestController
 @RequestMapping("/project")
 public class ProjectController extends AbstractApplicationController {
-
     @Autowired
     @Qualifier("firstDummyProjectServiceImpl")
     private ProjectService projectService;
+    private Project response;
+    private Log logger = LogFactory.getLog(this.getClass());
 
     @GetMapping("/id/{id}")
     public ResponseEntity<ProjectDto> searchById(@PathVariable long id) {
-        Logger.getLogger(ProjectController.class.getName())
-                .log(Level.CONFIG, "using " + projectService.getClass().getName());
-        // Find current project by id in database
-        Project found = projectService.findById(id);
-
-        if (found == null) {
+        logger.info("using " + projectService.getClass().getName());
+        try {
+            response = projectService.findById(id);
+        } catch (ProjectNotFoundException exception) {
             return ResponseEntity.notFound().build();
-        } // not found
-
-        return ResponseEntity.ok(mapper.projectToProjectDto(found));
+        }
+        return ResponseEntity.ok(mapper.projectToProjectDto(response));
     }
 
     @PutMapping("/update")
     public ResponseEntity<ProjectDto> updateProject(@RequestBody ProjectDto projectDto) {
-        // Find current project by id in database
-        Project found = projectService.findById(projectDto.getId());
-
-        if (found == null) {
+        try {
+            response = projectService.update(projectDto);
+        } catch (ProjectNotFoundException e) {
             return ResponseEntity.notFound().build();
-        } // not found
-
-        // apply change
-        found.setName(projectDto.getName());
-        found.setFinishingDate(projectDto.getFinishingDate());
-
-        // try to save to database
-        Project response = projectService.update(found);
-
-        if (response == null) {
+        } catch (UpdateProjectException e){
             return ResponseEntity.badRequest().build();
-        } // update fail
-
+        }
         return ResponseEntity.ok(mapper.projectToProjectDto(response));
     }
 }

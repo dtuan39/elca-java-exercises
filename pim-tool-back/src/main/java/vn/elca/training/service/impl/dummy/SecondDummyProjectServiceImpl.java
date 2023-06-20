@@ -2,6 +2,8 @@ package vn.elca.training.service.impl.dummy;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import vn.elca.training.model.dto.ProjectDto;
 import vn.elca.training.model.entity.Project;
 import vn.elca.training.service.ProjectService;
 
@@ -33,8 +35,14 @@ public class SecondDummyProjectServiceImpl extends AbstractDummyProjectService i
     }
 
     @Override
-    public Project update(Project project) {
+    public Project update(ProjectDto project) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
+    }
+
+    @Override
+    public List<Project> findByKeyword(String keyword) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByKeyword'");
     }
 }
