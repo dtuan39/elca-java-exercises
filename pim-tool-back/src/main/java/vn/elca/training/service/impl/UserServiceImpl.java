@@ -14,7 +14,6 @@ import java.util.List;
 
 /**
  * @author gtn
- *
  */
 @Service
 @Transactional
@@ -37,8 +36,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findOne(String usename) {
-        return userRepository.findUserByUsername(usename);
+    public User findOne(String username) {
+        return userRepository.findUserByUsername(username);
     }
 
     @Override
@@ -46,7 +45,8 @@ public class UserServiceImpl implements UserService {
         List<Task> tasks = taskRepository.findAllById(taskIds);
         User user = findOne(username);
         user.setTasks(tasks);
-
+        //Because User & Task are in a bidirectional relationship, we need to set the user for each task
+        tasks.forEach(task -> task.setUser(user));
         return user;
     }
 
