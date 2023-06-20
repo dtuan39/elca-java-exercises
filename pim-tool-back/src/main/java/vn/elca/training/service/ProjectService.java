@@ -19,4 +19,6 @@ public interface ProjectService {
     long count();
 
     List<Project> findByKeyword(String keyword);
+
+    void createMaintenanceProject(long oldProjectId);
 }
