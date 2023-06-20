@@ -37,6 +37,7 @@ public class Task implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
+    @JsonIgnore
     private User user;
 
     public Task(Project project, String name) {
