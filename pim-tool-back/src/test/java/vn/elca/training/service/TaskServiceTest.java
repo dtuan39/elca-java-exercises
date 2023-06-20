@@ -33,7 +33,7 @@ import vn.elca.training.repository.TaskRepository;
 @ContextConfiguration(classes = {ApplicationWebConfig.class})
 @RunWith(value=SpringRunner.class)
 // please remove this annotation to do the Hibernate exercise
-@Ignore
+//@Ignore
 public class TaskServiceTest {
 	@PersistenceContext
 	private EntityManager em;
