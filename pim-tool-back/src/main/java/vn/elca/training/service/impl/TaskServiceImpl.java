@@ -18,6 +18,7 @@ package vn.elca.training.service.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +58,10 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public List<Project> findProjectsByTaskName(String taskName) {
-		return taskRepository.findProjectsByTaskName(taskName);
+		/*using Hibernate.Initialize() to load lazy collection*/
+		List<Project> projectsByTaskName = taskRepository.findProjectsByTaskName(taskName);
+		projectsByTaskName.forEach(project -> Hibernate.initialize(project.getTasks()));
+		return projectsByTaskName;
 	}
 
 	@Override
