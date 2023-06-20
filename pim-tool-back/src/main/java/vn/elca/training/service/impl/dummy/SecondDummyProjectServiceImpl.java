@@ -45,4 +45,10 @@ public class SecondDummyProjectServiceImpl extends AbstractDummyProjectService i
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findByKeyword'");
     }
+
+    @Override
+    public void createMaintenanceProject(long oldProjectId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'createMaintenanceProject'");
+    }
 }

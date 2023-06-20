@@ -24,7 +24,6 @@ public class FirstDummyProjectServiceImpl extends AbstractDummyProjectService im
 
     @Autowired
     private ProjectRepository projectRepository;
-    private Project response;
 
     @Override
     public List<Project> findAll() {
@@ -54,7 +53,7 @@ public class FirstDummyProjectServiceImpl extends AbstractDummyProjectService im
         found.setFinishingDate(projectDto.getFinishingDate());
 
         // Save the updated project
-        response = projectRepository.save(found);
+        Project response = projectRepository.save(found);
         if(response == null){
             throw new UpdateProjectException("Failed to update project");
         }
@@ -65,6 +64,12 @@ public class FirstDummyProjectServiceImpl extends AbstractDummyProjectService im
     public List<Project> findByKeyword(String keyword) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findByKeyword'");
+    }
+
+    @Override
+    public void createMaintenanceProject(long oldProjectId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'createMaintenanceProject'");
     }
 
 }
