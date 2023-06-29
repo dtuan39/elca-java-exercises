@@ -1,19 +1,26 @@
-INSERT INTO PROJECT (NAME, FINISHING_DATE)
+INSERT INTO EMPLOYEE (ID, VISA, FIRST_NAME, LAST_NAME, BIRTH_DATE, VERSION)
 VALUES
-    ('EFV', '2020-04-20'),
-    ('CXTRANET', '2020-04-25'),
-    ('CRYSTAL BALL', '2020-04-28'),
-    ('IOC CLIENT EXTRANET', '2020-06-07'),
-    ('TRADEECO', '2020-06-08');
+    (1, 'ABC', 'John', 'Doe', '1990-01-01', 1),
+    (2, 'DEF', 'Jane', 'Smith', '1995-05-15', 1),
+    (3, 'GHI', 'Michael', 'Johnson', '1988-12-10', 1),
+    (4, 'JKL', 'Emily', 'Brown', '1992-07-20', 1),
+    (5, 'MNO', 'David', 'Wilson', '1998-03-25', 1);
 
-INSERT INTO USER (USERNAME)
+INSERT INTO GROUP1(GROUP_LEADER_ID,VERSION)
 VALUES
-    ('USER1'),
-    ('USER2'),
-    ('USER3');
+    ('1','1'),
+    ('2','1'),
+    ('3','1'),
+    ('4','1'),
+    ('5','1');
 
-INSERT INTO TASK(NAME, DEADLINE, PROJECT_ID, USER_ID)
+INSERT INTO PROJECT (PROJECT_NUMBER, CUSTOMER, END_DATE, NAME, START_DATE, STATUS, VERSION,GROUP_ID)
 VALUES
-    ('EFV_TASK_1', '2020-03-05', 1, 1),
-    ('EFV_TASK_2', '2020-03-10', 1, null),
-    ('EFV_TASK_3', '2020-03-15', 1, null);
+    ('2','TEST','2022-06-06','TEST2','2021-06-06','1','1','1');
+
+INSERT INTO PROJECT_EMPLOYEE(PROJECT_ID, EMPLOYEE_ID)
+VALUES
+    ('1','3');
+
+
+

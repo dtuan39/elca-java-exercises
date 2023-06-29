@@ -1,49 +1,60 @@
 package vn.elca.training.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * @author vlp
- */
 @Entity
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "GroupId")
+    private Group1 group;
+
+    @OneToMany(mappedBy = "project")
+    private List<ProjectEmployee> projectEmployees = new ArrayList<>();
+
+//    @Column
+//    private int groupID;
+
+    @Column
+    private String status;
+
+    @Column
+    private LocalDate startDate;
+
     @Column(nullable = false)
     private String name;
 
     @Column
-    private LocalDate finishingDate;
+    private String PROJECT_NUMBER;
+
+    @Column
+    private LocalDate endDate;
 
     @Column
     private String customer;
 
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-    private Set<Task> tasks = new HashSet<>();
+    @Column
+    private int version;
 
     public Project() {
     }
 
-    public Project(String name, LocalDate finishingDate) {
-        this.name = name;
-        this.finishingDate = finishingDate;
-    }
-
-    public Project(Long id, String name, LocalDate finishingDate) {
+    public Project(Long id, Group1 group, String status, LocalDate startDate, String name, String PROJECT_NUMBER, LocalDate endDate, String customer, int version) {
         this.id = id;
+        this.group = group;
+        this.status = status;
+        this.startDate = startDate;
         this.name = name;
-        this.finishingDate = finishingDate;
+        this.PROJECT_NUMBER = PROJECT_NUMBER;
+        this.endDate = endDate;
+        this.customer = customer;
+        this.version = version;
     }
 
     public Long getId() {
@@ -54,6 +65,30 @@ public class Project {
         this.id = id;
     }
 
+//    public int getGroupID() {
+//        return groupID;
+//    }
+//
+//    public void setGroupID(int groupID) {
+//        this.groupID = groupID;
+//    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
     public String getName() {
         return name;
     }
@@ -62,12 +97,20 @@ public class Project {
         this.name = name;
     }
 
-    public LocalDate getFinishingDate() {
-        return finishingDate;
+    public String getPROJECT_NUMBER() {
+        return PROJECT_NUMBER;
     }
 
-    public void setFinishingDate(LocalDate finishingDate) {
-        this.finishingDate = finishingDate;
+    public void setPROJECT_NUMBER(String PROJECT_NUMBER) {
+        this.PROJECT_NUMBER = PROJECT_NUMBER;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public String getCustomer() {
@@ -78,11 +121,41 @@ public class Project {
         this.customer = customer;
     }
 
-    public Set<Task> getTasks() {
-        return tasks;
+    public int getVersion() {
+        return version;
     }
 
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
+    public void setVersion(int version) {
+        this.version = version;
     }
+
+    @Override
+    public String toString() {
+        return "Project2{" +
+                "id=" + id +
+                ", group=" + group +
+                ", status='" + status + '\'' +
+                ", startDate=" + startDate +
+                ", name='" + name + '\'' +
+                ", PROJECT_NUMBER='" + PROJECT_NUMBER + '\'' +
+                ", endDate=" + endDate +
+                ", customer='" + customer + '\'' +
+                ", version=" + version +
+                '}';
+    }
+
+    //    @Override
+//    public String toString() {
+//        return "Project2{" +
+//                "id=" + id +
+//                ", groupID=" + groupID +
+//                ", status='" + status + '\'' +
+//                ", startDate=" + startDate +
+//                ", name='" + name + '\'' +
+//                ", PROJECT_NUMBER='" + PROJECT_NUMBER + '\'' +
+//                ", endDate=" + endDate +
+//                ", customer='" + customer + '\'' +
+//                ", version=" + version +
+//                '}';
+//    }
 }
