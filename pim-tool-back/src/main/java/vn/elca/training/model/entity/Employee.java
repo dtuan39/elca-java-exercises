@@ -1,12 +1,7 @@
 package vn.elca.training.model.entity;
 
-import org.apache.tomcat.jni.Local;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,10 +10,10 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @OneToOne(mappedBy = "employee")
-    private Group1 group = new Group1();
+    private Group group = new Group();
 
-    @OneToMany(mappedBy = "employee")
-    private List<ProjectEmployee> projectEmployees = new ArrayList<>();
+    @ManyToMany(mappedBy = "projects")
+    private List<Project> projects;
     @Column
     private String visa;
 

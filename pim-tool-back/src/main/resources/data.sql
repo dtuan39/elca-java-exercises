@@ -6,7 +6,7 @@ VALUES
     (4, 'JKL', 'Emily', 'Brown', '1992-07-20', 1),
     (5, 'MNO', 'David', 'Wilson', '1998-03-25', 1);
 
-INSERT INTO GROUP1(GROUP_LEADER_ID,VERSION)
+INSERT INTO "group"(GROUP_LEADER_ID,VERSION)
 VALUES
     ('1','1'),
     ('2','1'),
@@ -20,7 +20,7 @@ VALUES
 
 INSERT INTO PROJECT_EMPLOYEE(PROJECT_ID, EMPLOYEE_ID)
 VALUES
-    ('1','3');
+    ('1','1');
 
 
 

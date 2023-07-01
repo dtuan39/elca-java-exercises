@@ -8,15 +8,20 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
-import vn.elca.training.repository.projectcontroller.ProjectController;
+import vn.elca.training.web.ProjectController;
+import vn.elca.training.service.impl.ProjectServiceImpl;
+import vn.elca.training.util.ApplicationMapper;
+import vn.elca.training.web.AbstractApplicationController;
 
 /**
  * @author gtn
- *
  */
 @SpringBootApplication(scanBasePackages = "vn.elca.training")
 @ComponentScan(basePackageClasses = {
-        ProjectController.class
+        ProjectController.class,
+        AbstractApplicationController.class,
+        ApplicationMapper.class,
+        ProjectServiceImpl.class
 })
 @PropertySource({"classpath:/application.properties", "classpath:/messages.properties"})
 public class ApplicationWebConfig extends SpringBootServletInitializer {

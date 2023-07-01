@@ -4,9 +4,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "`group`")
-public class Group1 {
+@Entity(name = "\"group\"")
+public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,7 +22,7 @@ public class Group1 {
     @Column
     private int version;
 
-    public Group1() {
+    public Group() {
     }
 
     public int getId() {
@@ -33,14 +32,6 @@ public class Group1 {
     public void setId(int id) {
         this.id = id;
     }
-
-//    public int getGroupLeaderID() {
-//        return groupLeaderID;
-//    }
-//
-//    public void setGroupLeaderID(int groupLeaderID) {
-//        this.groupLeaderID = groupLeaderID;
-//    }
 
     public int getVersion() {
         return version;
