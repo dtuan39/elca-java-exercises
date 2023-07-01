@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "`group`")
 public class Group1 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

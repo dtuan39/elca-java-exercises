@@ -7,33 +7,35 @@ import vn.elca.training.model.entity.Project;
 import vn.elca.training.model.exception.UserNotFoundException;
 
 import java.util.List;
+
 @Service
-public class ProjectRepository_Impl {
-private final ProjectRepository projectRepository;
+public class ProjectRepositoryImpl {
+    private final ProjectRepository projectRepository;
+
     @Autowired
-    public ProjectRepository_Impl(ProjectRepository projectRepository) {
+    public ProjectRepositoryImpl(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
     }
 
-    public Project addProject(Project project){
+    public Project addProject(Project project) {
         return projectRepository.save(project);
     }
 
-    public List<Project> findAllProject(){
+    public List<Project> findAllProject() {
         return projectRepository.findAll();
     }
 
-    public Project updateProject(Project project){
+    public Project updateProject(Project project) {
         return projectRepository.save(project);
     }
 
     @Transactional
-    public void deleteProjectById(Long id){
+    public void deleteProjectById(Long id) {
         projectRepository.deleteProjectById(id);
     }
 
-        public Project findProjectByid(Long id){
-        return projectRepository.findProjectById(id).orElseThrow(()-> new UserNotFoundException("User by id " + id + " was not found"));
+    public Project findProjectByid(Long id) {
+        return projectRepository.findProjectById(id).orElseThrow(() -> new UserNotFoundException("User by id " + id + " was not found"));
     }
 
 }
