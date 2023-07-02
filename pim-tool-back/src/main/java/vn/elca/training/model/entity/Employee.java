@@ -32,6 +32,6 @@ public class Employee {
     private LocalDate birthDate;
 
     @Column(name = "VERSION", nullable = false)
-    private Integer version;
+    private int version;
 }
 

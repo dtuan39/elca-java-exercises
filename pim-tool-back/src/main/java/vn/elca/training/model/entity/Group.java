@@ -23,5 +23,5 @@ public class Group {
     private Employee groupLeader;
 
     @Column(name = "VERSION", nullable = false)
-    private Integer version;
+    private int version;
 }
