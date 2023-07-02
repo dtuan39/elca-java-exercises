@@ -1,10 +1,13 @@
 package vn.elca.training.model.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author thomas.dang
@@ -23,7 +26,7 @@ public class Project {
     @JoinColumn(name = "GROUP_ID", nullable = false)
     private Group group;
 
-    @Column(name = "PROJECT_NUMBER", nullable = false)
+    @Column(name = "PROJECT_NUMBER", nullable = false, unique = true)
     private Integer projectNumber;
 
     @Column(name = "NAME", nullable = false, length = 50)
@@ -33,7 +36,8 @@ public class Project {
     private String customer;
 
     @Column(name = "STATUS", nullable = false, length = 3)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @Column(name = "START_DATE", nullable = false)
     private LocalDate startDate;
@@ -42,5 +46,21 @@ public class Project {
     private LocalDate endDate;
 
     @Column(name = "VERSION", nullable = false)
-    private Integer version;
+    private int version;
+
+    @Getter
+    @AllArgsConstructor
+    public enum Status {
+        NEW("New"),
+        PLA("Planned"),
+        INP("In progress"),
+        FIN("Finished");
+        private final String displayName;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "PROJECT_EMPLOYEE",
+            joinColumns = @JoinColumn(name = "PROJECT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "EMPLOYEE_ID"))
+    private Set<Employee> employees = new HashSet<>();
 }

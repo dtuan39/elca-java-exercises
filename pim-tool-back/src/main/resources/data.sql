@@ -45,14 +45,14 @@ VALUES
     (2, 7296, 'ORDER MANAGEMENT', 'OrderPro', 'INP', '2021-06-18', NULL, 1),
     (3, 7300, 'CUSTOMER SUPPORT', 'HelpDesk', 'PLA', '2020-11-30', NULL, 1);
 -- Insert sample data for the ProjectEmployee table
-INSERT INTO PROJECT_EMPLOYEE (ID, PROJECT_ID, EMPLOYEE_ID)
-VALUES (1, 1, 1),
-       (2, 1, 2),
-       (3, 2, 4),
-       (4, 2, 5),
-       (5, 2, 6),
-       (6, 2, 7),
-       (7, 2, 8),
-       (8, 3, 1),
-       (9, 3, 2),
-       (10, 3, 3);
+INSERT INTO PROJECT_EMPLOYEE (PROJECT_ID, EMPLOYEE_ID)
+VALUES (1, 1),
+       (1, 2),
+       (2, 4),
+       (2, 5),
+       (2, 6),
+       (2, 7),
+       (2, 8),
+       (3, 1),
+       (3, 2),
+       (3, 3);
