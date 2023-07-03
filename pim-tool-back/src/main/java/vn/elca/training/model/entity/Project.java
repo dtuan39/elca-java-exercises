@@ -1,5 +1,9 @@
 package vn.elca.training.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -15,6 +19,7 @@ public class Project {
     private Group group;
 
     @ManyToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinTable(
             name = "ProjectEmployee",
             joinColumns = @JoinColumn(name = "employeeId"),

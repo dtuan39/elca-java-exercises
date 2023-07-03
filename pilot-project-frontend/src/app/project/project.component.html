@@ -377,101 +377,166 @@
   }
 </style>
 
-<nav class="navbar fixed-top navbar-light bg-light">
-  <div class="toolbar" role="banner">
-    <img
-      width="40"
-      alt="Angular Logo"
-      src="../assets/images/logo_elca.png"
-    />
-    <span>Project Information Management </span>
-    <div class="spacer"></div>
-    <a href="#" class="language">EN</a>
-    <p style="color: #2f85fa; font-size: smaller; padding: 5px">|</p>
-    <a href="#" class="language">FR</a>
-    <a href="#" style="color: #2f85fa; font-size: smaller; margin-left: 65px">Help</a>
-    <a href="#" style="font-size: smaller; color: gray;margin: 50px">Logout</a>
-  </div>
-</nav>
-<!-- Toolbar -->
-<div>
-  <mat-sidenav-container class="border">
-    <div class="left-navbar-border"></div>
-  </mat-sidenav-container>
-  <mat-sidenav-container>
-    <mat-sidenav-content>
-      <div class="left-navbar">
-        <a href="#" class="new">Projects list</a>
-        <a href="#" class="new">New</a>
-        <a href="/project">Project</a>
-        <a href="#">Customer</a>
-        <a href="#">Supplier</a>
-      </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</div>
-<!-- Right Side Toolbar -->
-
-<!--<div class="content" role="main">-->
-<!--  <form #createproject="ngForm" (ngSubmit)="onAddProject(createproject)" style="display: flex">-->
-<!--    <table>-->
-<!--      <tr>-->
-<!--        <td><label>Project Number</label></td>-->
-<!--        <td><input required type="text" name="projectNumber" id="projectNumber" ngModel></td>-->
-<!--        <td><span></span></td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><label>Project name</label></td>-->
-<!--        <td><input required type="text" name="name" id="name" ngModel></td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><label>Customer</label></td>-->
-<!--        <td><input required type="text" name="customer" id="customer" ngModel></td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><label>Group</label></td>-->
-<!--        <td>-->
-<!--          <input required type="text" name="groupId" id="groupId" ngModel>-->
-<!--          <input hidden type="text" name="id" id="id" value="1" ngModel>-->
-<!--          <input hidden type="text" name="version" id="version" value="1" ngModel>-->
-<!--        </td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><label>Members</label></td>-->
-<!--        <td><input type="text" name="Member" id="Member" ngModel></td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><label>Status</label></td>-->
-<!--        <td>-->
-<!--          <select required name="status" id="status" ngModel>-->
-<!--            <option value="New" selected>New</option>-->
-<!--            <option value="Finished">Finished</option>-->
-<!--            <option value="In progress">In progress</option>-->
-<!--            <option value="Planned">Planned</option>-->
-<!--          </select>-->
-<!--          &lt;!&ndash;        <input required type="text" name="status" id="status" ngModel>&ndash;&gt;-->
-<!--        </td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><label>Start date</label></td>-->
-<!--        <td><input required type="date" name="startDate" ngModel id="startDate"></td>-->
-<!--        <td><label style="margin-left: 100px;">End date</label></td>-->
-<!--        <td><input type="date" name="endDate" id="endDate" ngModel></td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <div class="spacer"></div>-->
-<!--        <td>-->
-<!--          <button type="reset" class="btn btn-light"-->
-<!--                  style="background-color: #b9b9b9; height: 35px; text-align: center; font-family: 'Segoe UI Semibold'; color: black">Cancel-->
-<!--          </button>-->
-<!--        </td>-->
-<!--        <td>-->
-<!--          <button [disabled]="createproject.invalid" type="submit" class="btn btn-primary"-->
-<!--                  style="background-color: #2f85fa;margin-left: 50px; height: 35px; text-align: center; font-family: 'Segoe UI Semibold'">Create Project-->
-<!--          </button>-->
-<!--        </td>-->
-<!--      </tr>-->
-<!--    </table>-->
-<!--  </form>-->
-  <router-outlet></router-outlet>
+<!--<nav class="navbar fixed-top navbar-light bg-light">-->
+<!--  <div class="toolbar" role="banner">-->
+<!--    <img-->
+<!--      width="40"-->
+<!--      alt="Angular Logo"-->
+<!--      src="../assets/images/logo_elca.png"-->
+<!--    />-->
+<!--    <span>Project Information Management </span>-->
+<!--    <div class="spacer"></div>-->
+<!--    <a href="#" class="language">EN</a>-->
+<!--    <p style="color: #2f85fa; font-size: smaller; padding: 5px">|</p>-->
+<!--    <a href="#" class="language">FR</a>-->
+<!--    <a href="#" style="color: #2f85fa; font-size: smaller; margin-left: 65px">Help</a>-->
+<!--    <a href="#" style="font-size: smaller; color: gray;margin: 50px">Logout</a>-->
+<!--  </div>-->
+<!--</nav>-->
+<!--&lt;!&ndash; Toolbar &ndash;&gt;-->
+<!--<div>-->
+<!--  <mat-sidenav-container class="border">-->
+<!--    <div class="left-navbar-border"></div>-->
+<!--  </mat-sidenav-container>-->
+<!--  <mat-sidenav-container>-->
+<!--    <mat-sidenav-content>-->
+<!--      <div class="left-navbar">-->
+<!--        <a href="#" class="new">Projects list</a>-->
+<!--        <a href="#" class="new">New</a>-->
+<!--        <a href="#">Project</a>-->
+<!--        <a href="#">Customer</a>-->
+<!--        <a href="#">Supplier</a>-->
+<!--      </div>-->
+<!--    </mat-sidenav-content>-->
+<!--  </mat-sidenav-container>-->
 <!--</div>-->
+<!--&lt;!&ndash; Right Side Toolbar &ndash;&gt;-->
+
+<div class="content" role="main">
+  <form [formGroup]="createproject" (ngSubmit)="onSubmit()" style="display: flex">
+    <table>
+      <tr>
+        <td><label>Project Number</label></td>
+        <td><input class="form-control" required type="text" id="projectNumber"
+                   formControlName="projectNumber"
+                   [ngClass]="{'is-invalid': createproject.controls.projectNumber.touched && createproject.controls.projectNumber.invalid}">
+        </td>
+        <td>
+          <span></span>
+        </td>
+        <td>
+          <span class="text-danger" style="font-family: 'Segoe UI'"
+                *ngIf="createproject.controls.projectNumber.touched && createproject.controls.projectNumber.invalid">
+            Project Number cannot be empty
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td><label>Project name</label></td>
+        <td><input class="form-control" required type="text" id="name" formControlName="name"
+                   [ngClass]="{'is-invalid': createproject.controls.name.touched && createproject.controls.name.invalid}">
+        </td>
+        <td>
+          <span></span>
+        </td>
+        <td>
+          <span class="text-danger" style="font-family: 'Segoe UI'"
+                *ngIf="createproject.controls.name.touched && createproject.controls.name.invalid">
+            Name cannot be empty
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td><label>Customer</label></td>
+        <td><input class="form-control" required type="text" id="customer" formControlName="customer"
+                   [ngClass]="{'is-invalid': createproject.controls.customer.touched && createproject.controls.customer.invalid}">
+        </td>
+        <td>
+          <span></span>
+        </td>
+        <td>
+          <span class="text-danger" style="font-family: 'Segoe UI'"
+                *ngIf="createproject.controls.customer.touched && createproject.controls.customer.invalid">
+            Customer cannot be empty
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td><label>Group</label></td>
+        <td>
+          <input class="form-control" required type="text" id="groupId" formControlName="groupId"
+                 [ngClass]="{'is-invalid': createproject.controls.groupId.touched && createproject.controls.groupId.invalid}">
+          <input class="form-control" hidden type="text" name="id" id="id" value="1">
+          <input class="form-control" hidden type="text" name="version" id="version" value="1" formControlName="version">
+        </td>
+        <td>
+          <span></span>
+        </td>
+        <td>
+          <p class="text-danger" style="font-family: 'Segoe UI'"
+             *ngIf="createproject.controls.groupId.touched && createproject.controls.groupId.invalid">
+            Group cannot be empty
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td><label>Members</label></td>
+        <td><input class="form-control" type="text" name="Member" id="Member"></td>
+      </tr>
+      <tr>
+        <td><label>Status</label></td>
+        <td>
+          <select required id="status" formControlName="status"
+                  [ngClass]="{'is-invalid': createproject.controls.status.touched && createproject.controls.status.invalid}">
+            <option value="New" selected>NEW</option>
+            <option value="Finished">FIN</option>
+            <option value="In progress">INP</option>
+            <option value="Planned">PLA</option>
+          </select>
+
+          <!--        <input required type="text" name="status" id="status" ngModel>-->
+        </td>
+        <td><span></span></td>
+        <td>
+          <span class="text-danger" style="font-family: 'Segoe UI'"
+                            *ngIf="createproject.controls.status.touched && createproject.controls.status.invalid">
+            Status cannot be empty
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td><label>Start date</label></td>
+        <td><input class="form-control" required type="date" formControlName="startDate" id="startDate"
+                   [ngClass]="{'is-invalid': createproject.controls.startDate.touched && createproject.controls.startDate.invalid}">
+        </td>
+        <td>
+          <span></span>
+        </td>
+        <td>
+          <span class="text-danger" style="font-family: 'Segoe UI'"
+                *ngIf="createproject.controls.startDate.touched && createproject.controls.startDate.invalid">
+            Start date cannot be empty
+          </span>
+        </td>
+        <td><label style="margin-left: 100px;">End date</label></td>
+        <td><input class="form-control" type="date" id="endDate" name="endDate"></td>
+      </tr>
+      <tr>
+        <div class="spacer">
+        </div>
+        <td>
+          <button type="reset" class="btn btn-light"
+                  style="background-color: #b9b9b9; height: 35px;width: 60%; font-family: 'Segoe UI Semibold'; color: black">
+            Cancel
+          </button>
+        </td>
+        <td>
+          <button [disabled]="createproject.invalid" is type="submit" class="btn btn-primary"
+                  style="background-color: #2f85fa; height: 35px; width: 150%; font-family: 'Segoe UI Semibold'">
+            Create Project
+          </button>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>

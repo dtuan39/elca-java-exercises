@@ -1,17 +1,28 @@
 package vn.elca.training.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.elca.training.model.entity.Project;
+import vn.elca.training.model.entity.QProject;
 import vn.elca.training.model.exception.UserNotFoundException;
 import vn.elca.training.service.ProjectService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
     private ProjectRepository projectRepository;
+
+    public ProjectServiceImpl(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
+    }
+
+    @PersistenceContext
+    private EntityManager em;
+
 
     @Override
     public String welcome() {
@@ -25,7 +36,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Project> findAllProject() {
-        return projectRepository.findAll();
+        return new JPAQuery<Project>(em)
+                .from(QProject.project)
+                .fetch();
     }
 
     @Override
