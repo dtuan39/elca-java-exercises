@@ -46,6 +46,7 @@ public class Project {
     private LocalDate endDate;
 
     @Column(name = "VERSION", nullable = false)
+    @Version
     private int version;
 
     @Getter
@@ -56,6 +57,15 @@ public class Project {
         INP("In progress"),
         FIN("Finished");
         private final String displayName;
+
+        public static boolean contains(String status) {
+            for (Status s : Status.values()) {
+                if (s.name().equals(status)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     @ManyToMany
