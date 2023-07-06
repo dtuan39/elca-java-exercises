@@ -18,7 +18,11 @@ public interface ProjectService {
     @Transactional
     void deleteProjectById(Long id);
 
-    Project findProjectByid(Long id);
+    List<Project> findProjectByProjectNumber(int id);
+
+    List<Project> findProjectByAny(String value);
+
+    boolean checkProjectNumber(int projectNumber);
 }
 
 

@@ -4,6 +4,15 @@
   "newProjectRoot": "projects",
   "projects": {
     "pilot-project-frontend": {
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "fr": {
+            "translation": "src/locale/messages.fr.xlf",
+            "baseHref": "/fr"
+          }
+        }
+      },
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,6 +22,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": [
+              "fr"
+            ],
             "outputPath": "dist/pilot-project-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",

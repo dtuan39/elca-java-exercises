@@ -1,0 +1,71 @@
+<div style="">
+  TEST
+</div>
+<div class="content" role="main">
+  <h2>{{ title }}</h2>
+  <form>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <input #search type="text" name="search" style="width: 150%; height: 82%; float: left"
+                 placeholder="Project number, name, customer name" class="form-control" id="search"
+                 aria-describedby="emailHelp">
+        </div>
+        <div class="col">
+          <select #select class="form-select form-select-sm" aria-label=".form-select-sm example" style="float: right">
+            <option>Project status</option>
+            <option value="New" i18n>NEW</option>
+            <option value="Finished" i18n>FIN</option>
+            <option value="In progress" i18n>INP</option>
+            <option value="Planned" i18n>PLA</option>
+          </select>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-primary" (click)="onSearch(search.value, select.value)">Search Project
+          </button>
+        </div>
+        <div class="col">
+          <button type="reset" style="text-decoration: none" class="btn btn-link">Reset Search</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <table class="table">
+    <thead style="height: 32px">
+    <tr>
+      <th></th>
+      <th scope="col">Number</th>
+      <th scope="col">Name</th>
+      <th scope="col">Status</th>
+      <th scope="col">Customer</th>
+      <th scope="col">Start Date</th>
+      <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let project of projects">
+      <td>
+        <div class="form-check">
+          <input style="width: 15px; height: 15px" class="form-check-input" type="checkbox"
+                 value="{{project.projectNumber}}" id="flexCheckDefault">
+        </div>
+      </td>
+      <td>{{project.projectNumber}}</td>
+      <td>{{project.name}}</td>
+      <td>{{project.status}}</td>
+      <td>{{project.customer}}</td>
+      <td>{{project.startDate}}</td>
+      <td *ngIf="project.status==='New'">
+        <a href="#">
+          <svg style="color: red" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+               class="bi bi-trash3" viewBox="0 0 16 16">
+            <path
+              d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+          </svg>
+          <span>
+              </span></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

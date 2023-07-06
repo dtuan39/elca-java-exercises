@@ -3,6 +3,8 @@ import {Projects} from "./project/projects";
 import {AppService} from "./app.service";
 import {FormGroup, NgForm} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";
+import {Title} from "@angular/platform-browser";
+import {$localize} from "@angular/localize/init";
 
 @Component({
   selector: 'app-root',
@@ -21,8 +23,9 @@ export class AppComponent implements OnInit {
   reactiveForm: FormGroup;
   public projects: Projects[];
 
-  constructor(private projectsService: AppService) {
+  constructor(private projectsService: AppService, private titleService: Title) {
     this.projects = [];
+    // this.titleService.setTitle($localize(this.title));
   }
 
   protected readonly onclick = onclick;

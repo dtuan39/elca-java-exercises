@@ -20,4 +20,12 @@ export class AppService {
   public addProjects(projects: Projects): Observable<Projects> {
     return this.http.post<Projects>(`${this.apiServerUrl}/projects/add`, projects);
   }
+
+  public findProject(projectNumber: number): Observable<Projects[]>{
+    return this.http.get<Projects[]>(`${this.apiServerUrl}/projects/find/${projectNumber}`);
+  }
+
+  public searchProject(value: String): Observable<Projects[]>{
+    return this.http.get<Projects[]>(`${this.apiServerUrl}/projects/search/${value}`);
+  }
 }

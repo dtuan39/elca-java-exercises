@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.elca.training.model.entity.Project;
 import vn.elca.training.service.ProjectService;
-import vn.elca.training.service.impl.ProjectServiceImpl;
-import vn.elca.training.web.AbstractApplicationController;
 
 import java.util.List;
 
@@ -36,9 +34,9 @@ public class ProjectController extends AbstractApplicationController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<Project> getProjectByid(@PathVariable("id") Long id) {
-        Project projects = projectService.findProjectByid(id);
+    @GetMapping("/find/{projectNumber}")
+    public ResponseEntity <List<Project>> getProjectByProjectNumber(@PathVariable("projectNumber") int projectNumber) {
+        List <Project> projects = projectService.findProjectByProjectNumber(projectNumber);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
@@ -58,5 +56,11 @@ public class ProjectController extends AbstractApplicationController {
     public ResponseEntity<?> deleteProject(@PathVariable("id") Long id) {
         projectService.deleteProjectById(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/search/{value}")
+    public ResponseEntity <List<Project>> searchPage(@PathVariable("value") String value){
+        List<Project> projects = projectService.findProjectByAny(value);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 }

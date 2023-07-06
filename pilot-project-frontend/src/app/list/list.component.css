@@ -361,13 +361,31 @@ label {
   color: #666666;
 }
 
-input, select {
-  width: 120%;
-  height: 30px;
-  margin: 38px;
-}
+/*input, select {*/
+/*  width: 120%;*/
+/*  height: 30px;*/
+/*  margin: 38px;*/
+/*}*/
 
 span.error{
   color: red;
   margin: 10px;
+}
+
+div.container{
+  margin: 20px 10px 30px 10px;
+}
+
+div.col{
+margin: 0 30px 0 30px;
+}
+
+button{
+  font-family: "Segoe UI Semibold";
+}
+
+td{
+  font-size: 14px;
+  font-family: "Segoe UI Semibold";
+  color: #666666;
 }
