@@ -19,7 +19,7 @@ public class Employee {
     @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(name = "VISA", nullable = false, length = 3)
+    @Column(name = "VISA", nullable = false, length = 3, unique = true)
     private String visa;
 
     @Column(name = "FIRST_NAME", nullable = false, length = 50)
