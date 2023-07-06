@@ -58,5 +58,5 @@ target
 /node_modules
 
 # Miscellaneous
-/.angular/cache
+/pim-tool-front/.angular/cache
 .sass-cache/
