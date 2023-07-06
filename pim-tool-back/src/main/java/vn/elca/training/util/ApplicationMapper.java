@@ -1,13 +1,13 @@
 package vn.elca.training.util;
 
 import org.springframework.stereotype.Component;
+import vn.elca.training.model.dto.GroupDto;
 import vn.elca.training.model.dto.ProjectDto;
-import vn.elca.training.model.dto.TaskDto;
-import vn.elca.training.model.dto.UserDto;
+import vn.elca.training.model.entity.Employee;
+import vn.elca.training.model.entity.Group;
 import vn.elca.training.model.entity.Project;
-import vn.elca.training.model.entity.Task;
-import vn.elca.training.model.entity.User;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -22,30 +22,39 @@ public class ApplicationMapper {
     public ProjectDto projectToProjectDto(Project entity) {
         ProjectDto dto = new ProjectDto();
         dto.setId(entity.getId());
+        dto.setProjectNumber(entity.getProjectNumber());
         dto.setName(entity.getName());
-        dto.setFinishingDate(entity.getFinishingDate());
         dto.setCustomer(entity.getCustomer());
+        dto.setGroupId(entity.getGroup().getId());//lazy loading
+        dto.setStatus(entity.getStatus().toString());
+        dto.setStartDate(entity.getStartDate());
+        dto.setEndDate(entity.getEndDate());
+        //set string members split by , by visa
+        dto.setMembers(entity.getEmployees().stream().map(Employee::getVisa).collect(Collectors.joining(",")));
+        dto.setVersion(entity.getVersion());
         return dto;
     }
 
-    public TaskDto taskToTaskDto(Task task) {
-        TaskDto dto = new TaskDto();
-        dto.setId(task.getId());
-        dto.setTaskName(task.getName());
-        dto.setDeadline(task.getDeadline());
-        dto.setProjectName(task.getProject() != null
-                ? task.getProject().getName()
-                : null);
-
-        return dto;
+    public Project projectDtoToProject(ProjectDto projectDto) {
+        Project project = new Project();
+        project.setProjectNumber(projectDto.getProjectNumber());
+        project.setName(projectDto.getName());
+        project.setCustomer(projectDto.getCustomer());
+        project.setStatus(Project.Status.valueOf(projectDto.getStatus()));
+        project.setStartDate(projectDto.getStartDate());
+        project.setEndDate(projectDto.getEndDate());
+        //Entity needn't version because it is auto generated
+        return project;
     }
 
-    public UserDto userToUserDto(User user) {
-        UserDto dto = new UserDto();
-        dto.setId(user.getId());
-        dto.setUsername(user.getUsername());
-        dto.setTasks(user.getTasks().stream().map(this::taskToTaskDto).collect(Collectors.toList()));
+    public GroupDto groupToGroupDto(Group group) {
+        GroupDto groupDto = new GroupDto();
+        groupDto.setId(group.getId());
+        groupDto.setGroupLeaderVisa(group.getGroupLeader().getVisa());
+        return groupDto;
+    }
 
-        return dto;
+    public List<ProjectDto> projectToProjectDto(List<Project> entities) {
+        return entities.stream().map(this::projectToProjectDto).collect(Collectors.toList());
     }
 }
