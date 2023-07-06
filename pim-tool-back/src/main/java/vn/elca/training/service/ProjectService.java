@@ -2,23 +2,32 @@ package vn.elca.training.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import vn.elca.training.model.dto.ProjectDto;
-import vn.elca.training.model.entity.Project;
+import vn.elca.training.model.exception.ProjectNotInNewStatusException;
+import vn.elca.training.model.exception.ProjectNumberAlreadyExistsException;
+import vn.elca.training.model.exception.StartDateAfterEndDateException;
 
 /**
  * @author vlp
- *
  */
-public interface ProjectService {
-    List<Project> findAll();
+public interface
+ProjectService {
+    ProjectDto create(ProjectDto projectDto) throws StartDateAfterEndDateException, ProjectNumberAlreadyExistsException;
 
-    Project findById(long id);
+    ProjectDto update(ProjectDto project) throws StartDateAfterEndDateException;
 
-    Project update(ProjectDto project);
-    
+    ProjectDto findById(long id);
+
+    boolean delete(long id);
+
+    ProjectDto findProjectByNumber(Integer number);
+
+    void deleteByProjectNumber(Integer projectNumber) throws ProjectNotInNewStatusException;
+
     long count();
 
-    List<Project> findByKeyword(String keyword);
+    Page<ProjectDto> findByKeyword(String keyword, String status, int page, int limit);
 
-    void createMaintenanceProject(long oldProjectId);
+    Page<ProjectDto> findAllOrderByProjectNumber(int page, int limit);
 }
