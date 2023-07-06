@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Data
 @RequiredArgsConstructor
 public class ProjectDto implements Serializable {
+    private Long id;
     @JsonProperty("number")
     private Integer projectNumber;
     private String name;
