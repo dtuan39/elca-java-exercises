@@ -1,88 +1,76 @@
 package vn.elca.training.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author vlp
+ * @author thomas.dang
  */
 @Entity
+@Getter
+@Setter
+@Table(name = "PROJECT")
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GROUP_ID", nullable = false)
+    private Group group;
+
+    @Column(name = "PROJECT_NUMBER", nullable = false, unique = true)
+    private Integer projectNumber;
+
+    @Column(name = "NAME", nullable = false, length = 50)
     private String name;
 
-    @Column
-    private LocalDate finishingDate;
-
-    @Column
+    @Column(name = "CUSTOMER", nullable = false, length = 50)
     private String customer;
 
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-    private Set<Task> tasks = new HashSet<>();
+    @Column(name = "STATUS", nullable = false, length = 3)
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
-    public Project() {
+    @Column(name = "START_DATE", nullable = false)
+    private LocalDate startDate;
+
+    @Column(name = "END_DATE")
+    private LocalDate endDate;
+
+    @Column(name = "VERSION", nullable = false)
+    @Version
+    private int version;
+
+    @Getter
+    @AllArgsConstructor
+    public enum Status {
+        NEW("New"),
+        PLA("Planned"),
+        INP("In progress"),
+        FIN("Finished");
+        private final String displayName;
+
+        public static boolean contains(String status) {
+            for (Status s : Status.values()) {
+                if (s.name().equals(status)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
-    public Project(String name, LocalDate finishingDate) {
-        this.name = name;
-        this.finishingDate = finishingDate;
-    }
-
-    public Project(Long id, String name, LocalDate finishingDate) {
-        this.id = id;
-        this.name = name;
-        this.finishingDate = finishingDate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getFinishingDate() {
-        return finishingDate;
-    }
-
-    public void setFinishingDate(LocalDate finishingDate) {
-        this.finishingDate = finishingDate;
-    }
-
-    public String getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(String customer) {
-        this.customer = customer;
-    }
-
-    public Set<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
-    }
+    @ManyToMany
+    @JoinTable(name = "PROJECT_EMPLOYEE",
+            joinColumns = @JoinColumn(name = "PROJECT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "EMPLOYEE_ID"))
+    private Set<Employee> employees = new HashSet<>();
 }

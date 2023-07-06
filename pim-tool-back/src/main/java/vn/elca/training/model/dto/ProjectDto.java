@@ -1,37 +1,27 @@
 package vn.elca.training.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * @author gtn
- *
+ * DTO for {@link vn.elca.training.model.entity.Project}
  */
-public class ProjectDto {
+@Data
+@RequiredArgsConstructor
+public class ProjectDto implements Serializable {
     private Long id;
+    @JsonProperty("number")
+    private Integer projectNumber;
     private String name;
-    private LocalDate finishingDate;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getFinishingDate() {
-        return finishingDate;
-    }
-
-    public void setFinishingDate(LocalDate finishingDate) {
-        this.finishingDate = finishingDate;
-    }
+    private String customer;
+    private Long groupId;
+    private String members;
+    private String status;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private int version;
 }

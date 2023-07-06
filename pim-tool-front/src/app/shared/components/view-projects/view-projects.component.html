@@ -1,0 +1,144 @@
+<div class="p-3">
+  <div class="row gap-3">
+    <div class="col">
+      <div class="mb-3 row">
+        <input
+          (keyup.enter)="searchProjects()"
+          [(ngModel)]="keyword"
+          class="form-control col"
+          id="search"
+          placeholder="{{this.translate.instant('search-placeholder')}}"
+          type="email"
+        />
+        <div class="col">
+          <div class="dropdown w-100">
+            <div class="d-inline-block w-100" ngbDropdown>
+              <button
+                class="btn border-light-subtle w-100 d-flex justify-content-center align-items-center"
+                id="status"
+                ngbDropdownToggle
+                type="button"
+              >
+                {{ translate.instant(selectedStatus) }}
+                <span style="flex: 1"></span>
+              </button>
+              <div aria-labelledby="status" ngbDropdownMenu>
+                <button (click)="selectStatus($event, 'NEW')" ngbDropdownItem>{{translate.instant("NEW")}}</button>
+                <button (click)="selectStatus($event, 'PLA')" ngbDropdownItem>{{translate.instant("PLA")}}</button>
+                <button (click)="selectStatus($event, 'INP')"
+                        ngbDropdownItem>{{translate.instant("INP")}}</button>
+                <button (click)="selectStatus($event, 'FIN')" ngbDropdownItem>{{translate.instant("FIN")}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row gap-3">
+        <button (click)="searchProjects()"
+                class="col btn btn-primary fw-medium">{{this.translate.instant('search')}}
+        </button>
+        <button (click)="resetSearch()"
+                class="col btn btn-light text-primary fw-medium">{{this.translate.instant('reset')}}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <table class="table border">
+    <thead>
+    <tr>
+      <th class="border" scope="col"></th>
+      <th class="border" scope="col">{{translate.instant('Number')}}</th>
+      <th class="border" scope="col">{{translate.instant('Name')}}</th>
+      <th class="border" scope="col">{{translate.instant('Status')}}</th>
+      <th class="border" scope="col">{{translate.instant('Customer')}}</th>
+      <th class="border" scope="col">{{translate.instant('Start date')}}</th>
+      <th class="border" scope="col">{{translate.instant('Delete')}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let project of tableData; let last = last">
+      <th
+        [ngClass]="{'border border-top-0 border-bottom-0': !last}"
+        class="border-start border-end text-center"
+        scope="row"
+      >
+        <input [disabled]="project.status !== Status.NEW" id="" name="checkbox" type="checkbox"
+               [checked]="isSelectedProject(project.number)"
+               (change)="toggleSelectedProject(project.number)"/>
+      </th>
+      <td (click)="navigateToEditPage(project)"
+          [ngClass]="{
+            'border border-top-0 border-bottom-0': !last,
+            'pointer-cursor': true,
+            'text-decoration-underline': true
+         }" class="border-start border-end text-end"
+          >
+        {{ project.number }}
+      </td>
+      <td [ngClass]="{'border border-top-0 border-bottom-0': !last}" class="border-start border-end">
+        {{ project.name }}
+      </td>
+      <td [ngClass]="{'border border-top-0 border-bottom-0': !last}" class="border-start border-end">
+        {{ translate.instant(project.status) }}
+      </td>
+      <td [ngClass]="{'border border-top-0 border-bottom-0': !last}" class="border-start border-end">
+        {{ project.customer }}
+      </td>
+      <td [ngClass]="{'border border-top-0 border-bottom-0': !last}" class="border-start border-end">
+        {{ this.convertDate(project.startDate) }}
+      </td>
+      <td
+        [ngClass]="{'border border-top-0 border-bottom-0': !last}"
+        class="border-start border-end text-center"
+      >
+        <svg
+          (click)="deleteProject(project.number, confirm(this.translate.instant('delete-confirm')))"
+          *ngIf="project.status === Status.NEW"
+          class="bi bi-trash3"
+          fill="#D2492A"
+          height="16"
+          style="cursor: pointer"
+          viewBox="0 0 16 16"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"
+          />
+        </svg>
+      </td>
+    </tr>
+    <tr *ngIf="this.getSelectedProjectSize() >0">
+      <th colspan="4" style="color: #0b5dd7; font-weight: normal;">
+        {{translate.instant('items selected', {count: this.getSelectedProjectSize()})}}
+      </th>
+      <th
+        (click)="deleteSelectedProjects(confirm(this.translate.instant('delete-selected',
+                                  {count: this.getSelectedProjectSize()}).toString()))"
+        [ngClass]="{'pointer-cursor': true}" class="text-end"
+        colspan="3" style="color: #D2492A; font-weight: normal;">
+        {{translate.instant('delete selected items')}}
+        <svg
+          class="bi bi-trash3"
+          fill="#D2492A"
+          height="16"
+          style="cursor: pointer"
+          viewBox="0 0 16 16"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"
+          />
+        </svg>
+      </th>
+    </tr>
+    </tbody>
+  </table>
+  <ngb-pagination [(page)]="page" [collectionSize]=collectionSize [pageSize]="pageSize" (pageChange)="onPageChange(page)"
+                  class="d-flex justify-content-end"></ngb-pagination>
+
+</div>

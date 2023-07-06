@@ -1,0 +1,14 @@
+.dialog-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px; /* Adjust the desired spacing between buttons */
+}
+
+.delete-button {
+  /* Your existing styles for the button */
+
+  /* Add the following styles to emphasize the button */
+  font-weight: bold;
+  color: #D2492A;
+}
+
