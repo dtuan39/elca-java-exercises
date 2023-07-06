@@ -53,3 +53,10 @@ target
 *.spec.ts
 .vscode/settings.json
 /logs/application.log
+
+# Node
+/node_modules
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/

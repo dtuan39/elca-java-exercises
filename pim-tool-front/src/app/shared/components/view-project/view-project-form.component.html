@@ -1,0 +1,206 @@
+<div class="p-3">
+  <ngb-alert
+    #selfClosingAlert
+    (closed)="successMessage = ''"
+    *ngIf="successMessage"
+    type="danger"
+  >{{ successMessage }}
+  </ngb-alert>
+
+  <div class="card border-0">
+    <div class="card-header bg-transparent border-0"><h5>{{ translate.instant(cardHeaderText) }}</h5></div>
+    <div class="card-body">
+      <form class="row">
+        <div class="mb-3 col-4">
+          <!-- Project number -->
+          <label class="form-label" for="projectNumber">
+            {{translate.instant('Project number')}}
+            <span class="text-danger">*</span></label>
+          <input
+            [disabled]="this.project!=null"
+            aria-describedby="projectNumberHelper"
+            class="form-control"
+            id="projectNumber"
+            required
+            type="text"
+            value="{{project?.number}}"
+          />
+          <div
+            *ngIf="projectNumberError != ''"
+            class="form-text"
+            id="projectNumberHelper"
+          >
+            {{ projectNumberError }}
+          </div>
+        </div>
+
+        <!-- Project name -->
+        <div class="mb-3">
+          <label class="form-label" for="projectName"
+          >{{translate.instant('Project name')}}<span class="text-danger">*</span></label
+          >
+          <input
+            aria-describedby="projectNameHelper"
+            class="form-control"
+            id="projectName"
+            required
+            type="text"
+            value="{{project?.name}}"
+          />
+          <div
+            *ngIf="projectNameError != ''"
+            class="form-text"
+            id="projectNameHelper"
+          >
+            project name error helper.
+          </div>
+        </div>
+
+        <!-- Customer -->
+        <div class="mb-3">
+          <label class="form-label" for="customer"
+          >{{translate.instant('Customer')}}<span class="text-danger">*</span></label
+          >
+          <input
+            aria-describedby="customerHelper"
+            class="form-control"
+            id="customer"
+            required
+            type="text"
+            value="{{project?.customer}}"
+          />
+          <div
+            *ngIf="customerError != ''"
+            class="form-text"
+            id="customerHelper"
+          >
+            Customer error helper.
+          </div>
+        </div>
+
+        <!-- Group -->
+        <div class="mb-3 col-4">
+          <label class="form-label" for="group"
+          >{{translate.instant('Group')}}<span class="text-danger">*</span></label
+          >
+          <div class="dropdown w-100">
+            <div class="d-inline-block w-100" ngbDropdown>
+              <button
+                class="btn border-light-subtle w-100 d-flex justify-content-center align-items-center"
+                id="group"
+                ngbDropdownToggle
+                type="button"
+              >
+                {{ selectedGroup == 0
+                ? translate.instant('New')
+                : this.translate.instant("Group") + " " + selectedGroup
+                }}<!--New/Group 1 (ABC) for example-->
+                <span style="flex: 1"></span>
+              </button>
+              <div aria-labelledby="group" ngbDropdownMenu>
+                <button (click)="selectGroup($event, group.id)" *ngFor="let group of groups"
+                        ngbDropdownItem>{{translate.instant("Group") + " " + group.id}} ({{group.groupLeaderVisa}})</button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="groupError != ''" class="form-text" id="groupHelper">
+            Group error helper.
+          </div>
+        </div>
+
+        <!-- Member -->
+        <div class="mb-3">
+          <label class="form-label" for="members">{{translate.instant('Members')}}</label>
+          <input
+            aria-describedby="membersHelper"
+            class="form-control"
+            id="members"
+            type="text"
+            value="{{project?.members}}"
+          />
+          <div *ngIf="membersError != ''" class="form-text" id="membersHelper">
+            Members error helper.
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="mb-3 col-4">
+          <label class="form-label" for="status"
+          >{{translate.instant('Status')}}<span class="text-danger">*</span></label
+          >
+          <div class="dropdown w-100">
+            <div class="d-inline-block w-100" ngbDropdown>
+              <button
+                class="btn border-light-subtle w-100 d-flex justify-content-center align-items-center"
+                id="status"
+                ngbDropdownToggle
+                type="button"
+              >
+                {{ translate.instant(selectedStatus) }}
+                <span style="flex: 1"></span>
+              </button>
+              <div aria-labelledby="status" ngbDropdownMenu>
+                <button (click)="selectStatus($event, 'NEW')" ngbDropdownItem>{{translate.instant('NEW')}}</button>
+                <button (click)="selectStatus($event, 'PLA')" ngbDropdownItem>{{translate.instant('PLA')}}</button>
+                <button (click)="selectStatus($event, 'INP')" ngbDropdownItem>{{translate.instant('INP')}}</button>
+                <button (click)="selectStatus($event, 'FIN')" ngbDropdownItem>{{translate.instant('FIN')}}</button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="statusError != ''" class="form-text" id="statusHelper">
+            Status error helper.
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Start date -->
+          <div class="mb-3 col">
+            <label class="form-label" for="startDate"
+            >{{translate.instant('Start date')}}<span class="text-danger">*</span></label
+            >
+            <input
+              aria-describedby="startDateHelper"
+              class="form-control"
+              id="startDate"
+              required
+              type="date"
+              value="{{project?.startDate}}"
+            />
+            <div
+              *ngIf="startDateError != ''"
+              class="form-text"
+              id="startDateHelper"
+            >
+              Start date error helper.
+            </div>
+          </div>
+          <div class="mb-3 col">
+            <label class="form-label" for="endDate"
+            >{{translate.instant('End date')}}<span class="text-danger"></span></label
+            >
+            <input
+              aria-describedby="endDateError"
+              class="form-control"
+              id="endDate"
+              type="date"
+              value="{{project?.endDate}}"
+            />
+            <div *ngIf="endDateError != ''" class="form-text" id="endDateError">
+              End date error helper.
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-center gap-3">
+          <button (click)="cancelEdit()" class="fs-medium btn btn-light col-3">{{translate.instant('Cancel')}}</button>
+          <button
+            (click)="this.project ? updateProject($event) : createProject($event)"
+            class="fs-medium btn btn-primary col-3"
+          >
+            {{this.translate.instant(buttonSubmitText)}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

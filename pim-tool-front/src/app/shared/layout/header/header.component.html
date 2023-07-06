@@ -1,0 +1,41 @@
+<div class="border-bottom">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand" routerLinkActive="active fw-medium" routerLink="/">
+          <img class="img-fluid" style="width: 35px; height: 35px;" src="assets/images/logo.png" alt="">
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse justify-content-between"
+          id="navbarSupportedContent"
+        >
+          <h5 class="h5 text-capitalize m-0">{{translate.instant('project-management-system')}}</h5>
+
+          <div class="d-flex align-items-center">
+            <button class="btn btn-light mx-5 my-0" (click)="toggleLanguage()">{{ translate.instant("toggle") }}</button>
+
+            <ul class="list-group list-group-horizontal border-0">
+              <li class="list-group-item border-0 rounded me-3">
+                <a class="text-decoration-none" routerLinkActive="active fw-medium" routerLink="/help">{{translate.instant("help")}}</a>
+              </li>
+              <li class="list-group-item btn btn-light border-0 rounded">
+                {{translate.instant("logout")}}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
