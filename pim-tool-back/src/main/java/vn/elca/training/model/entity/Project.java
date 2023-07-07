@@ -27,8 +27,6 @@ public class Project {
 
     @Enumerated(EnumType.STRING)
     private Status status;
-//    @Column
-//    private String status;
 
     @Column
     private LocalDate startDate;

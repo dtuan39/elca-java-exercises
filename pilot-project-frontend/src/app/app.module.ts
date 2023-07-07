@@ -11,7 +11,7 @@ import {ListComponent} from './list/list.component';
 import {MatTableModule} from "@angular/material/table";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatSelectModule} from "@angular/material/select";
-import { ErrorComponent } from './error/error.component';
+import {ErrorComponent} from './error/error.component';
 
 const appRoute: Routes = [
   {path: '', redirectTo: 'project', pathMatch: "full"},

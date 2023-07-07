@@ -11,6 +11,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import vn.elca.training.repository.ProjectRepository;
 import vn.elca.training.repository.custom.ProjectRepositoryCustom;
 import vn.elca.training.service.impl.ProjectServiceImpl;
 import vn.elca.training.util.ApplicationMapper;
@@ -28,7 +29,8 @@ import java.util.Arrays;
         AbstractApplicationController.class,
         ApplicationMapper.class,
         ProjectServiceImpl.class,
-        ProjectRepositoryCustom.class
+        ProjectRepositoryCustom.class,
+        ProjectRepository.class
 })
 @PropertySource({"classpath:/application.properties", "classpath:/messages.properties"})
 public class ApplicationWebConfig extends SpringBootServletInitializer {

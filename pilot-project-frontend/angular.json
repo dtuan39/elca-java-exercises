@@ -23,7 +23,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "localize": [
-              "fr"
+              "en-US"
             ],
             "outputPath": "dist/pilot-project-frontend",
             "index": "src/index.html",

@@ -23,7 +23,6 @@ export class AppComponent implements OnInit {
 
   constructor(private projectsService: AppService, private titleService: Title, private router: Router) {
     this.projects = [];
-    // this.titleService.setTitle($localize(this.title));
   }
 
   protected readonly onclick = onclick;

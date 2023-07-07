@@ -49,21 +49,6 @@ p {
   margin: 0 16px;
 }
 
-/*.toolbar #twitter-logo {*/
-/*  height: 40px;*/
-/*  margin: 0 8px;*/
-/*}*/
-
-/*.toolbar #youtube-logo {*/
-/*  height: 40px;*/
-/*  margin: 0 16px;*/
-/*}*/
-
-/*.toolbar #twitter-logo:hover,*/
-/*.toolbar #youtube-logo:hover {*/
-/*  opacity: 0.8;*/
-/*}*/
-
 .content {
   display: flex;
   margin: 82px auto 32px;
@@ -360,12 +345,6 @@ label {
   font-size: 14px;
   color: #666666;
 }
-
-/*input, select {*/
-/*  width: 120%;*/
-/*  height: 30px;*/
-/*  margin: 38px;*/
-/*}*/
 
 span.error{
   color: red;

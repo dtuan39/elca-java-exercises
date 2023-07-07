@@ -16,8 +16,6 @@ public class Group {
     @OneToOne
     @JoinColumn(name = "groupLeaderId", referencedColumnName = "id")
     private Employee employee;
-//    @Column
-//    private int groupLeaderID;
 
     @Column
     private int version;
