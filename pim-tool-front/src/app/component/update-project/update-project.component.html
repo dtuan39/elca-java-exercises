@@ -1,0 +1,159 @@
+<div class="new-project-container">
+  <p class="area-title">Edit Project information</p>
+  <div
+    class="alert alert-danger alert-popup"
+    role="alert"
+    style="margin-top: 0.5rem"
+    *ngIf="addForm.submitted && addForm.invalid"
+    #alertPopup
+  >
+    <span>Please enter all the mandatory fields (*).</span>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="closeAlert()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="form-container">
+    <form #addForm="ngForm" (ngSubmit)="onUpdateProject(addForm)">
+      <div class="form-group">
+        <label for="number"
+          >Project Number <span style="color: red">*</span></label
+        >
+        <div class="input-container">
+          <input
+            type="text"
+            ngModel
+            [readonly]="editMode"
+            [(ngModel)]="updateProject.number"
+            name="number"
+            class="form-control short-input"
+            id="nanumberme"
+            required
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="name">Project Name <span style="color: red">*</span></label>
+        <div class="input-container">
+          <input
+            type="text"
+            ngModel
+            [(ngModel)]="updateProject.name"
+            name="name"
+            class="form-control"
+            id="name"
+            required
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="customer">Customer <span style="color: red">*</span></label>
+        <div class="input-container">
+          <input
+            type="text"
+            ngModel
+            [(ngModel)]="updateProject.customer"
+            name="customer"
+            class="form-control"
+            id="customer"
+            required
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="group">Group <span style="color: red">*</span></label>
+        <div class="input-container">
+          <select id="groupId" name="groupId" ngModel class="short-input">
+            <option *ngFor="let group of groups" value="{{ group?.id }}">
+              Group {{ group?.id }} ({{ group?.groupLeader?.visa }})
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="member">Members</label>
+        <div class="input-container">
+          <input
+            type="text"
+            ngModel
+            [(ngModel)]="updateProject.members"
+            name="member"
+            class="form-control"
+            id="member"
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="status">Status <span style="color: red">*</span></label>
+        <div class="input-container">
+          <select id="status" name="status" ngModel class="short-input">
+            <option value="NEW">New</option>
+            <option value="PLA">Planned</option>
+            <option value="INP">In Progress</option>
+            <option value="FIN">Finished</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-date">
+        <div class="form-group form-date__start">
+          <label for="startDate"
+            >Start date <span style="color: red">*</span></label
+          >
+          <div class="input-container">
+            <input
+              type="date"
+              ngModel
+              [(ngModel)]="updateProject.startDate"
+              name="startDate"
+              class="form-control short-input"
+              id="startDate"
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group form-date__end">
+          <label for="endDate">End date</label>
+          <div class="input-container">
+            <input
+              type="date"
+              ngModel
+              [(ngModel)]="updateProject.endDate"
+              name="endDate"
+              class="form-control short-input"
+              id="endDate"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        style="margin: 0 !important; display: flex; justify-content: flex-end"
+        *ngIf="ennDateErr != ''"
+      >
+        <div class="form-text" style="color: red; transform: translateY(-2rem)">
+          {{ ennDateErr }}
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <div class="modal-footer cancel-btn">
+          <button type="button" (click)="navigateToList()" class="btn">
+            Cancel
+          </button>
+        </div>
+        <div class="modal-footer create-btn">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- [disabled]="addForm.invalid" -->
+<!-- (click)="editMode ? onUpdateProject(updateProject) : createProject($event)" -->
+<!-- [readonly]="editMode" -->

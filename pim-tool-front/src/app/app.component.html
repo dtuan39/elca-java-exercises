@@ -1,0 +1,53 @@
+<div class="full-container">
+  <div class="header row">
+    <div class="header-left col-md-5">
+      <div class="header-left__logo">
+        <img src="../assets/img/logo_elca.png" alt="" />
+      </div>
+      <p class="header-left__name">Project Information Management</p>
+    </div>
+
+    <div class="header-right col-md-3">
+      <div class="header-right__language">
+        <p style="margin-right: 0.3rem; cursor: pointer">EN</p>
+        <p>|</p>
+        <p style="margin-left: 0.3rem; cursor: pointer; color: var(--blue)">
+          FR
+        </p>
+      </div>
+      <div class="header-right__end">
+        <div class="header-right__end__help">Help</div>
+        <div class="header-right__end__logOut">Log out</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="appBody row">
+    <div class="appBody-sideBar">
+      <div class="appBody-sideBar__big-title">
+        <p>Projects List</p>
+      </div>
+      <div class="appBody-sideBar__func-title">
+        <ul>
+          <li class="func-new">
+            <a routerLink="/add" [class.active-link]="isActiveRoute('/add')"
+              >New</a
+            >
+          </li>
+          <li class="func-active">
+            <a routerLink="/list" [class.active-link]="isActiveRoute('/list')"
+              >Project</a
+            >
+          </li>
+          <li>Customer</li>
+          <li>Supplier</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="appBody-funcArea">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+<!-- (click)="handleClickNew()" -->
