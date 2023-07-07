@@ -1,6 +1,4 @@
-import {Component, Input} from '@angular/core';
-import {error} from "@angular/compiler-cli/src/transformers/util";
-import {HttpErrorResponse} from "@angular/common/http";
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-error',
@@ -8,8 +6,5 @@ import {HttpErrorResponse} from "@angular/common/http";
   styleUrls: ['./error.component.css']
 })
 export class ErrorComponent {
-  title = "Error"
-  constructor(private notify: HttpErrorResponse) {
-  }
-  // title = this.notify.error.error.message;
+  title ="Error"
 }

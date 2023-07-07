@@ -19,7 +19,7 @@ VALUES
     ('2','TEST','2022-06-06','TEST2','2021-06-06','New','1','1'),
     ('3116','Les Retaites Populaires','2003-10-10','Facturation/Encasements','2004-02-25','New','1','1'),
     ('3118','GKB','2022-06-06','GKBWEB','2002-10-10','Finished','1','1'),
-    ('7157','MGB Tourism','2022-06-06','MGBAHN-Main2015','2021-09-24','In progress','1','1'),
+    ('7157','MGB Tourism','2022-06-06','MGBAHN-Main2015','2021-09-24','Inprogress','1','1'),
     ('7174','SOMED-SPITEX MAINT ','2022-06-06','SOMED SPITEX MAINT','2021-10-05','New','1','1'),
     ('7199','Les Retaites Populaires','2022-06-06','ARCHIMEDE-2015-3.14','2021-05-29','Planned','1','1');
 

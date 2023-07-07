@@ -41,14 +41,6 @@ public class Employee {
         this.version = version;
     }
 
-//    public Group getGroup() {
-//        return group;
-//    }
-//
-//    public void setGroup(Group group) {
-//        this.group = group;
-//    }
-
     public int getId() {
         return id;
     }

@@ -46,10 +46,10 @@ public class ProjectController extends AbstractApplicationController {
         return new ResponseEntity<>(addProject, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Project> updateProject(@RequestBody Project project) {
-        Project updateProject = projectService.updateProject(project);
-        return new ResponseEntity<>(updateProject, HttpStatus.OK);
+    @PutMapping("/update/{projectNumber}")
+    public ResponseEntity<Project> updateProject(@RequestBody Project project, @PathVariable("projectNumber") int projectNumber) {
+        projectService.updateProjectByProjectNumber(projectNumber,project);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/delete/{id}")

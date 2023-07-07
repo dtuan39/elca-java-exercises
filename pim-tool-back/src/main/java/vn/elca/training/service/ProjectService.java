@@ -11,18 +11,19 @@ public interface ProjectService {
 
     Project addProject(Project project);
 
-    List<Project> findAllProject();
-
     Project updateProject(Project project);
 
-    @Transactional
     void deleteProjectById(Long id);
+
+    List<Project> findAllProject();
 
     List<Project> findProjectByProjectNumber(int id);
 
     List<Project> findProjectByAny(String value);
 
     boolean checkProjectNumber(int projectNumber);
+
+    void updateProjectByProjectNumber(int projectNumber, Project project);
 }
 
 

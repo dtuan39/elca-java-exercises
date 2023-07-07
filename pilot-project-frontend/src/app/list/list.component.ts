@@ -20,19 +20,6 @@ export class ListComponent implements OnInit {
     this.getProjects();
   }
 
-
-  private getProjects() {
-    this.projectsService.getProjects().subscribe(
-      (response: Projects[]) => {
-        this.projects = response;
-      },
-      (error: HttpErrorResponse) => {
-        this.router.navigateByUrl('/error');
-        alert(error.message);
-      }
-    );
-  }
-
   onSearch(search: string, select: string) {
     if (!search) {
       this.projectsService.getProjects().subscribe(
@@ -41,7 +28,7 @@ export class ListComponent implements OnInit {
         }
       );
     }
-    if (!search && select){
+    if (!search && select) {
       this.projectsService.searchProject(select).subscribe(
         (response: Projects[]) => {
           this.projects = response;
@@ -51,6 +38,32 @@ export class ListComponent implements OnInit {
     this.projectsService.searchProject(search).subscribe(
       (response: Projects[]) => {
         this.projects = response;
+      }
+    );
+  }
+
+  OnDeleteProject(id: number) {
+    if (confirm("Are you sure you want to delete this project?") === true) {
+      this.projectsService.deleteProject(id).subscribe(
+        (response: void) => {
+          window.location.reload();
+        },
+        (error: HttpErrorResponse) => {
+          this.router.navigateByUrl('/error');
+          alert(error.message);
+        }
+      );
+    }
+  }
+
+  private getProjects() {
+    this.projectsService.getProjects().subscribe(
+      (response: Projects[]) => {
+        this.projects = response;
+      },
+      (error: HttpErrorResponse) => {
+        this.router.navigateByUrl('/error');
+        alert(error.message);
       }
     );
   }

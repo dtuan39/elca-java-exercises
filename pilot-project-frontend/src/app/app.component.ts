@@ -4,7 +4,7 @@ import {AppService} from "./app.service";
 import {FormGroup, NgForm} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";
 import {Title} from "@angular/platform-browser";
-import {$localize} from "@angular/localize/init";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -15,15 +15,13 @@ export class AppComponent implements OnInit {
   title = 'pilot-project-frontend';
 
   ngOnInit() {
-    this.reactiveForm = new FormGroup({
-
-    });
+    this.reactiveForm = new FormGroup({});
   }
 
   reactiveForm: FormGroup;
   public projects: Projects[];
 
-  constructor(private projectsService: AppService, private titleService: Title) {
+  constructor(private projectsService: AppService, private titleService: Title, private router: Router) {
     this.projects = [];
     // this.titleService.setTitle($localize(this.title));
   }

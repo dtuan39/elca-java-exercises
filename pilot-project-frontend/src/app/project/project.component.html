@@ -1,18 +1,10 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-<div class="content" role="main">
-  <h2>{{ title }}</h2>
+<div *ngIf="!editMode" class="content" role="main">
+  <h2 i18n>New Project</h2>
   <form [formGroup]="createproject" (ngSubmit)="onSubmit()" style="display: flex">
     <table>
       <tr>
@@ -64,23 +56,22 @@
           </span>
         </td>
       </tr>
-      <tr>
-        <td><label for="groupId" i18n>Group<span class="error">*</span></label></td>
+      <tr formGroupName="group">
+        <td><label for="id" i18n>Group<span class="error">*</span></label></td>
         <td>
-          <input class="form-control" required type="text" id="groupId" formControlName="groupId"
-                 [ngClass]="{'is-invalid': createproject.controls.groupId.touched && createproject.controls.groupId.invalid}">
-          <input class="form-control" hidden type="text" name="id" id="id" value="1">
-          <input class="form-control" hidden type="text" name="version" id="version" value="1"
-                 formControlName="version">
+          <input class="form-control" required type="text" name="id" id="id" formControlName="id">
+          <!--                 [ngClass]="{'is-invalid': createproject.controls.id.touched && createproject.controls.id.invalid}">-->
+          <input class="form-control" hidden readonly type="text" name="version" id="version"
+                 formControlName="version" value="1">
         </td>
         <td>
           <span></span>
         </td>
         <td>
-          <p i18n class="text-danger" style="font-family: 'Segoe UI'"
-             *ngIf="createproject.controls.groupId.touched && createproject.controls.groupId.invalid">
-            Group cannot be empty
-          </p>
+          <!--          <p i18n class="text-danger" style="font-family: 'Segoe UI'"-->
+          <!--             *ngIf="createproject.controls.id.touched && createproject.controls.id.invalid">-->
+          <!--            Group cannot be empty-->
+          <!--          </p>-->
         </td>
       </tr>
       <tr>
@@ -94,7 +85,7 @@
                   [ngClass]="{'is-invalid': createproject.controls.status.touched && createproject.controls.status.invalid}">
             <option value="New" i18n selected>NEW</option>
             <option value="Finished" i18n>FIN</option>
-            <option value="In progress" i18n>INP</option>
+            <option value="Inprogress" i18n>INP</option>
             <option value="Planned" i18n>PLA</option>
           </select>
         </td>
@@ -119,7 +110,7 @@
           </span>
         </td>
         <td><label for="endDate" i18n style="margin-left: 100px;">End date</label></td>
-        <td><input class="form-control" type="date" id="endDate" name="endDate"></td>
+        <td><input class="form-control" type="date" id="endDate" name="endDate" formControlName="endDate"></td>
       </tr>
       <tr>
         <div class="spacer">
@@ -139,7 +130,135 @@
       </tr>
     </table>
   </form>
-  <div *ngFor="let project of projects">
-    {{project.name}}
-  </div>
 </div>
+
+<div *ngIf="editMode" class="content" role="main">
+  <h2 i18n>Edit Project Information</h2>
+  <form [formGroup]="createproject" (ngSubmit)="onUpdate()" style="display: flex">
+    <table
+      *ngFor="let project of project_parent">
+      <tr>
+        <td><label for="projectNumber" i18n>Project Number<span class="error">*</span></label></td>
+        <td><input class="form-control" required type="text" id="projectNumber"
+                   formControlName="projectNumber"
+                   [ngClass]="{'is-invalid': createproject.controls.projectNumber.touched && createproject.controls.projectNumber.invalid}">
+        </td>
+        <td>
+          <span></span>
+        </td>
+        <td>
+          <span i18n class="text-danger" style="font-family: 'Segoe UI'"
+                *ngIf="createproject.controls.projectNumber.touched && createproject.controls.projectNumber.invalid">
+            Project Number cannot be empty
+          </span>
+          <span i18n class="text-danger" style="font-family: 'Segoe UI'">
+            {{message}}
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td><label for="name" i18n>Project name<span class="error">*</span></label></td>
+        <td><input class="form-control" required type="text" id="name" formControlName="name"
+                   [ngClass]="{'is-invalid': createproject.controls.name.touched && createproject.controls.name.invalid}">
+        </td>
+        <td>
+          <span></span>
+        </td>
+        <td>
+          <span i18n class="text-danger" style="font-family: 'Segoe UI'"
+                *ngIf="createproject.controls.name.touched && createproject.controls.name.invalid">
+            Name cannot be empty
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td><label for="customer" i18n>Customer<span class="error">*</span></label></td>
+        <td><input class="form-control" required type="text" id="customer" formControlName="customer"
+                   [ngClass]="{'is-invalid': createproject.controls.customer.touched && createproject.controls.customer.invalid}">
+        </td>
+        <td>
+          <span></span>
+        </td>
+        <td>
+          <span i18n class="text-danger" style="font-family: 'Segoe UI'"
+                *ngIf="createproject.controls.customer.touched && createproject.controls.customer.invalid">
+            Customer cannot be empty
+          </span>
+        </td>
+      </tr>
+      <tr formGroupName="group">
+        <td><label for="id" i18n>Group<span class="error">*</span></label></td>
+        <td>
+          <input class="form-control" required type="text" name="id" id="id" formControlName="id">
+          <!--                 [ngClass]="{'is-invalid': createproject.controls.id.touched && createproject.controls.id.invalid}">-->
+          <input class="form-control" hidden readonly type="text" name="version" id="version"
+                 formControlName="version" value="1">
+        </td>
+        <td>
+          <span></span>
+        </td>
+        <td>
+          <!--          <p i18n class="text-danger" style="font-family: 'Segoe UI'"-->
+          <!--             *ngIf="createproject.controls.id.touched && createproject.controls.id.invalid">-->
+          <!--            Group cannot be empty-->
+          <!--          </p>-->
+        </td>
+      </tr>
+      <tr>
+        <td><label for="Member" i18n>Members</label></td>
+        <td><input class="form-control" type="text" name="Member" id="Member"></td>
+      </tr>
+      <tr>
+        <td><label for="status" i18n>Status<span class="error">*</span></label></td>
+        <td>
+          <select required id="status" formControlName="status"
+                  [ngClass]="{'is-invalid': createproject.controls.status.touched && createproject.controls.status.invalid}">
+            <option value="New" i18n selected>NEW</option>
+            <option value="Finished" i18n>FIN</option>
+            <option value="Inprogress" i18n>INP</option>
+            <option value="Planned" i18n>PLA</option>
+          </select>
+        </td>
+        <td><span></span></td>
+        <td>
+          <span i18n class="text-danger" style="font-family: 'Segoe UI'"
+                *ngIf="createproject.controls.status.touched && createproject.controls.status.invalid">
+            Status cannot be empty
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td><label for="startDate" i18n>Start date<span class="error">*</span></label></td>
+        <td><input class="form-control" required type="date" formControlName="startDate" id="startDate"
+                   [ngClass]="{'is-invalid': createproject.controls.startDate.touched && createproject.controls.startDate.invalid}">
+        </td>
+        <td><span></span></td>
+        <td>
+          <span i18n class="text-danger" style="font-family: 'Segoe UI'"
+                *ngIf="createproject.controls.startDate.touched && createproject.controls.startDate.invalid">
+            Start date cannot be empty
+          </span>
+        </td>
+        <td><label for="endDate" i18n style="margin-left: 100px;">End date</label></td>
+        <td><input class="form-control" type="date" id="endDate" name="endDate" formControlName="endDate"></td>
+      </tr>
+      <tr>
+        <div class="spacer">
+        </div>
+        <td>
+          <button i18n type="reset" class="btn btn-light"
+                  style="background-color: #b9b9b9; height: 35px;width: 60%; font-family: 'Segoe UI Semibold'; color: black">
+            Cancel
+          </button>
+        </td>
+        <td>
+          <button *ngIf="editMode" i18n [disabled]="createproject.invalid" type="submit" class="btn btn-primary"
+                  style="background-color: #2f85fa; height: 35px; width: 150%; font-family: 'Segoe UI Semibold'">
+            Edit Project
+          </button>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+

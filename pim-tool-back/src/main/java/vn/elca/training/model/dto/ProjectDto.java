@@ -1,5 +1,7 @@
 package vn.elca.training.model.dto;
 
+import vn.elca.training.model.entity.Status;
+
 import java.time.LocalDate;
 
 public class ProjectDto {
@@ -8,7 +10,7 @@ public class ProjectDto {
     private int projectNumber;
     private String name;
     private String customer;
-    private String status;
+    private Status status;
     private LocalDate startDate;
     private LocalDate endDate;
     private int version;
@@ -53,11 +55,11 @@ public class ProjectDto {
         this.customer = customer;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

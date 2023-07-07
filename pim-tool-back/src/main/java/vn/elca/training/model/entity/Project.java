@@ -1,8 +1,6 @@
 package vn.elca.training.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -27,8 +25,10 @@ public class Project {
     )
     private List<Project> projects;
 
-    @Column
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+//    @Column
+//    private String status;
 
     @Column
     private LocalDate startDate;
@@ -51,7 +51,7 @@ public class Project {
     public Project() {
     }
 
-    public Project(Long id, Group group, List<Project> projects, String status, LocalDate startDate, String name, int projectNumber, LocalDate endDate, String customer, int version) {
+    public Project(Long id, Group group, List<Project> projects, Status status, LocalDate startDate, String name, int projectNumber, LocalDate endDate, String customer, int version) {
         this.id = id;
         this.group = group;
         this.projects = projects;
@@ -64,7 +64,7 @@ public class Project {
         this.version = version;
     }
 
-    public Project(Group group, List<Project> projects, String status, LocalDate startDate, String name, int projectNumber, LocalDate endDate, String customer, int version) {
+    public Project(Group group, List<Project> projects, Status status, LocalDate startDate, String name, int projectNumber, LocalDate endDate, String customer, int version) {
         this.group = group;
         this.projects = projects;
         this.status = status;
@@ -100,19 +100,11 @@ public class Project {
         this.id = id;
     }
 
-//    public int getGroupID() {
-//        return groupID;
-//    }
-//
-//    public void setGroupID(int groupID) {
-//        this.groupID = groupID;
-//    }
-
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -179,4 +171,5 @@ public class Project {
                 ", version=" + version +
                 '}';
     }
+
 }
