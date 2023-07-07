@@ -18,7 +18,7 @@
 		<common-io.version>1.3.2</common-io.version>
 	</properties>
 
-	<!-- Inherit defaults from Spring Boot -->
+	<!-- Inherit defaults from Spring Boot-->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
