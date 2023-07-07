@@ -51,3 +51,6 @@ target
 
 # Angular
 *.spec.ts
+/pim-tool-front/.angular
+/pim-tool-front/.vscode
+/pim-tool-front/node_modules
