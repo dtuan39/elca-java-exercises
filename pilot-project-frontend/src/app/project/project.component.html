@@ -9,7 +9,7 @@
     <table>
       <tr>
         <td><label for="projectNumber" i18n>Project Number<span class="error">*</span></label></td>
-        <td><input class="form-control" required type="text" id="projectNumber"
+        <td><input class="form-control" required type="number" id="projectNumber"
                    formControlName="projectNumber"
                    [ngClass]="{'is-invalid': createproject.controls.projectNumber.touched && createproject.controls.projectNumber.invalid}">
         </td>
@@ -59,7 +59,7 @@
       <tr formGroupName="group">
         <td><label for="id" i18n>Group<span class="error">*</span></label></td>
         <td>
-          <input class="form-control" required type="text" name="id" id="id" formControlName="id">
+          <input class="form-control" required type="number" name="id" id="id" formControlName="id">
           <!--                 [ngClass]="{'is-invalid': createproject.controls.id.touched && createproject.controls.id.invalid}">-->
           <input class="form-control" hidden readonly type="text" name="version" id="version"
                  formControlName="version" value="1">
@@ -139,7 +139,7 @@
       *ngFor="let project of project_parent">
       <tr>
         <td><label for="projectNumber" i18n>Project Number<span class="error">*</span></label></td>
-        <td><input class="form-control" required type="text" id="projectNumber"
+        <td><input class="form-control" required type="number" id="projectNumber"
                    formControlName="projectNumber"
                    [ngClass]="{'is-invalid': createproject.controls.projectNumber.touched && createproject.controls.projectNumber.invalid}">
         </td>
@@ -189,7 +189,7 @@
       <tr formGroupName="group">
         <td><label for="id" i18n>Group<span class="error">*</span></label></td>
         <td>
-          <input class="form-control" required type="text" name="id" id="id" formControlName="id">
+          <input class="form-control" required type="number" name="id" id="id" formControlName="id">
           <!--                 [ngClass]="{'is-invalid': createproject.controls.id.touched && createproject.controls.id.invalid}">-->
           <input class="form-control" hidden readonly type="text" name="version" id="version"
                  formControlName="version" value="1">

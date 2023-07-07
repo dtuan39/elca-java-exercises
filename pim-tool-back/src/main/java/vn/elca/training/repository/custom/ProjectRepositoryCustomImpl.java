@@ -34,13 +34,22 @@ public class ProjectRepositoryCustomImpl implements ProjectRepositoryCustom {
 
     @Override
     public List<Project> findProjectByAny(String value) {
+        if (value.equalsIgnoreCase("New")
+                || value.equalsIgnoreCase("Finished")
+                || value.equalsIgnoreCase("Inprogress")
+                || value.equalsIgnoreCase("Planned")) {
+            return new JPAQuery<Project>(em)
+                    .select(QProject.project)
+                    .from(QProject.project)
+                    .where((QProject.project.status.eq(Status.valueOf(value))))
+                    .fetch();
+        }
         return new JPAQuery<Project>(em)
                 .select(QProject.project)
                 .from(QProject.project)
                 .where(QProject.project.projectNumber.like("%" + value + "%")
                         .or(QProject.project.name.like("%" + value + "%"))
-                        .or(QProject.project.customer.like("%" + value + "%"))
-                        .or(QProject.project.status.eq(Status.valueOf(value))))
+                        .or(QProject.project.customer.like("%" + value + "%")))
                 .fetch();
     }
 
@@ -55,7 +64,7 @@ public class ProjectRepositoryCustomImpl implements ProjectRepositoryCustom {
 
     @Override
     @Transactional
-    public void updateProjectByProjectNumber(int projectNumber, Project project){
+    public void updateProjectByProjectNumber(int projectNumber, Project project) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(JPQLTemplates.DEFAULT, em);
         queryFactory.update(QProject.project)
                 .where(QProject.project.projectNumber.eq(projectNumber))

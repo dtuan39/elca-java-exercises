@@ -43,7 +43,7 @@ public class Project {
     @Column
     private String customer;
 
-    @Column
+    @Version
     private int version;
 
     public Project() {
