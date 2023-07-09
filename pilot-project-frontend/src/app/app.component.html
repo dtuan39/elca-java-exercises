@@ -1,0 +1,41 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<nav class="navbar fixed-top navbar-light bg-light">
+  <div class="toolbar" role="banner">
+    <img
+      width="40"
+      alt="ELCA Logo"
+      src="../assets/images/logo_elca.png"
+      i18n-alt
+    />
+    <span i18n>Project Information Management </span>
+    <div class="spacer"></div>
+    <a href="/en-US/" class="language">EN</a>
+    <p style="color: #2f85fa; font-size: smaller; padding: 5px">|</p>
+    <a href="/fr/" class="language">FR</a>
+    <a href="#" style="color: #2f85fa; font-size: smaller; margin-left: 65px" i18n>Help</a>
+    <a href="#" style="font-size: smaller; color: gray;margin: 50px" i18n>Logout</a>
+  </div>
+</nav>
+<!-- Toolbar -->
+<div>
+  <mat-sidenav-container class="border">
+    <div class="left-navbar-border"></div>
+  </mat-sidenav-container>
+  <mat-sidenav-container>
+    <mat-sidenav-content>
+      <div class="left-navbar">
+        <a href="/list" class="new" i18n>Projects list</a>
+        <a href="#" class="new" i18n>New</a>
+        <a href="/project" i18n>Project</a>
+        <a href="#" i18n>Customer</a>
+        <a href="#" i18n>Supplier</a>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+<!-- Right Side Toolbar -->
+<router-outlet></router-outlet>

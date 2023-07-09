@@ -1,49 +1,93 @@
 package vn.elca.training.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-/**
- * @author vlp
- */
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.List;
+
 @Entity
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "GroupId")
+    private Group group;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JoinTable(
+            name = "ProjectEmployee",
+            joinColumns = @JoinColumn(name = "employeeId"),
+            inverseJoinColumns = @JoinColumn(name = "projectId")
+    )
+    private List<Project> projects;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Column
+    private LocalDate startDate;
+
     @Column(nullable = false)
     private String name;
 
     @Column
-    private LocalDate finishingDate;
+    private int projectNumber;
+
+    @Column
+    private LocalDate endDate;
 
     @Column
     private String customer;
 
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-    private Set<Task> tasks = new HashSet<>();
+    @Version
+    private int version;
 
     public Project() {
     }
 
-    public Project(String name, LocalDate finishingDate) {
+    public Project(Long id, Group group, List<Project> projects, Status status, LocalDate startDate, String name, int projectNumber, LocalDate endDate, String customer, int version) {
+        this.id = id;
+        this.group = group;
+        this.projects = projects;
+        this.status = status;
+        this.startDate = startDate;
         this.name = name;
-        this.finishingDate = finishingDate;
+        this.projectNumber = projectNumber;
+        this.endDate = endDate;
+        this.customer = customer;
+        this.version = version;
     }
 
-    public Project(Long id, String name, LocalDate finishingDate) {
-        this.id = id;
+    public Project(Group group, List<Project> projects, Status status, LocalDate startDate, String name, int projectNumber, LocalDate endDate, String customer, int version) {
+        this.group = group;
+        this.projects = projects;
+        this.status = status;
+        this.startDate = startDate;
         this.name = name;
-        this.finishingDate = finishingDate;
+        this.projectNumber = projectNumber;
+        this.endDate = endDate;
+        this.customer = customer;
+        this.version = version;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 
     public Long getId() {
@@ -54,6 +98,22 @@ public class Project {
         this.id = id;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
     public String getName() {
         return name;
     }
@@ -62,12 +122,20 @@ public class Project {
         this.name = name;
     }
 
-    public LocalDate getFinishingDate() {
-        return finishingDate;
+    public int getProjectNumber() {
+        return projectNumber;
     }
 
-    public void setFinishingDate(LocalDate finishingDate) {
-        this.finishingDate = finishingDate;
+    public void setProjectNumber(int projectNumber) {
+        this.projectNumber = projectNumber;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public String getCustomer() {
@@ -78,11 +146,28 @@ public class Project {
         this.customer = customer;
     }
 
-    public Set<Task> getTasks() {
-        return tasks;
+    public int getVersion() {
+        return version;
     }
 
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
+    public void setVersion(int version) {
+        this.version = version;
     }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", group=" + group +
+                ", projects=" + projects +
+                ", status='" + status + '\'' +
+                ", startDate=" + startDate +
+                ", name='" + name + '\'' +
+                ", projectNumber=" + projectNumber +
+                ", endDate=" + endDate +
+                ", customer='" + customer + '\'' +
+                ", version=" + version +
+                '}';
+    }
+
 }

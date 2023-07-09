@@ -1,22 +1,42 @@
 package vn.elca.training.model.dto;
 
+import vn.elca.training.model.entity.Status;
+
 import java.time.LocalDate;
 
-/**
- * @author gtn
- *
- */
 public class ProjectDto {
-    private Long id;
+    private int id;
+    private int groupId;
+    private int projectNumber;
     private String name;
-    private LocalDate finishingDate;
+    private String customer;
+    private Status status;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private int version;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    public int getProjectNumber() {
+        return projectNumber;
+    }
+
+    public void setProjectNumber(int projectNumber) {
+        this.projectNumber = projectNumber;
     }
 
     public String getName() {
@@ -27,11 +47,43 @@ public class ProjectDto {
         this.name = name;
     }
 
-    public LocalDate getFinishingDate() {
-        return finishingDate;
+    public String getCustomer() {
+        return customer;
     }
 
-    public void setFinishingDate(LocalDate finishingDate) {
-        this.finishingDate = finishingDate;
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }
