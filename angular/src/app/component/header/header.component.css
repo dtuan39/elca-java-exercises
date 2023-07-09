@@ -1,0 +1,66 @@
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+}
+.app-header > div {
+  width: 50%;
+}
+.logo {
+  display: flex;
+  align-items: center;
+}
+.logo img {
+  height: 70%;
+}
+.logo h4 {
+  font-size: 20px;
+  color: #525050bd;
+  font-style: bold;
+  margin-left: 10px;
+  align-self: self-end;
+}
+.function {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.function a {
+  cursor: pointer;
+  padding: 10px;
+  text-decoration: none;
+  line-height: 100%;
+}
+.function a:hover {
+  text-decoration: underline;
+  background-color: lightgray;
+}
+.function > div {
+  width: 50%;
+}
+.action,
+.language {
+  display: flex;
+  justify-content: flex-end;
+  align-self: flex-end;
+}
+.action,
+.language a {
+  font-size: 14px;
+  color: #333333;
+  font-style: bold;
+  align-self: flex-end;
+}
+.language a:first-child {
+  border-right: 1px solid #333333;
+}
+.action {
+  justify-content: center;
+}
+.action a:first-child {
+  color: #2f85fa;
+}
+.selected {
+  color: #2f85fa !important;
+}

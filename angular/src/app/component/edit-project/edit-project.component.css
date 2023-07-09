@@ -1,0 +1,107 @@
+.edit-container {
+  margin: 20px;
+  width: 70%;
+}
+
+.title {
+  border-bottom: 1px solid #ccc;
+}
+.title h3 {
+  font-size: 18pt;
+  padding-top: 15px;
+  color: #666666;
+}
+.form {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #ccc;
+}
+.form-line {
+  height: 30px;
+  display: flex;
+  margin: 19px 0;
+}
+.form-line .date {
+  width: 50%;
+  display: flex;
+}
+.form-line .date:last-child {
+  justify-content: flex-end;
+}
+
+.form-line .date label {
+  width: 40%;
+}
+
+.form-line .date input {
+  width: 50%;
+}
+.form-line .date-error {
+  width: 100%;
+}
+
+.form-line label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666666;
+  display: block;
+  width: 20%;
+  line-height: 30px;
+}
+.form-line input {
+  width: 25%;
+  height: 100%;
+  display: block;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 12pt;
+}
+.option-input {
+  width: 25%;
+  height: 100%;
+  font-size: 12pt;
+
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.form-line .long-input {
+  flex-grow: 1;
+}
+.action-container {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+.action {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+.action button {
+  height: 35px;
+  font-size: 14pt;
+  width: 45%;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.action .cancel {
+  background-color: #ccc;
+  color: black;
+}
+.action .create {
+  color: white;
+  background-color: #2f85fa;
+}
+.help-block {
+  color: red;
+  font-size: 10pt;
+  margin-left: 10px;
+}
+
+input.ng-invalid.ng-touched {
+  border: 1px solid red;
+}

@@ -1,0 +1,43 @@
+.nav-container {
+  margin: 20px;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.nav-column {
+  width: 60%;
+}
+
+.title a {
+  font-size: 18pt;
+  font-weight: semibold;
+  color: #2f85fa;
+  text-align: left;
+  margin: 15px 0;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+.title a:hover {
+  opacity: 0.5;
+}
+.object {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.object a {
+  text-decoration: none;
+  font-size: 14pt;
+  color: #666666;
+  padding: 5px 0;
+}
+.object .select {
+  color: #333333;
+  font-weight: 500;
+}
+.object a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  background-color: #ccc;
+}

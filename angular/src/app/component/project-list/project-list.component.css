@@ -1,0 +1,151 @@
+.project-list-container {
+  padding: 20px;
+  width: 100%;
+}
+
+.title {
+  border-bottom: 1px solid #ccc;
+}
+.title h3 {
+  font-size: 18pt;
+  padding-top: 15px;
+  color: #666666;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  margin-top: 20px;
+}
+.form > div {
+  width: 50%;
+  display: flex;
+}
+.info {
+  justify-content: space-between;
+  padding-right: 10px;
+  height: 100%;
+}
+.info .search-bar {
+  font-size: 14pt;
+  outline: none;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 70%;
+  padding: 5px;
+}
+.info .option {
+  padding: 5px;
+
+  font-size: 14pt;
+  color: #ccc;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.info .option option:first-child {
+  color: #ccc;
+}
+.info .option option {
+  color: black;
+}
+.action {
+  /* justify-content: space-around; */
+  padding-left: 10px;
+  height: 100%;
+}
+.action button {
+  width: 35%;
+  border-radius: 6px;
+  font-size: 14pt;
+  margin: 0 10px;
+  padding: 0 10px;
+  height: 100%;
+}
+.action .search-btn {
+  background-color: #2f85fa;
+  border: 1px solid #ccc;
+  color: white;
+}
+
+.action .reset-btn {
+  background-color: transparent;
+  color: #2f85fa;
+  border: none;
+}
+
+.action button:hover {
+  opacity: 0.8;
+}
+.table {
+  width: 100%;
+  padding-right: 20px;
+}
+
+table,
+tr,
+td,
+th {
+  border: none;
+}
+
+.table table {
+  margin-top: 30px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+.table table th {
+  font-size: 14pt;
+  color: #ccc;
+  font-weight: 500;
+  border: 1px solid #ccc;
+}
+.table-header {
+  height: 40px;
+}
+.table-header th {
+  padding: 10px;
+}
+.table-data .project-number:hover {
+  color: #2f85fa;
+  opacity: 0.8;
+}
+
+.table-data td {
+  padding: 10px;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  font-size: 14pt;
+}
+.table-data td:last-child {
+  text-align: center;
+}
+
+.table-footer {
+  width: 100%;
+}
+.action-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #ccc;
+  background-color: #e2f1f7;
+  font-size: 14pt;
+}
+.action-footer p {
+  margin: 0;
+  padding: 10px;
+}
+.paging {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+.paging button {
+  background-color: whitesmoke;
+  color: #2f85fa;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  font-size: 14pt;
+}
