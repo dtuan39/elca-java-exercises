@@ -1,0 +1,107 @@
+<div class="project-list-container">
+  <div class="title">
+    <h3>Projects List</h3>
+  </div>
+  <div class="form">
+    <div class="info">
+      <input
+        type="text"
+        name="search-value"
+        placeholder="Project number, name, customer name"
+        class="search-bar"
+        [(ngModel)]="searchValue"
+      />
+      <select name="status" id="" class="option" [(ngModel)]="statusValue">
+        <option value="" selected>Project status</option>
+        <option value="PLA">PLA</option>
+        <option value="INP">INP</option>
+        <option value="FIN">FIN</option>
+        <option value="NEW">NEW</option>
+      </select>
+    </div>
+    <div class="action">
+      <button type="button" class="search-btn" (click)="onSearch(0)">
+        Search Projects
+      </button>
+      <button type="button" class="reset-btn" (click)="onReset()">
+        Reset Search
+      </button>
+    </div>
+  </div>
+  <div class="table">
+    <table>
+      <thead>
+        <tr class="table-header">
+          <th></th>
+          <th>Number</th>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Customer</th>
+          <th>Start Date</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-data" *ngFor="let project of projects">
+          <td style="text-align: center">
+            <input
+              type="checkbox"
+              name=""
+              id=""
+              (change)="onCheck(project)"
+              [checked]="selectedProjects.indexOf(project) !== -1"
+            />
+          </td>
+          <td
+            style="text-align: right; cursor: pointer"
+            class="project-number"
+            (click)="onEditProject(project.projectNumber)"
+          >
+            {{ project.projectNumber }}
+          </td>
+          <td style="text-align: left">{{ project.name }}</td>
+          <td style="text-align: left">{{ project.status }}</td>
+          <td style="text-align: left">{{ project.customer }}</td>
+          <td style="text-align: center">{{ project.startDate }}</td>
+          <td style="text-align: center">
+            <i
+              class="fas fa-trash-alt"
+              style="color: #fd1d0d; cursor: pointer"
+              *ngIf="project.status == 'NEW'"
+              (click)="onDeleteProject(project)"
+            ></i>
+          </td>
+        </tr>
+        <tr *ngIf="selectedProjects.length > 0">
+          <td colspan="7" class="table-footer">
+            <div class="action-footer">
+              <p style="color: #2f85fa">
+                {{ selectedProjects.length }} items selected
+              </p>
+              <p
+                style="color: #fd1d0d; cursor: pointer"
+                (click)="onDeleteProjects()"
+                *ngIf="canDeleteMultiple"
+              >
+                Delete selected items
+                <i class="fas fa-trash-alt" style="color: #fd1d0d"></i>
+              </p>
+              <p *ngIf="!canDeleteMultiple">
+                You can only delete projects with a status of 'NEW'
+              </p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="paging">
+      <button
+        *ngFor="let page of [].constructor(totalPages); let i = index"
+        (click)="onSearch(i)"
+        [ngStyle]="currentPage === i ? { opacity: '0.5' } : {}"
+      >
+        {{ i + 1 }}
+      </button>
+    </div>
+  </div>
+</div>

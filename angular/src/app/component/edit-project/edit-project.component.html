@@ -1,0 +1,106 @@
+<div class="edit-container">
+  <div class="title">
+    <h3 *ngIf="!componentEditState">New Project</h3>
+    <h3 *ngIf="componentEditState">Edit Project</h3>
+  </div>
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <div class="form">
+      <div class="form-line">
+        <label for="project-number"
+          >Project Number
+          <span style="color: red; font-weight: 900">*</span></label
+        >
+        <input
+          id="project-number"
+          type="text"
+          formControlName="projectNumber"
+        />
+      </div>
+      <div class="form-line">
+        <label for="project-name"
+          >Project Name
+          <span style="color: red; font-weight: 900">*</span></label
+        >
+        <input
+          id="project-name"
+          type="text"
+          class="long-input"
+          formControlName="projectName"
+        />
+      </div>
+      <div class="form-line">
+        <label for="customer"
+          >Customer <span style="color: red; font-weight: 900">*</span></label
+        >
+        <input
+          id="customer"
+          type="text"
+          class="long-input"
+          formControlName="customer"
+        />
+      </div>
+      <div class="form-line">
+        <label for="group"
+          >Group <span style="color: red; font-weight: 900">*</span></label
+        >
+        <select name="" id="group" class="option-input" formControlName="group">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+      <div class="form-line">
+        <label for="members">Members</label>
+        <input
+          id="members"
+          type="text"
+          class="long-input"
+          formControlName="members"
+        />
+      </div>
+      <div class="form-line">
+        <label for="status"
+          >Status <span style="color: red; font-weight: 900">*</span></label
+        >
+        <select
+          name=""
+          id="status"
+          class="option-input"
+          formControlName="status"
+        >
+          <option value="NEW">NEW</option>
+          <option value="PLA">PLA</option>
+          <option value="INP">INP</option>
+          <option value="FIN">FIN</option>
+        </select>
+      </div>
+      <div class="form-line">
+        <div class="date">
+          <label for="date1"
+            >Start date
+            <span style="color: red; font-weight: 900">*</span></label
+          >
+          <input id="date1" type="date" formControlName="date1" />
+        </div>
+        <div class="date">
+          <label for="date2">End date</label>
+          <input id="date2" type="date" formControlName="date2" />
+        </div>
+      </div>
+    </div>
+
+    <div class="action-container">
+      <div class="action">
+        <button class="cancel" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="create" *ngIf="!componentEditState">
+          Create Project
+        </button>
+        <button type="submit" class="create" *ngIf="componentEditState">
+          Update Project
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
