@@ -3,7 +3,10 @@ package vn.elca.training.model.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Table;
 import java.time.LocalDate;
 
 /**
@@ -13,11 +16,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Table(name = "EMPLOYEE")
-public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
-    private Long id;
+public class Employee extends AbstractEntity {
 
     @Column(name = "VISA", nullable = false, length = 3, unique = true)
     private String visa;
@@ -31,7 +30,5 @@ public class Employee {
     @Column(name = "BIRTH_DATE", nullable = false)
     private LocalDate birthDate;
 
-    @Column(name = "VERSION", nullable = false)
-    private int version;
 }
 

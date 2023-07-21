@@ -16,11 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "PROJECT")
-public class Project {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
-    private Long id;
+public class Project extends AbstractEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GROUP_ID", nullable = false)
@@ -44,10 +40,6 @@ public class Project {
 
     @Column(name = "END_DATE")
     private LocalDate endDate;
-
-    @Column(name = "VERSION", nullable = false)
-    @Version
-    private int version;
 
     @Getter
     @AllArgsConstructor
