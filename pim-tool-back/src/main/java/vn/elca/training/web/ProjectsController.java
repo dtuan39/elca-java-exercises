@@ -26,10 +26,14 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class ProjectsController extends AbstractApplicationController {
 
-    private static final Logger logger = LogManager.getLogger(ProjectsController.class);
+    private final Logger logger = LogManager.getLogger(ProjectsController.class);
+
+    private final ProjectService projectService;
 
     @Autowired
-    private ProjectService projectService;
+    public ProjectsController(ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @ExceptionHandler(ResponseStatusException.class)
     //We implement a @ControllerAdvice globally but also ResponseStatusExceptions locally
@@ -52,33 +56,48 @@ public class ProjectsController extends AbstractApplicationController {
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
-    @PostMapping
+
+    @PostMapping // POST /projects
     public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectDto projectDto) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(projectService.create(projectDto));
-        } catch (StartDateAfterEndDateException e) {//validation
+        } catch (StartDateAfterEndDateException | IllegalArgumentException e) { //validation
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (ProjectNumberAlreadyExistsException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        } catch (InvalidProjectMembersException e) {
+        } catch (GroupNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
-    @PutMapping
+
+    @PutMapping // PUT /projects
     public ResponseEntity<ProjectDto> updateProject(@RequestBody ProjectDto projectDto) {
-        ProjectDto response = null;
+        ProjectDto response;
         try {
             response = projectService.update(projectDto);
-        } catch (ProjectNotFoundException e) {
+        } catch (ProjectNotFoundException | GroupNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (StartDateAfterEndDateException | InvalidProjectMembersException e) {
+        } catch (StartDateAfterEndDateException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (ConcurrentUpdateException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
+
+    @GetMapping("/{id}") // GET /projects/1
+    public ResponseEntity<ProjectDto> findProjectByNumber(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(projectService.findById(id));
+        } catch (ProjectNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+
+    @GetMapping // GET /projects?page=0&limit=10
     public ResponseEntity<ProjectRetrieveResponseDto> getAll(@RequestParam(defaultValue = "0") int page,
                                                              @RequestParam(defaultValue = "10") int limit) {
 
@@ -91,7 +110,7 @@ public class ProjectsController extends AbstractApplicationController {
     }
 
 
-    @GetMapping("/search")
+    @GetMapping("/search") // GET /projects/search?keyword=abc&status=NEW&page=0&limit=10
     public ResponseEntity<ProjectRetrieveResponseDto> search(@RequestParam String keyword,
                                                              @RequestParam String status,
                                                              @RequestParam(defaultValue = "0") int page,
@@ -99,7 +118,16 @@ public class ProjectsController extends AbstractApplicationController {
         if (StringUtils.isBlank(keyword) && StringUtils.isBlank(status)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Keyword and status are blank");
         }
-        Page<ProjectDto> result = projectService.findByKeyword(keyword, status, page, limit);
+
+        ProjectDto.StatusDto statusDto;
+
+        try {
+            statusDto = StringUtils.isBlank(status) ? null : ProjectDto.StatusDto.valueOf(status);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Status %s is invalid", status));
+        }
+
+        Page<ProjectDto> result = projectService.findByKeyword(keyword, statusDto, page, limit);
 
         // Extract the total count of results
         long totalCount = result.getTotalElements();
@@ -108,29 +136,15 @@ public class ProjectsController extends AbstractApplicationController {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProjectDto> findProjectByNumber(@PathVariable Integer id) {
+    @DeleteMapping("/{id}") // DELETE /projects/1
+    public ResponseEntity<ProjectDto> deleteProjectById(@PathVariable int id) {
         try {
-            return ResponseEntity.ok(projectService.findById(id));
-        } catch (ProjectNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-
-    @DeleteMapping("/{number}")
-    public ResponseEntity<ProjectDto> deleteProject(@PathVariable int number) {
-        try {
-            projectService.deleteByProjectNumber(number);
+            projectService.deleteById(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (ProjectNotInNewStatusException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (ProjectNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-    }
-
-    @GetMapping("/count")
-    public ResponseEntity<Long> countProject() {
-        return ResponseEntity.ok(projectService.count());
     }
 }
