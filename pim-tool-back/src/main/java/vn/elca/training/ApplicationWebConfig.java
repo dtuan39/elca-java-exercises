@@ -8,25 +8,20 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import vn.elca.training.model.mapping.ProjectMapper;
-import vn.elca.training.validator.ProjectValidator;
 import vn.elca.training.service.ProjectService;
 import vn.elca.training.util.ApplicationMapper;
+import vn.elca.training.validator.ProjectValidator;
 import vn.elca.training.web.AbstractApplicationController;
 
 /**
  * @author gtn
- *
  */
 @SpringBootApplication(scanBasePackages = "vn.elca.training")
-@ComponentScan(basePackageClasses = {
-        AbstractApplicationController.class,
-        ApplicationMapper.class,
-        ProjectService.class,
-        ProjectValidator.class,
-        ProjectMapper.class
-})
+@ComponentScan(basePackageClasses = {AbstractApplicationController.class, ApplicationMapper.class, ProjectService.class, ProjectValidator.class, ProjectMapper.class})
 @PropertySource({"classpath:/application.properties", "classpath:/messages.properties"})
+@EnableJpaRepositories(basePackages = "vn.elca.training.repository")
 public class ApplicationWebConfig extends SpringBootServletInitializer {
 
     @Override
@@ -35,9 +30,7 @@ public class ApplicationWebConfig extends SpringBootServletInitializer {
     }
 
     @Bean
-    public ServletRegistrationBean h2servletRegistration() {
-        ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
-        registrationBean.addUrlMappings("/h2console/*");
-        return registrationBean;
+    public ServletRegistrationBean<WebServlet> h2servletRegistration() {
+        return new ServletRegistrationBean<>(new WebServlet(), "/h2console/*");
     }
 }
