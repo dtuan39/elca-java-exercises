@@ -11,6 +11,7 @@ import vn.elca.training.model.mapping.ProjectMapperImpl;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class ProjectMapperTest {
     // Create an instance of ProjectMapper
@@ -18,53 +19,51 @@ public class ProjectMapperTest {
 
     @Test
     public void testToDTO() {
-        // Create a sample Project entity
+        // Suppose we have a Project from the database
         Project project = new Project();
         project.setId(1L);
         project.setProjectNumber(6969);
-        Group group = new Group();
-        group.setId(1L);
-        project.setGroup(group);
-        HashSet<Employee> employees = new HashSet<>();
-        Employee employee = new Employee();
-        employee.setId(1L);
-        employee.setVisa("FPT-001");
-        employees.add(employee);
-        project.setEmployees(employees);
         project.setName("Sample Project");
         project.setCustomer("Sample Customer");
         project.setStatus(Project.Status.NEW);
         project.setStartDate(LocalDate.now());
         project.setEndDate(null);
-        // Set other properties of the project as needed
 
-        // Call the mapper to convert Project to ProjectDto
-        ProjectDto projectDto = projectMapper.toDTO(project);
+        Group group = new Group();
+        group.setId(1L);
+        HashSet<Employee> employees = new HashSet<>();
+        Employee employee = new Employee();
+        employee.setId(1L);
+        employee.setVisa("FPT-001");
+        employees.add(employee);
 
-        // print projectDto to see the result
-        System.out.println(projectDto);
+        project.setGroup(group);
+        project.setEmployees(employees);
+
+        ProjectDto projectDto = projectMapper.toDTO(project); // mapping
 
         // Assert that the mapped ProjectDto has the correct values
-        Assertions.assertEquals(project.getId(), projectDto.getId());
         Assertions.assertEquals(project.getGroup().getId(), projectDto.getGroupId());
+        Assertions.assertEquals(project.getEmployees()
+                        .stream()
+                        .map(Employee::getVisa)
+                        .collect(Collectors.joining(","))
+                , projectDto.getMembers());
         // Assert other fields as needed
+        Assertions.assertEquals(project.getId(), projectDto.getId());
+        Assertions.assertEquals(project.getProjectNumber(), projectDto.getProjectNumber());
+        Assertions.assertEquals(project.getName(), projectDto.getName());
+        Assertions.assertEquals(project.getCustomer(), projectDto.getCustomer());
+        Assertions.assertEquals(project.getStatus().name(), projectDto.getStatus().name());
+        Assertions.assertEquals(project.getStartDate(), projectDto.getStartDate());
+        Assertions.assertEquals(project.getEndDate(), projectDto.getEndDate());
+        Assertions.assertEquals(project.getVersion(), projectDto.getVersion());
     }
 
     @Test
     public void testToEntity() {
+        // Suppose we have a ProjectDto from the frontend
         ProjectDto projectDto = new ProjectDto();
-        //{
-        //    "id": 1,
-        //    "name": "Facturation / Encaissements",
-        //    "customer": "Les Retaites Populaires",
-        //    "groupId": 1,
-        //    "members": "ABC,DEF",
-        //    "status": "NEW",
-        //    "startDate": "2004-02-25",
-        //    "endDate": null,
-        //    "version": 1,
-        //    "number": 3116
-        //}
         projectDto.setId(1L);
         projectDto.setName("Facturation / Encaissements");
         projectDto.setCustomer("Les Retaites Populaires");
@@ -73,11 +72,18 @@ public class ProjectMapperTest {
         projectDto.setStartDate(LocalDate.of(2004, 2, 25));
         projectDto.setEndDate(null);
         projectDto.setVersion(1);
-        projectDto.setMembers("ABC,DEF");
-        projectDto.setGroupId(1L);
 
-        Project project = projectMapper.toEntity(projectDto);
+        Project project = projectMapper.toEntity(projectDto); // mapping
 
-        System.out.println(project);
+        // assert all except members and group
+        // because mapper cannot map members and group (load from database)
+        Assertions.assertEquals(projectDto.getId(), project.getId());
+        Assertions.assertEquals(projectDto.getName(), project.getName());
+        Assertions.assertEquals(projectDto.getCustomer(), project.getCustomer());
+        Assertions.assertEquals(projectDto.getProjectNumber(), project.getProjectNumber());
+        Assertions.assertEquals(projectDto.getStatus().name(), project.getStatus().name());
+        Assertions.assertEquals(projectDto.getStartDate(), project.getStartDate());
+        Assertions.assertEquals(projectDto.getEndDate(), project.getEndDate());
+        Assertions.assertEquals(projectDto.getVersion(), project.getVersion());
     }
 }
