@@ -5,6 +5,10 @@ public class ProjectNotFoundException extends Exception{
         super("Project not found");
     }
 
+    public ProjectNotFoundException(String message) {
+        super(message);
+    }
+
     public ProjectNotFoundException(Long id) {
         super(String.format("Project with id %d not found", id));
     }
