@@ -8,7 +8,7 @@ import vn.elca.training.model.dto.ProjectDto;
 import vn.elca.training.model.entity.Employee;
 import vn.elca.training.model.entity.Project;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -23,7 +23,7 @@ public abstract class ProjectMapper implements IMapper<Project, ProjectDto> {
     public abstract Project toEntity(ProjectDto projectDto);
 
     @Override
-    public Collection<Project> toEntities(Collection<ProjectDto> dtos) {
+    public List<Project> toEntities(List<ProjectDto> dtos) {
         return dtos.stream().map(this::toEntity).collect(Collectors.toList());
     }
 
@@ -34,7 +34,7 @@ public abstract class ProjectMapper implements IMapper<Project, ProjectDto> {
     public abstract ProjectDto toDTO(Project project);
 
     @Override
-    public Collection<ProjectDto> toDTOs(Collection<Project> entities) {
+    public List<ProjectDto> toDTOs(List<Project> entities) {
         return entities.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
