@@ -147,4 +147,19 @@ public class ProjectsController extends AbstractApplicationController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+    // Delete multiple projects by ids
+    @DeleteMapping // DELETE /projects?ids=1,2,3
+    public ResponseEntity<ProjectDto> deleteProjectsByIds(@RequestParam String ids) {
+        try {
+            projectService.deleteByIds(ids);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (ProjectNotInNewStatusException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (ProjectNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (ProjectDeleteException e) {
+            throw new ResponseStatusException(HttpStatus.MULTI_STATUS, e.getMessage());
+        }
+    }
 }
