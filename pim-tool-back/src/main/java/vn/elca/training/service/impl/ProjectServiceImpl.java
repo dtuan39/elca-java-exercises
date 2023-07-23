@@ -5,7 +5,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,8 +109,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Page<ProjectDto> findByKeyword(String keyword, ProjectDto.StatusDto status, int page, int limit) {
         return projectRepository.findProjectByKeywordAndStatusSortByProjectNumber(keyword,
-                status == null ? null : Project.Status.valueOf(status.toString()),
-                PageRequest.of(page, limit))
+                        status == null ? null : Project.Status.valueOf(status.toString()),
+                        PageRequest.of(page, limit))
                 .map(mapper::toDTO);
     }
 
@@ -132,13 +131,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Page<ProjectDto> findAllOrderByProjectNumber(int page, int limit) {
-        // Build the sorting request
-        Sort sort = Sort.by("projectNumber").ascending();
         // Build the pagination and sorting request
-        Pageable pageableAndSorting = PageRequest.of(page, limit, sort);
-        // Retrieve the projects from the database
-        Page<Project> projects = projectRepository.findAll(pageableAndSorting);
-        return projects.map(mapper::toDTO);
+        Pageable pageableAndSorting = PageRequest.of(page, limit);
+        return projectRepository.findAllByOrderByProjectNumberAsc(pageableAndSorting)
+                .map(mapper::toDTO);
     }
 
     @Override
