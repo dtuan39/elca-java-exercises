@@ -60,3 +60,4 @@ target
 # Miscellaneous
 /pim-tool-front/.angular/cache
 .sass-cache/
+/logs/pim-tool-back.log
