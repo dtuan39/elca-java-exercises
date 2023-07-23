@@ -1,6 +1,5 @@
 package vn.elca.training.service.impl;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.elca.training.model.dto.ProjectDto;
 import vn.elca.training.model.entity.Project;
-import vn.elca.training.model.entity.QProject;
 import vn.elca.training.model.exception.*;
 import vn.elca.training.model.mapping.ProjectMapper;
 import vn.elca.training.repository.EmployeeRepository;
@@ -23,7 +21,10 @@ import vn.elca.training.validator.ProjectValidator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -108,41 +109,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Page<ProjectDto> findByKeyword(String keyword, ProjectDto.StatusDto status, int page, int limit) {
-        // TODO : Optimize the search query
-        String[] parts = keyword.split("\\s+"); // Split the keyword into separate parts
-        BooleanExpression conditions = null; // Initialize the conditions as null
-        // Loop through the parts and build the conditions
-        for (String part : parts) {
-            if (conditions == null) {
-                conditions = QProject.project.name.containsIgnoreCase(part).or(QProject.project.customer.containsIgnoreCase(part));
-                try {
-                    Integer projectNumber = Integer.parseInt(part);
-                    conditions = conditions.or(QProject.project.projectNumber.eq(projectNumber));
-                } catch (NumberFormatException e) {
-                    // Ignore if the part cannot be parsed as an integer
-                }
-            } else {
-                conditions = conditions.or(QProject.project.name.containsIgnoreCase(part)).or(QProject.project.customer.containsIgnoreCase(part));
-                try {
-                    Integer projectNumber = Integer.parseInt(part);
-                    conditions = conditions.or(QProject.project.projectNumber.eq(projectNumber));
-                } catch (NumberFormatException e) {
-                    // Ignore if the part cannot be parsed as an integer
-                }
-            }
-        }
-        //status string must be not null and is one of the values in Project.Status
-
-        if (conditions != null && status != null) {
-            conditions = conditions.and(QProject.project.status.eq(Project.Status.valueOf(status.toString())));
-        }
-        // Build sort request by project number
-        Sort sort = Sort.by("projectNumber").ascending();
-        // Build the pagination request
-        Pageable pageable = PageRequest.of(page, limit, sort);
-        // Retrieve the projects from the database
-        if (conditions != null) return projectRepository.findAll(conditions, pageable).map(mapper::toDTO);
-        else return projectRepository.findAll(pageable).map(mapper::toDTO);
+        return projectRepository.findProjectByKeywordAndStatusSortByProjectNumber(keyword,
+                status == null ? null : Project.Status.valueOf(status.toString()),
+                PageRequest.of(page, limit))
+                .map(mapper::toDTO);
     }
 
     @Override
@@ -169,5 +139,42 @@ public class ProjectServiceImpl implements ProjectService {
         // Retrieve the projects from the database
         Page<Project> projects = projectRepository.findAll(pageableAndSorting);
         return projects.map(mapper::toDTO);
+    }
+
+    @Override
+    public void deleteByIds(String ids)
+            throws ProjectNotInNewStatusException, ProjectNotFoundException, ProjectDeleteException {
+        List<Long> idsList = Stream.of(ids.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+
+        // Load from database to check status and one of the projects is not exist
+        List<Project> allByIdIn = projectRepository.findAllByIdIn(idsList);
+
+        List<Long> invalidProjectsStatus = new ArrayList<>();
+        for (Project project : allByIdIn) { // double check status of project is NEW because not always believe in front end
+            if (project.getStatus() != Project.Status.NEW) {
+                invalidProjectsStatus.add(project.getId());
+            }
+        }
+
+        if (allByIdIn.size() != idsList.size() && !invalidProjectsStatus.isEmpty()) { // the both
+            idsList.removeAll(allByIdIn.stream().map(Project::getId).collect(Collectors.toList()));
+            throw new ProjectDeleteException(String.format(
+                    "Projects with ids %s are not exist and projects with ids %s are not in NEW status",
+                    idsList, invalidProjectsStatus));
+        } else {
+            // One of the projects is not in NEW status
+            if (!invalidProjectsStatus.isEmpty()) {
+                throw new ProjectNotInNewStatusException(String.format("Projects with ids %s are not in NEW status", invalidProjectsStatus));
+            }
+            // One of the projects is not exist
+            if (allByIdIn.size() != idsList.size()) {
+                idsList.removeAll(allByIdIn.stream().map(Project::getId).collect(Collectors.toList()));
+                // what's id is not exist
+                throw new ProjectNotFoundException(String.format("Projects with ids %s are not exist", idsList));
+            }
+        }
+        projectRepository.deleteAllByIdIn(idsList);
     }
 }

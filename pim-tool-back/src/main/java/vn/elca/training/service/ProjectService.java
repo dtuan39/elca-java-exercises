@@ -22,4 +22,6 @@ ProjectService {
     Page<ProjectDto> findByKeyword(String keyword, ProjectDto.StatusDto status, int page, int limit);
 
     Page<ProjectDto> findAllOrderByProjectNumber(int page, int limit);
+
+    void deleteByIds(String ids) throws ProjectNotInNewStatusException, ProjectNotFoundException, ProjectDeleteException;
 }
