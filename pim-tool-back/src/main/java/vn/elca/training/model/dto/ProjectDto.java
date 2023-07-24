@@ -13,15 +13,19 @@ import java.time.LocalDate;
 @Data
 @RequiredArgsConstructor
 public class ProjectDto implements Serializable {
-    private Long id;
+    private static final long serialVersionUID = 1L;
     @JsonProperty("number")
     private Integer projectNumber;
+    private Long id;
     private String name;
     private String customer;
     private Long groupId;
     private String members;
-    private String status;
+    private StatusDto status;
     private LocalDate startDate;
     private LocalDate endDate;
     private int version;
+    public enum StatusDto {
+        NEW, PLA, INP, FIN
+    }
 }

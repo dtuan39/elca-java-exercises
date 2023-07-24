@@ -1,193 +1,176 @@
 package vn.elca.training.service.impl;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.elca.training.model.dto.ProjectDto;
 import vn.elca.training.model.entity.Project;
-import vn.elca.training.model.entity.QProject;
 import vn.elca.training.model.exception.*;
+import vn.elca.training.model.mapping.ProjectMapper;
 import vn.elca.training.repository.EmployeeRepository;
 import vn.elca.training.repository.GroupRepository;
 import vn.elca.training.repository.ProjectRepository;
 import vn.elca.training.service.ProjectService;
-import vn.elca.training.util.ApplicationMapper;
 import vn.elca.training.validator.ProjectValidator;
 
-import java.util.HashSet;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
 public class ProjectServiceImpl implements ProjectService {
 
-    @Autowired
-    private ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
+    private final EmployeeRepository employeeRepository;
+    private final GroupRepository groupRepository;
+    private final ProjectMapper mapper;
+    private final ProjectValidator validator;
+    @PersistenceContext
+    private EntityManager em;
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    public ProjectServiceImpl(ProjectRepository projectRepository, EmployeeRepository employeeRepository, GroupRepository groupRepository, ProjectMapper mapper, ProjectValidator validator) {
+        this.projectRepository = projectRepository;
+        this.employeeRepository = employeeRepository;
+        this.groupRepository = groupRepository;
+        this.mapper = mapper;
+        this.validator = validator;
+    }
 
-    @Autowired
-    private GroupRepository groupRepository;
-
-    @Autowired
-    private ApplicationMapper mapper;
-
-    @Autowired
-    private ProjectValidator projectValidator;
 
     @Override
-    public ProjectDto create(ProjectDto projectDto) throws StartDateAfterEndDateException,
-            ProjectNumberAlreadyExistsException, InvalidProjectMembersException {
-        // Validate the input data before creating the project
-        projectValidator.validate(projectDto);
+    @Transactional(rollbackFor = {DataIntegrityViolationException.class, Exception.class})
+    public ProjectDto create(ProjectDto projectDto)
+            throws StartDateAfterEndDateException, ProjectNumberAlreadyExistsException, GroupNotFoundException {
+        validator.validate(projectDto);
 
-        // Convert DTO to Entity
-        Project newProject = mapper.projectDtoToProject(projectDto);
+        Project newProject = mapper.toEntity(projectDto);
 
-        // Attach group to the project
-        newProject.setGroup(groupRepository.findById(projectDto.getGroupId()).orElseThrow());
+        // Project's group and members must set manually because the mapper cannot access the database
+        newProject.setGroup(groupRepository.findById(projectDto.getGroupId())
+                .orElseThrow(() -> new GroupNotFoundException(projectDto.getGroupId())));
+        newProject.setEmployees(employeeRepository.findByVisaIn(List.of(projectDto.getMembers().split(","))));
 
-        // Attach employees to the project
-        attachEmployeesToProject(newProject, projectDto.getMembers());
-
-        try {// Save the project to the database
+        try {
             Project savedProject = projectRepository.save(newProject);
-            return mapper.projectToProjectDto(savedProject);
+            return mapper.toDTO(savedProject);
         } catch (DataIntegrityViolationException e) {
-            throw new ProjectNumberAlreadyExistsException("Project number already exists");
+            throw new ProjectNumberAlreadyExistsException(String.format("Project number %d already exists",
+                    projectDto.getProjectNumber()));
         }
     }
 
     @Override
-    public ProjectDto update(ProjectDto updateProjectDto) throws StartDateAfterEndDateException,
-            ProjectNotFoundException, InvalidProjectMembersException {
-        // Validate the input data before updating the project
-        projectValidator.validate(updateProjectDto);
+    @Transactional(rollbackFor = {ObjectOptimisticLockingFailureException.class, Exception.class})
+    public ProjectDto update(ProjectDto projectDto)
+            throws StartDateAfterEndDateException, ProjectNotFoundException, GroupNotFoundException,
+            ConcurrentUpdateException {
+        validator.validate(projectDto);
 
-        // Retrieve the existing project entity from the database
-        Project existingProject = projectRepository.findByProjectNumber(updateProjectDto.getProjectNumber())
-                .orElseThrow(ProjectNotFoundException::new);
+        Project existingProject = projectRepository.findById(projectDto.getId())
+                .orElseThrow(() -> new ProjectNotFoundException(projectDto.getId()));
 
-        // Concurrent update detection, using optimistic locking by Hibernate
-        if (existingProject.getVersion() != updateProjectDto.getVersion()) {
-            throw new ConcurrentUpdateException("Project has been updated by another user");
-        }
+        // Hibernate will automatically detect concurrent update and throw an exception
+        em.detach(existingProject);
 
         // Update the project with the new data
-        existingProject.setName(updateProjectDto.getName());
-        existingProject.setCustomer(updateProjectDto.getCustomer());
-        existingProject.setStatus(Project.Status.valueOf(updateProjectDto.getStatus()));
-        existingProject.setStartDate(updateProjectDto.getStartDate());
-        existingProject.setEndDate(updateProjectDto.getEndDate());
-        existingProject.setVersion(updateProjectDto.getVersion());
+        existingProject.setName(projectDto.getName());
+        existingProject.setCustomer(projectDto.getCustomer());
+        existingProject.setStatus(Project.Status.valueOf(projectDto.getStatus().toString()));
+        existingProject.setStartDate(projectDto.getStartDate());
+        existingProject.setEndDate(projectDto.getEndDate());
+        existingProject.setVersion(projectDto.getVersion());
 
-        // Attach group to the project
-        existingProject.setGroup(groupRepository.findById(updateProjectDto.getGroupId())
-                .orElseThrow(ProjectNotFoundException::new));
+        // Project's group and members must set manually because the mapper cannot access the database
+        existingProject.setGroup(groupRepository.findById(projectDto.getGroupId())
+                .orElseThrow(GroupNotFoundException::new));
+        existingProject.setEmployees(employeeRepository.findByVisaIn(
+                List.of(projectDto.getMembers().split(","))));
 
-        // Attach employees to the project
-        attachEmployeesToProject(existingProject, updateProjectDto.getMembers());
-
-        // TODO : Hint : To handle concurrent update, the entity's status must not be persisted.
-        return mapper.projectToProjectDto(projectRepository.save(existingProject));
-    }
-
-    @Override
-    public Page<ProjectDto> findByKeyword(String keyword, String status, int page, int limit) {
-        String[] parts = keyword.split("\\s+"); // Split the keyword into separate parts
-        BooleanExpression conditions = null; // Initialize the conditions as null
-        // Loop through the parts and build the conditions
-        for (String part : parts) {
-            if (conditions == null) {
-                conditions = QProject.project.name.containsIgnoreCase(part)
-                        .or(QProject.project.customer.containsIgnoreCase(part));
-                try {
-                    Integer projectNumber = Integer.parseInt(part);
-                    conditions = conditions.or(QProject.project.projectNumber.eq(projectNumber));
-                } catch (NumberFormatException e) {
-                    // Ignore if the part cannot be parsed as an integer
-                }
-            } else {
-                conditions = conditions.or(QProject.project.name.containsIgnoreCase(part))
-                        .or(QProject.project.customer.containsIgnoreCase(part));
-                try {
-                    Integer projectNumber = Integer.parseInt(part);
-                    conditions = conditions.or(QProject.project.projectNumber.eq(projectNumber));
-                } catch (NumberFormatException e) {
-                    // Ignore if the part cannot be parsed as an integer
-                }
-            }
+        try {
+            Project response = projectRepository.save(existingProject);
+            return mapper.toDTO(response);
+        } catch (ObjectOptimisticLockingFailureException e) { // Concurrent update exception with optimistic locking
+            throw new ConcurrentUpdateException(
+                    String.format("Project with project number %d has been updated by another user",
+                            projectDto.getProjectNumber()));
         }
-        //status string must be not null and is one of the values in Project.Status
-
-        if (conditions != null && !StringUtils.isBlank(status) && Project.Status.contains(status)) {
-            conditions = conditions.and(QProject.project.status.eq(Project.Status.valueOf(status)));
-        }
-        // Build sort request by project number
-        Sort sort = Sort.by("projectNumber").ascending();
-        // Build the pagination request
-        Pageable pageable = PageRequest.of(page, limit, sort);
-        // Retrieve the projects from the database
-        return projectRepository.findAll(conditions, pageable).map(mapper::projectToProjectDto);
     }
 
     @Override
-    public ProjectDto findById(long id) {
-        return mapper.projectToProjectDto(projectRepository.findById(id).orElseThrow(ProjectNotFoundException::new));
+    public Page<ProjectDto> findByKeyword(String keyword, ProjectDto.StatusDto status, int page, int limit) {
+        return projectRepository.findProjectByKeywordAndStatusSortByProjectNumber(keyword,
+                        status == null ? null : Project.Status.valueOf(status.toString()),
+                        PageRequest.of(page, limit))
+                .map(mapper::toDTO);
     }
 
     @Override
-    public ProjectDto findProjectByNumber(Integer number) {
-        return mapper.projectToProjectDto(projectRepository.findByProjectNumber(number).orElseThrow());
+    public ProjectDto findById(long id) throws ProjectNotFoundException {
+        return mapper.toDTO(projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id)));
     }
 
     @Override
-    public boolean delete(long id) {
-        return false;
-    }
-
-    @Override
-    public void deleteByProjectNumber(Integer projectNumber) throws ProjectNotInNewStatusException {
-        Project project = projectRepository.findByProjectNumber(projectNumber).orElseThrow(ProjectNotFoundException::new);
+    public void deleteById(long id) throws ProjectNotInNewStatusException, ProjectNotFoundException {
+        Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         if (project.getStatus() != Project.Status.NEW) {
-            //just delete the project if it is not in NEW status
-            throw new ProjectNotInNewStatusException("Project is not in NEW status");
+            throw new ProjectNotInNewStatusException(String.format("Project with project number %d is not in NEW status",
+                    project.getProjectNumber()));
         }
-        projectRepository.deleteByProjectNumber(projectNumber);
-    }
-
-    @Override
-    public long count() {
-        return projectRepository.count();
+        projectRepository.deleteById(id);
     }
 
     @Override
     public Page<ProjectDto> findAllOrderByProjectNumber(int page, int limit) {
-        // Build the sorting request
-        Sort sort = Sort.by("projectNumber").ascending();
         // Build the pagination and sorting request
-        Pageable pageableAndSorting = PageRequest.of(page, limit, sort);
-        // Retrieve the projects from the database
-        Page<Project> projects = projectRepository.findAll(pageableAndSorting);
-        return projects.map(mapper::projectToProjectDto);
+        Pageable pageableAndSorting = PageRequest.of(page, limit);
+        return projectRepository.findAllByOrderByProjectNumberAsc(pageableAndSorting)
+                .map(mapper::toDTO);
     }
 
-    private void attachEmployeesToProject(Project project, String members) {
-        if (!StringUtils.isBlank(members)) {// if members is not empty
-            List<String> visas = List.of(members.split(","));
-            if (employeeRepository.existsByVisaIn(visas)) {
-                project.setEmployees(new HashSet<>(employeeRepository.findByVisaIn(visas)));
-            } else {//throw exception that project's members are not valid
-                throw new InvalidProjectMembersException("Project's members are not valid.");
+    @Override
+    public void deleteByIds(String ids)
+            throws ProjectNotInNewStatusException, ProjectNotFoundException, ProjectDeleteException {
+        List<Long> idsList = Stream.of(ids.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+
+        // Load from database to check status and one of the projects is not exist
+        List<Project> allByIdIn = projectRepository.findAllByIdIn(idsList);
+
+        List<Long> invalidProjectsStatus = new ArrayList<>();
+        for (Project project : allByIdIn) { // double check status of project is NEW because not always believe in front end
+            if (project.getStatus() != Project.Status.NEW) {
+                invalidProjectsStatus.add(project.getId());
             }
         }
+
+        if (allByIdIn.size() != idsList.size() && !invalidProjectsStatus.isEmpty()) { // the both
+            idsList.removeAll(allByIdIn.stream().map(Project::getId).collect(Collectors.toList()));
+            throw new ProjectDeleteException(String.format(
+                    "Projects with ids %s are not exist and projects with ids %s are not in NEW status",
+                    idsList, invalidProjectsStatus));
+        } else {
+            // One of the projects is not in NEW status
+            if (!invalidProjectsStatus.isEmpty()) {
+                throw new ProjectNotInNewStatusException(String.format("Projects with ids %s are not in NEW status", invalidProjectsStatus));
+            }
+            // One of the projects is not exist
+            if (allByIdIn.size() != idsList.size()) {
+                idsList.removeAll(allByIdIn.stream().map(Project::getId).collect(Collectors.toList()));
+                // what's id is not exist
+                throw new ProjectNotFoundException(String.format("Projects with ids %s are not exist", idsList));
+            }
+        }
+        projectRepository.deleteAllByIdIn(idsList);
     }
 }

@@ -1,18 +1,18 @@
 package vn.elca.training.model.mapping;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
- * @author thomas.dang
  * @param <E> Entity
  * @param <D> DTO
+ * @author thomas.dang
  */
 public interface IMapper<E, D> {
     E toEntity(D d);
 
-    Collection<E> toEntities(Collection<D> ds);
+    List<E> toEntities(List<D> ds);
 
     D toDTO(E e);
 
-    Collection<D> toDTOs(Collection<E> entities);
+    List<D> toDTOs(List<E> entities);
 }
