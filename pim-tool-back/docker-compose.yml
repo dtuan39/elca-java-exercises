@@ -6,6 +6,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: pim-tool
+    volumes:
+      - ./data.sql:/data.sql
   # spring boot app
   pim-tool-back:
     build: .

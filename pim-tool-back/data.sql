@@ -1,4 +1,4 @@
-INSERT INTO EMPLOYEE (VISA, FIRST_NAME, LAST_NAME, BIRTH_DATE, VERSION)
+INSERT INTO employee (VISA, FIRST_NAME, LAST_NAME, BIRTH_DATE, VERSION)
 VALUES
     ('ABC', 'John', 'Doe', '1990-01-01', 1),
     ('DEF', 'Jane', 'Smith', '1985-05-15', 1),
@@ -10,14 +10,14 @@ VALUES
     ('VWX', 'Olivia', 'Taylor', '1993-10-10', 2),
     ('YZA', 'David', 'Thomas', '1994-08-18', 3),
     ('BCD', 'Sophia', 'Hernandez', '1989-06-08', 3);
-INSERT INTO "group"(VERSION, GROUP_LEADER_ID)
+INSERT INTO `group`(VERSION, GROUP_LEADER_ID)
 VALUES
     (1, 1),
     (1, 2),
     (2, 2),
     (1, 3),
     (1, 3);
-INSERT INTO PROJECT (GROUP_ID, PROJECT_NUMBER, NAME, CUSTOMER, STATUS, START_DATE, END_DATE, VERSION)
+INSERT INTO project (GROUP_ID, PROJECT_NUMBER, NAME, CUSTOMER, STATUS, START_DATE, END_DATE, VERSION)
 VALUES
     (1, 3116, 'Facturation / Encaissements', 'Les Retaites Populaires', 'NEW', '2004-02-25', NULL, 1),
     (2, 3118, 'GKBWEB', 'GKk8', 'FIN', '2002-10-10', NULL, 1),
@@ -45,7 +45,7 @@ VALUES
     (2, 7296, 'ORDER MANAGEMENT', 'OrderPro', 'INP', '2021-06-18', NULL, 1),
     (3, 7300, 'CUSTOMER SUPPORT', 'HelpDesk', 'PLA', '2020-11-30', NULL, 1);
 -- Insert sample data for the ProjectEmployee table
-INSERT INTO PROJECT_EMPLOYEE (PROJECT_ID, EMPLOYEE_ID)
+INSERT INTO project_employee (PROJECT_ID, EMPLOYEE_ID)
 VALUES (1, 1),
        (1, 2),
        (2, 4),
