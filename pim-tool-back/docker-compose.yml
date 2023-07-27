@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  # mysql database
+  pim-tool-db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pim-tool
+  # spring boot app
+  pim-tool-back:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+        - pim-tool-db
