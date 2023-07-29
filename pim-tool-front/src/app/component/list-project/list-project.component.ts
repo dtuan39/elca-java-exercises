@@ -93,7 +93,7 @@ export class ListProjectComponent implements OnInit {
 
     //if 2 fields are empty, load all projects and return
     if (searchForm.value.searchText == '' && searchForm.value.status == '') {
-      this.getProjects()
+      this.getProjects();
       return;
     }
 
@@ -101,10 +101,11 @@ export class ListProjectComponent implements OnInit {
     this.sharedService.setSavedSatus(searchForm.value.status);
 
     this.projectService
-      .searchProjects(
-        searchForm.value.searchText == '' ? null : searchForm.value.searchText,
-        searchForm.value.status == '' ? null : searchForm.value.status
-      )
+      // .searchProjects(
+      //   searchForm.value.searchText == '' ? null : searchForm.value.searchText,
+      //   searchForm.value.status == '' ? null : searchForm.value.status
+      // )
+      .searchProjects(searchForm.value.searchText, searchForm.value.status)
       .subscribe(
         (response: Project[]) => {
           console.log('day la search');
@@ -143,7 +144,6 @@ export class ListProjectComponent implements OnInit {
     this.selectedItems = [];
   }
 
-  
   public deleteSelectedProject(): void {
     this.selectedItems.forEach((project) => {
       this.projectService.deleteProject(project.id).subscribe(
@@ -166,7 +166,7 @@ export class ListProjectComponent implements OnInit {
   toggleSelection(project: Project) {
     if (this.isSelected(project)) {
       // Item is already selected, remove it from the array
-      // creates a new array containing only the elements that satisfy a given condition (use when user check the box twice 
+      // creates a new array containing only the elements that satisfy a given condition (use when user check the box twice
       //to remove the checkbox, the array is re-updated)
       this.selectedItems = this.selectedItems.filter(
         (item) => item.id !== project.id
@@ -178,7 +178,6 @@ export class ListProjectComponent implements OnInit {
     console.log(this.selectedItems);
   }
 
-
   //to check if at least one item (project) in selectedItems has the id equal with the project we have pass as argument
   //it will return true
   isSelected(project: Project) {
@@ -188,6 +187,5 @@ export class ListProjectComponent implements OnInit {
   navigateToUpdateProject(project: Project) {
     this.router.navigate(['/update', project.number]);
     // try
-    
   }
 }

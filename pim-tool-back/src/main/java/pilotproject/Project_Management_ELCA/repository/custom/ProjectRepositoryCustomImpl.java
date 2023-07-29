@@ -25,13 +25,13 @@ public class ProjectRepositoryCustomImpl implements ProjectRepositoryCustom{
     public List<Project> findProjectBySearchTextAndStatus(String searchText, String status) {
         BooleanBuilder predicate = new BooleanBuilder();
 
-        if (!"null".equals(searchText)) {
+        if (!"".equals(searchText)) {
             predicate.or(QProject.project.projectNumber.stringValue().containsIgnoreCase(searchText));
             predicate.or(QProject.project.name.containsIgnoreCase(searchText));
             predicate.or(QProject.project.customer.containsIgnoreCase(searchText));
         }
 
-        if (!"null".equals(status)) {
+        if (!"".equals(status)) {
             try {
                 predicate.and(QProject.project.status.eq(Project.Status.valueOf(status)));
             } catch (IllegalArgumentException e) {
