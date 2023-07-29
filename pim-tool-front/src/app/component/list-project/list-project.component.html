@@ -5,17 +5,21 @@
       <input
         type="text"
         ngModel
-        [placeholder]="savedSearchText ? savedSearchText : 'Project number, name, customer name'"
+        [placeholder]="
+          savedSearchText
+            ? savedSearchText
+            : 'Project number, name, customer name'
+        "
         name="searchText"
       />
       <select ngModel name="status" class="short-input">
         <option value="" selected disabled>
           {{ savedStatus ? savedStatus : "Project Status" }}
         </option>
-        <option value="NEW">New</option>
-        <option value="PLA">Planning</option>
-        <option value="INP">In Progress</option>
-        <option value="FIN">Finished</option>
+        <option value="NEW">NEW</option>
+        <option value="PLA">PLA</option>
+        <option value="INP">INP</option>
+        <option value="FIN">FIN</option>
       </select>
       <div class="modal-footer search-btn">
         <button type="submit" class="btn btn-primary">Search Project</button>
@@ -57,12 +61,12 @@
           style="text-decoration: underline; cursor: pointer"
           (click)="navigateToUpdateProject(project)"
         >
-          {{ project?.number }}
+          {{ project.number }}
         </td>
-        <td>{{ project?.name }}</td>
-        <td>{{ project?.status }}</td>
-        <td>{{ project?.customer }}</td>
-        <td>{{ project?.startDate }}</td>
+        <td>{{ project.name }}</td>
+        <td>{{ project.status }}</td>
+        <td>{{ project.customer }}</td>
+        <td>{{ project.startDate }}</td>
         <td>
           <button
             type="button"

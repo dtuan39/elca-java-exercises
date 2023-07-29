@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
-
     @ExceptionHandler(ProjectNumberExistedException.class)
     public ResponseEntity handlerDuplicatedProjectNumber(ProjectNumberExistedException projectNumberExistedException){
         return new ResponseEntity(projectNumberExistedException.getMessage(), HttpStatus.BAD_REQUEST);

@@ -23,6 +23,7 @@ export class AddProjectComponent implements OnInit {
   editMode: boolean = false;
   numberErr: string = '';
   ennDateErr: string = '';
+  globalErr: string = 'Please enter all the mandatory fields (*)';
 
   constructor(
     private projectService: ProjectService,
@@ -34,6 +35,7 @@ export class AddProjectComponent implements OnInit {
 
   ngOnInit(): void {
     this.getGroups();
+    this.globalErr = 'Please enter all the mandatory fields (*)';
 
     //get project's number from the parameter after navigating from list
     const projectNumber: any =
@@ -76,10 +78,17 @@ export class AddProjectComponent implements OnInit {
     //data cua form
     console.log(addForm.value);
 
+    if (addForm.invalid) {
+      this.globalErr = 'Please enter all the mandatory fields (*)';
+      this.numberErr = ''
+      return;
+    }
+
     //change the string data type of endDate and startDate from the form.value to Date datatype
     const startTime = new Date(addForm.value.startDate);
     const endTime = new Date(addForm.value.endDate);
 
+    //check valid end time
     if (startTime > endTime) {
       this.ennDateErr = 'End date must be after Start date';
       return;
@@ -97,6 +106,7 @@ export class AddProjectComponent implements OnInit {
         if (error.error.includes('project number already existed')) {
           this.numberErr = error.error;
         }
+        this.globalErr = 'Create project failed';
         console.log(this.numberErr);
         addForm.reset(); //reset even if there's an error
       }

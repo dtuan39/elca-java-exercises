@@ -12,9 +12,9 @@ public interface ProjectService {
 
     void deleteSingleProject(Long id);
 
-    ProjectDto addProject(ProjectDto dto);
+    Project addProject(ProjectDto dto);
 
-    ProjectDto updateProject(ProjectDto dto);
+    Project updateProject(ProjectDto dto);
 
     List<Project> searchProject(String searchText, String status);
 }

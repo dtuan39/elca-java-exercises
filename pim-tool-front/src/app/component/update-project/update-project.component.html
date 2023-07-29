@@ -67,7 +67,13 @@
       <div class="form-group">
         <label for="group">Group <span style="color: red">*</span></label>
         <div class="input-container">
-          <select id="groupId" name="groupId" ngModel class="short-input">
+          <select
+            id="groupId"
+            name="groupId"
+            [(ngModel)]="updateProject.groupId"
+            required
+            class="short-input"
+          >
             <option *ngFor="let group of groups" value="{{ group?.id }}">
               Group {{ group?.id }} ({{ group?.groupLeader?.visa }})
             </option>
@@ -90,10 +96,16 @@
       <div class="form-group">
         <label for="status">Status <span style="color: red">*</span></label>
         <div class="input-container">
-          <select id="status" name="status" ngModel class="short-input">
+          <select
+            id="status"
+            name="status"
+            [(ngModel)]="updateProject.status"
+            class="short-input"
+            required
+          >
             <option value="NEW">New</option>
             <option value="PLA">Planned</option>
-            <option value="INP">In Progress</option>
+            <option value="INP">In Progress</option> 
             <option value="FIN">Finished</option>
           </select>
         </div>

@@ -27,15 +27,9 @@ public class ProjectController extends AbstractApplicationController {
 //    add but with send the response to client to check
     @PostMapping("/add")
     public ResponseEntity<ProjectDto> addProject(@RequestBody ProjectDto projectDto) {
-        ProjectDto response = projectServiceImpl.addProject(projectDto);
+        ProjectDto response = mapper.projectToProjectDto(projectServiceImpl.addProject(projectDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
-//    only add
-//    @PostMapping("/add")
-//    public void addProjectOfficial(@RequestBody ProjectDto projectDto) {
-//        projectServiceImpl.addProject(projectDto);
-//    }
 
     @GetMapping("/all")
     public ResponseEntity<List<ProjectDto>> getAllProjects() {
@@ -46,34 +40,13 @@ public class ProjectController extends AbstractApplicationController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
-//    @GetMapping("/search")
-//    public List<ProjectDto> search(@RequestParam String searchText, @RequestParam String status) {
-//        List<ProjectDto> projects = projectServiceImpl.searchProject(searchText, status)
-//                .stream()
-//                .map(mapper::projectToProjectDto)
-//                .collect(Collectors.toList());
-//        return projects;
-//    }
-
-//    @GetMapping("/search/{searchText}/{status}")
-//    public List<ProjectDto> search(@PathVariable String searchText, @PathVariable String status) {
-//        List<ProjectDto> projects = projectServiceImpl.searchProject(searchText, status)
-//                .stream()
-//                .map(mapper::projectToProjectDto)
-//                .collect(Collectors.toList());
-//        return projects;
-//    }
-
-    @GetMapping("/search/{searchText}/{status}")
-    public List<ProjectDto> search(@PathVariable(required = false) String searchText, @PathVariable(required = false) String status) {
-        List<ProjectDto> projects = projectServiceImpl.searchProject(searchText, status)
+    @GetMapping("/search")
+    public List<ProjectDto> search(@RequestParam(required = false) String searchText, @RequestParam(required = false) String status) {
+        return projectServiceImpl.searchProject(searchText, status)
                 .stream()
                 .map(mapper::projectToProjectDto)
                 .collect(Collectors.toList());
-        return projects;
     }
-
-
 
     @GetMapping("/{number}")
     public ResponseEntity<ProjectDto> getProjectByNumber(@PathVariable int number) { //ResponseEntity chuyển obj về json để front end render dc ra màn hình
@@ -81,18 +54,15 @@ public class ProjectController extends AbstractApplicationController {
         return ResponseEntity.ok(projectDto);
     }
 
-    @DeleteMapping ("/delete/{id}")
-    public ResponseEntity<ProjectDto> deleteSingleProject(@PathVariable("id") Long id){
+    @DeleteMapping ("/delete")
+    public ResponseEntity<ProjectDto> deleteSingleProject(@RequestParam() Long id){
         projectServiceImpl.deleteSingleProject(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping ("/update")
     public ResponseEntity<ProjectDto> updateProject(@RequestBody ProjectDto dto){
-        ProjectDto updateProject = projectServiceImpl.updateProject(dto);
+        ProjectDto updateProject = mapper.projectToProjectDto(projectServiceImpl.updateProject(dto));
         return new ResponseEntity<>(updateProject, HttpStatus.OK);
     }
-
-
-
 }

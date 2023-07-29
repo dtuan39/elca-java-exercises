@@ -41,17 +41,16 @@ export class UpdateProjectComponent implements OnInit {
     //if projectNumber is not null, ask service to get the project with passed number
     if (projectNumber) {
       this.editMode = !this.editMode;
-      this.getProjectByNumber2(projectNumber);
+      this.getProjectByProjectNumber(projectNumber);
       this.actionTitle = 'Edit Project information';
       this.btnSubmitContent = 'Save Changes';
     }
   }
 
-  public getProjectByNumber2(projectNumber: string): void {
+  public getProjectByProjectNumber(projectNumber: string): void {
     this.projectService.getProjectByNumber(parseInt(projectNumber)).subscribe(
       (response: Project) => {
         this.updateProject = response;
-        console.log(this.updateProject);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -73,6 +72,10 @@ export class UpdateProjectComponent implements OnInit {
 
   public onUpdateProject(addForm: NgForm): void {
     console.log(addForm.value);
+
+    if (addForm.value.status == '') {
+      return;
+    }
 
     const startTime = new Date(addForm.value.startDate);
     const endTime = new Date(addForm.value.endDate);

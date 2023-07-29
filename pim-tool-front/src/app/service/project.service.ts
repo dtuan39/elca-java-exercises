@@ -7,11 +7,9 @@ import { Project } from '../model/project';
   providedIn: 'root',
 })
 export class ProjectService {
-  private projectUrl: string;
+  private projectUrl: string = 'http://localhost:8080';
 
-  constructor(private http: HttpClient) {
-    this.projectUrl = 'http://localhost:8080';
-  }
+  constructor(private http: HttpClient) {}
 
   public addProject(project: Project): Observable<Project> {
     return this.http.post<Project>(`${this.projectUrl}/project/add`, project);
@@ -21,13 +19,18 @@ export class ProjectService {
     return this.http.get<Project[]>(`${this.projectUrl}/project/all`);
   }
 
-  public searchProjects(searchText: String, status: String): Observable<Project[]> {
-    return this.http.get<Project[]>(`${this.projectUrl}/project/search/${searchText}/${status}`);
+  public searchProjects(
+    searchText: String,
+    status: String
+  ): Observable<Project[]> {
+    return this.http.get<Project[]>(
+      `${this.projectUrl}/project/search?searchText=${searchText}&status=${status}`
+    );
   }
 
   public deleteProject(projectId: number): Observable<void> {
     return this.http.delete<void>(
-      `${this.projectUrl}/project/delete/${projectId}`
+      `${this.projectUrl}/project/delete?id=${projectId}`
     );
   }
 

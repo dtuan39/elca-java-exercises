@@ -13,6 +13,8 @@ export interface Project {
   name: string;
   customer: string;
   group: Group;
+  groupId: number;
+  groupLeaderVisa: string;
   members: [];
   status: Status;
   startDate: Date;

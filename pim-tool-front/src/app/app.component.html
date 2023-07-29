@@ -25,17 +25,20 @@
   <div class="appBody row">
     <div class="appBody-sideBar">
       <div class="appBody-sideBar__big-title">
-        <p>Projects List</p>
+        <a
+          style="text-decoration: none"
+          routerLink="/list"
+          [class.active-link]="isActiveRoute('/list')"
+          >Projects List</a
+        >
       </div>
       <div class="appBody-sideBar__func-title">
         <ul>
           <li class="func-new">
-            <a routerLink="/add" [class.active-link]="isActiveRoute('/add')"
-              >New</a
-            >
+            <a href="">New</a>
           </li>
           <li class="func-active">
-            <a routerLink="/list" [class.active-link]="isActiveRoute('/list')"
+            <a routerLink="/add" [class.active-link]="isActiveRoute('/add')"
               >Project</a
             >
           </li>

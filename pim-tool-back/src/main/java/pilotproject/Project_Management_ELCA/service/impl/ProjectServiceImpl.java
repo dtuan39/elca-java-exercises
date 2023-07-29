@@ -13,18 +13,14 @@ import pilotproject.Project_Management_ELCA.service.ProjectService;
 import pilotproject.Project_Management_ELCA.util.ApplicationMapper;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Service
 //@Transactional
 public class ProjectServiceImpl implements ProjectService {
 
+    private final ProjectRepository projectRepository;
     @Autowired
     private ApplicationMapper mapper;
-
-    private final ProjectRepository projectRepository;
-
     @Autowired
     private GroupRepository groupRepository;
 
@@ -34,18 +30,18 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto addProject(ProjectDto dto) throws ProjectNumberExistedException {
+    public Project addProject(ProjectDto dto) throws ProjectNumberExistedException {
         Project project = mapper.projectDtoToProjectEntity(dto);
         project.setGroup(groupRepository.findById(dto.getGroupId()).orElseThrow());
         try {
-            return mapper.projectToProjectDto(projectRepository.save(project));
+            return projectRepository.save(project);
         } catch (DataIntegrityViolationException e) {
             throw new ProjectNumberExistedException("The project number already existed. Please select a different project number");
         }
     }
 
     @Override
-    public ProjectDto updateProject(ProjectDto dto) {
+    public Project updateProject(ProjectDto dto) {
         Project entity = projectRepository.findProjectByNumber(dto.getNumber());
         entity.setCustomer(dto.getCustomer());
         entity.setName(dto.getName());
@@ -53,13 +49,12 @@ public class ProjectServiceImpl implements ProjectService {
         entity.setStartDate(dto.getStartDate());
         entity.setEndDate(dto.getEndDate());
         entity.setGroup(groupRepository.findById(dto.getGroupId()).orElseThrow());
-
-        return mapper.projectToProjectDto(projectRepository.save(entity));
+        return projectRepository.save(entity);
     }
 
     @Override
     public List<Project> searchProject(String searchText, String status) {
-        return projectRepository.findProjectBySearchTextAndStatus(searchText, status);
+        return projectRepository.findProjectBySearchTextAndStatus(searchText.trim(), status.trim());
     }
 
     @Override
@@ -77,6 +72,4 @@ public class ProjectServiceImpl implements ProjectService {
     public void deleteSingleProject(Long id) {
         projectRepository.deleteProjectById(id);
     }
-
-
 }

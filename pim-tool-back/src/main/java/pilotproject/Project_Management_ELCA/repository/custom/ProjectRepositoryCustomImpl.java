@@ -25,7 +25,6 @@ public class ProjectRepositoryCustomImpl implements ProjectRepositoryCustom{
     public List<Project> findProjectBySearchTextAndStatus(String searchText, String status) {
         BooleanBuilder predicate = new BooleanBuilder();
 
-
         if (!"null".equals(searchText)) {
             predicate.or(QProject.project.projectNumber.stringValue().containsIgnoreCase(searchText));
             predicate.or(QProject.project.name.containsIgnoreCase(searchText));
@@ -39,7 +38,6 @@ public class ProjectRepositoryCustomImpl implements ProjectRepositoryCustom{
                 // Handle the case when the provided status is not a valid enum constant
             }
         }
-
         JPAQuery<Project> query = new JPAQuery<>(em);
         return query.select(QProject.project)
                 .from(QProject.project)
@@ -47,6 +45,4 @@ public class ProjectRepositoryCustomImpl implements ProjectRepositoryCustom{
                 .orderBy(QProject.project.projectNumber.asc())
                 .fetch();
     }
-
-
 }

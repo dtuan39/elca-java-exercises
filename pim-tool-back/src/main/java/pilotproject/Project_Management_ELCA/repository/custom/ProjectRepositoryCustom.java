@@ -1,5 +1,6 @@
 package pilotproject.Project_Management_ELCA.repository.custom;
 
+import com.querydsl.core.BooleanBuilder;
 import pilotproject.Project_Management_ELCA.model.entity.Project;
 
 import java.util.List;
