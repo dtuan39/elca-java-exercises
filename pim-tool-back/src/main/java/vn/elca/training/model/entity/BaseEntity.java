@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class AbstractEntity {
+public abstract class BaseEntity {
 
     // If you need to use distributed caching, distributed systems, or session replication,
     // where serializability might be beneficial or even mandatory.

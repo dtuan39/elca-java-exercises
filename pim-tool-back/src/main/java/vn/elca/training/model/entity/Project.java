@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "PROJECT")
-public class Project extends AbstractEntity{
+public class Project extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GROUP_ID", nullable = false)
@@ -49,15 +49,6 @@ public class Project extends AbstractEntity{
         INP("In progress"),
         FIN("Finished");
         private final String displayName;
-
-        public static boolean contains(String status) {
-            for (Status s : Status.values()) {
-                if (s.name().equals(status)) {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 
     @ManyToMany

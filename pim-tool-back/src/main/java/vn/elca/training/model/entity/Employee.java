@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
@@ -16,7 +15,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Table(name = "EMPLOYEE")
-public class Employee extends AbstractEntity {
+public class Employee extends BaseEntity {
 
     @Column(name = "VISA", nullable = false, length = 3, unique = true)
     private String visa;

@@ -17,4 +17,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, Query
 
     //if at least one visa is not found, return false, ensure all visas are found
     boolean existsByVisaIn(List<String> visas);
+
+    //find employees by visa containing keyword
+    List<Employee> findByVisaContaining(String keyword);
 }
