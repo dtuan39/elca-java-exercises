@@ -11,8 +11,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "\"GROUP\"")
-public class Group extends AbstractEntity {
+@Table(name = "`group`")
+public class Group extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GROUP_LEADER_ID", nullable = false)
