@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class SharedService {
   private savedSearchText!: String;
   private savedSatus!: String;
+  private isUpdate: boolean = false;
 
   constructor() {}
 
@@ -23,5 +24,13 @@ export class SharedService {
 
   getSavedSatus(): String {
     return this.savedSatus;
+  }
+
+  setIsUpdate(value: boolean) {
+    this.isUpdate = value;
+  }
+
+  getIsUpdate(): boolean {
+    return this.isUpdate;
   }
 }

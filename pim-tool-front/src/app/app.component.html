@@ -25,12 +25,8 @@
   <div class="appBody row">
     <div class="appBody-sideBar">
       <div class="appBody-sideBar__big-title">
-        <a
-          style="text-decoration: none"
-          routerLink="/list"
-          [class.active-link]="isActiveRoute('/list')"
-          >Projects List</a
-        >
+        <a style="text-decoration: none" routerLink="/list" [class.active-link]="isActiveRoute('/list')">Projects
+          List</a>
       </div>
       <div class="appBody-sideBar__func-title">
         <ul>
@@ -38,9 +34,7 @@
             <a href="">New</a>
           </li>
           <li class="func-active">
-            <a routerLink="/add" [class.active-link]="isActiveRoute('/add')"
-              >Project</a
-            >
+            <a routerLink="/project" [class.active-link]="isActiveRoute('/project')">Project</a>
           </li>
           <li>Customer</li>
           <li>Supplier</li>
@@ -53,4 +47,3 @@
     </div>
   </div>
 </div>
-<!-- (click)="handleClickNew()" -->

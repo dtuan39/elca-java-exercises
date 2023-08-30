@@ -7,13 +7,12 @@ import { GroupService } from '../../service/group.service';
 import { Group } from 'src/app/model/group';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedService } from 'src/app/service/shared.service';
-
 @Component({
-  selector: '.add-project',
-  templateUrl: './add-project.component.html',
-  styleUrls: ['./add-project.component.scss'],
+  selector: 'app-project-detail',
+  templateUrl: './project-detail.component.html',
+  styleUrls: ['./project-detail.component.scss'],
 })
-export class AddProjectComponent implements OnInit {
+export class ProjectDetailComponent {
   @ViewChild('alertPopup') alertPopup!: ElementRef;
 
   groups: Group[] | undefined;
@@ -36,21 +35,17 @@ export class AddProjectComponent implements OnInit {
   ngOnInit(): void {
     this.getGroups();
     this.globalErr = 'Please enter all the mandatory fields (*)';
-
-    //get project's number from the parameter after navigating from list
     const projectNumber: any =
       this.route.snapshot.paramMap.get('projectNumber');
-
-    //if projectNumber is not null, ask service to get the project with passed number
     if (projectNumber) {
       this.editMode = !this.editMode;
-      this.getProjectByNumber2(projectNumber);
+      this.getProjectByNumber(projectNumber);
       this.actionTitle = 'Edit Project information';
       this.btnSubmitContent = 'Save Changes';
     }
   }
 
-  public getProjectByNumber2(projectNumber: string): void {
+  public getProjectByNumber(projectNumber: string): void {
     this.projectService.getProjectByNumber(parseInt(projectNumber)).subscribe(
       (response: Project) => {
         this.updateProject = response;
@@ -59,7 +54,7 @@ export class AddProjectComponent implements OnInit {
       (error: HttpErrorResponse) => {
         alert(error.message);
       }
-    ); //subcribe de theo doi cac thay doi cua du lieu, tbao khi du lieu dc tra ve tu server
+    );
   }
 
   public getGroups(): void {
@@ -71,34 +66,39 @@ export class AddProjectComponent implements OnInit {
       (error: HttpErrorResponse) => {
         alert(error.message);
       }
-    ); //subcribe de theo doi cac thay doi cua du lieu, tbao khi du lieu dc tra ve tu server
+    );
   }
 
   public onAddProject(addForm: NgForm): void {
-    //data cua form
     console.log(addForm.value);
 
     if (addForm.invalid) {
       this.globalErr = 'Please enter all the mandatory fields (*)';
-      this.numberErr = ''
+      this.numberErr = '';
       return;
     }
 
-    //change the string data type of endDate and startDate from the form.value to Date datatype
     const startTime = new Date(addForm.value.startDate);
-    const endTime = new Date(addForm.value.endDate);
+    const currentTime = new Date();
 
-    //check valid end time
-    if (startTime > endTime) {
-      this.ennDateErr = 'End date must be after Start date';
+    if (startTime < currentTime) {
+      this.ennDateErr = 'Start date must be after current date';
       return;
     }
 
-    //data cua response duoc map tu dto qua interface Project
+    if (addForm.value.endDate != null) {
+      const endTime = new Date(addForm.value.endDate);
+
+      if (startTime > endTime) {
+        this.ennDateErr = 'End date must be after Start date';
+        return;
+      }
+    }
+
     this.projectService.addProject(addForm.value).subscribe(
       (response: Project) => {
         console.log(response);
-        addForm.reset(); //to reset all fields of form when you want to re-add new amp
+        addForm.reset();
         this.router.navigateByUrl('/list');
       },
       (error: HttpErrorResponse) => {
@@ -107,8 +107,6 @@ export class AddProjectComponent implements OnInit {
           this.numberErr = error.error;
         }
         this.globalErr = 'Create project failed';
-        console.log(this.numberErr);
-        addForm.reset(); //reset even if there's an error
       }
     );
   }
@@ -116,7 +114,22 @@ export class AddProjectComponent implements OnInit {
   public onUpdateProject(addForm: NgForm): void {
     console.log(addForm.value);
 
-    //đưa cái form xuống database để add
+    if (addForm.invalid) {
+      this.globalErr = 'Please enter all the mandatory fields (*)';
+      this.numberErr = '';
+      return;
+    }
+
+    const startTime = new Date(addForm.value.startDate);
+    if (addForm.value.endDate != null) {
+      const endTime = new Date(addForm.value.endDate);
+
+      if (startTime > endTime) {
+        this.ennDateErr = 'End date must be after Start date';
+        return;
+      }
+    }
+
     this.projectService.updateProject(addForm.value).subscribe(
       (response: Project) => {
         console.log(response);

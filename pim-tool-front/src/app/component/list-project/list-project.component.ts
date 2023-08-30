@@ -43,13 +43,6 @@ export class ListProjectComponent implements OnInit {
     } else {
       this.getProjects();
     }
-
-    // this.router.events.subscribe((event) => {
-    //   if (event instanceof NavigationEnd) {
-    //     // Call the getProjects() method when the component is navigated to
-    //     this.getProjects();
-    //   }
-    // });
   }
 
   public getProjects(): void {
@@ -58,12 +51,12 @@ export class ListProjectComponent implements OnInit {
         console.log(response);
 
         this.projects = response;
-        this.projects.sort((a, b) => a.number - b.number); //sort list project by number asc
+        this.projects.sort((a, b) => a.number - b.number);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
       }
-    ); //subcribe de theo doi cac thay doi cua du lieu, tbao khi du lieu dc tra ve tu server
+    );
   }
 
   public searchProjects2(searchText: any, status: any) {
@@ -91,7 +84,6 @@ export class ListProjectComponent implements OnInit {
   public searchProjects(searchForm: NgForm): void {
     console.log(searchForm.value);
 
-    //if 2 fields are empty, load all projects and return
     if (searchForm.value.searchText == '' && searchForm.value.status == '') {
       this.getProjects();
       return;
@@ -101,10 +93,6 @@ export class ListProjectComponent implements OnInit {
     this.sharedService.setSavedSatus(searchForm.value.status);
 
     this.projectService
-      // .searchProjects(
-      //   searchForm.value.searchText == '' ? null : searchForm.value.searchText,
-      //   searchForm.value.status == '' ? null : searchForm.value.status
-      // )
       .searchProjects(searchForm.value.searchText, searchForm.value.status)
       .subscribe(
         (response: Project[]) => {
@@ -130,7 +118,6 @@ export class ListProjectComponent implements OnInit {
   }
 
   public deleteProject(projectId: number): void {
-    //đưa cái form xuống database để add
     this.projectService.deleteProject(projectId).subscribe(
       (response: void) => {
         console.log(response);
@@ -156,8 +143,6 @@ export class ListProjectComponent implements OnInit {
           alert(error.message);
         }
       );
-
-      // this.projectService.deleteProject(project.id);
     });
 
     this.selectedItems = [];
@@ -165,27 +150,28 @@ export class ListProjectComponent implements OnInit {
 
   toggleSelection(project: Project) {
     if (this.isSelected(project)) {
-      // Item is already selected, remove it from the array
-      // creates a new array containing only the elements that satisfy a given condition (use when user check the box twice
-      //to remove the checkbox, the array is re-updated)
       this.selectedItems = this.selectedItems.filter(
         (item) => item.id !== project.id
       );
     } else {
-      // Item is not selected, add it to the array
       this.selectedItems.push(project);
     }
     console.log(this.selectedItems);
   }
 
-  //to check if at least one item (project) in selectedItems has the id equal with the project we have pass as argument
-  //it will return true
   isSelected(project: Project) {
     return this.selectedItems.some((item) => item.id === project.id);
   }
 
   navigateToUpdateProject(project: Project) {
     this.router.navigate(['/update', project.number]);
-    // try
+  }
+
+  navigateToProjectDetail(project: Project) {
+    this.router.navigate(['/project', project.number]);
+  }
+
+  changeIsUpdate(val: boolean) {
+    this.sharedService.setIsUpdate(val);
   }
 }

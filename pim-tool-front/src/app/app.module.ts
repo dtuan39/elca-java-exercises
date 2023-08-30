@@ -5,21 +5,21 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { AddProjectComponent } from './component/add-project/add-project.component';
 import { ListProjectComponent } from './component/list-project/list-project.component';
+import { ProjectDetailComponent } from './component/project-detail/project-detail.component';
 import { AppRoutingModule } from './app-routing.module';
-import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { UpdateProjectComponent } from './component/update-project/update-project.component';
-
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
-  declarations: [AppComponent, AddProjectComponent, ListProjectComponent, UpdateProjectComponent],
+  declarations: [AppComponent, ListProjectComponent, ProjectDetailComponent],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot([]),
     AppRoutingModule,
-    NgbPaginationModule
+    NgbPaginationModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
