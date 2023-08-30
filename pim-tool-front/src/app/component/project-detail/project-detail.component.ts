@@ -82,15 +82,15 @@ export class ProjectDetailComponent {
     const currentTime = new Date();
 
     if (startTime < currentTime) {
-      this.ennDateErr = 'Start date must be after current date';
+      this.ennDateErr = 'Start date must be the same or after current date';
       return;
     }
 
     if (addForm.value.endDate != null) {
       const endTime = new Date(addForm.value.endDate);
 
-      if (startTime > endTime) {
-        this.ennDateErr = 'End date must be after Start date';
+      if (startTime >= endTime) {
+        this.ennDateErr = 'End date must be the same or after Start date';
         return;
       }
     }
@@ -124,8 +124,8 @@ export class ProjectDetailComponent {
     if (addForm.value.endDate != null) {
       const endTime = new Date(addForm.value.endDate);
 
-      if (startTime > endTime) {
-        this.ennDateErr = 'End date must be after Start date';
+      if (startTime >= endTime) {
+        this.ennDateErr = 'End date must be the same or after Start date';
         return;
       }
     }
