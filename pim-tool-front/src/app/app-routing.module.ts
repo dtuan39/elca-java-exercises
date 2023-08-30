@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AddProjectComponent } from './component/add-project/add-project.component';
 import { ListProjectComponent } from './component/list-project/list-project.component';
-import { UpdateProjectComponent } from './component/update-project/update-project.component';
+import { ProjectDetailComponent } from './component/project-detail/project-detail.component';
 
 const routes: Routes = [
   { path: '', component: ListProjectComponent },
-  { path: 'add', component: AddProjectComponent },
   { path: 'list', component: ListProjectComponent },
-  { path: 'update/:projectNumber', component: UpdateProjectComponent },
+  { path: 'project/:projectNumber', component: ProjectDetailComponent },
+  { path: 'project', component: ProjectDetailComponent },
 ];
 
 @NgModule({

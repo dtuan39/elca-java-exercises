@@ -10,9 +10,17 @@ import { SharedService } from './service/shared.service';
 export class AppComponent {
   title = 'Project_Management_ELCA_FE';
 
-  constructor(private router: Router, private sharedService: SharedService) {}
+  constructor(private router: Router, public sharedService: SharedService) {}
 
   isActiveRoute(route: string): boolean {
     return this.router.url === route;
+  }
+
+  navigateToProjectDetail() {
+    this.router.navigate(['/project', '']);
+  }
+
+  changeIsUpdate(val : boolean) {
+    this.sharedService.setIsUpdate(val); // or false
   }
 }

@@ -2,16 +2,11 @@
   <p class="area-title">Project List</p>
   <form #searchForm="ngForm" (ngSubmit)="searchProjects(searchForm)">
     <div class="search-area">
-      <input
-        type="text"
-        ngModel
-        [placeholder]="
+      <input type="text" ngModel [placeholder]="
           savedSearchText
             ? savedSearchText
             : 'Project number, name, customer name'
-        "
-        name="searchText"
-      />
+        " name="searchText" />
       <select ngModel name="status" class="short-input">
         <option value="" selected disabled>
           {{ savedStatus ? savedStatus : "Project Status" }}
@@ -25,11 +20,7 @@
         <button type="submit" class="btn btn-primary">Search Project</button>
       </div>
       <div class="modal-footer reset-btn">
-        <button
-          type="button"
-          (click)="resetSearchHandle(searchForm)"
-          class="btn"
-        >
+        <button type="button" (click)="resetSearchHandle(searchForm)" class="btn">
           Reset Search
         </button>
       </div>
@@ -50,17 +41,11 @@
     <tbody>
       <tr *ngFor="let project of projects">
         <td>
-          <input
-            type="checkbox"
-            [disabled]="project.status !== Status.NEW"
-            (change)="toggleSelection(project)"
-            [checked]="isSelected(project)"
-          />
+          <input type="checkbox" [disabled]="project.status !== Status.NEW" (change)="toggleSelection(project)"
+            [checked]="isSelected(project)" />
         </td>
-        <td
-          style="text-decoration: underline; cursor: pointer"
-          (click)="navigateToUpdateProject(project)"
-        >
+        <td style="text-decoration: underline; cursor: pointer"
+          (click)="navigateToProjectDetail(project); changeIsUpdate(true)">
           {{ project.number }}
         </td>
         <td>{{ project.name }}</td>
@@ -68,19 +53,10 @@
         <td>{{ project.customer }}</td>
         <td>{{ project.startDate }}</td>
         <td>
-          <button
-            type="button"
-            class="btn"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
-            style="background-color: transparent"
-            (click)="setProjectIdDelete(project.id)"
-            *ngIf="project.status === Status.NEW"
-          >
-            <i
-              style="color: red; cursor: pointer"
-              class="fa-regular fa-trash-can"
-            ></i>
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            style="background-color: transparent" (click)="setProjectIdDelete(project.id)"
+            *ngIf="project.status === Status.NEW">
+            <i style="color: red; cursor: pointer" class="fa-regular fa-trash-can"></i>
           </button>
         </td>
       </tr>
@@ -90,29 +66,17 @@
   <div *ngIf="selectedItems.length > 0" class="selected-items">
     <p style="margin: auto 0">{{ selectedItems.length }} items selected</p>
 
-    <button
-      type="button"
-      class="btn"
-      data-bs-toggle="modal"
-      data-bs-target="#exampleModal2"
-      style="background-color: transparent"
-    >
+    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal2"
+      style="background-color: transparent">
       <p style="color: red; cursor: pointer">
         delete selected items
         <span>
-          <i
-            style="color: red; cursor: pointer; margin-left: 5px"
-            class="fa-regular fa-trash-can"
-          ></i
-        ></span>
+          <i style="color: red; cursor: pointer; margin-left: 5px" class="fa-regular fa-trash-can"></i></span>
       </p>
     </button>
   </div>
 
-  <nav
-    aria-label="Page navigation example"
-    style="display: flex; justify-content: flex-end"
-  >
+  <nav aria-label="Page navigation example" style="display: flex; justify-content: flex-end">
     <ul class="pagination">
       <li class="page-item">
         <a class="page-link" href="" aria-label="Previous">
@@ -132,23 +96,13 @@
   </nav>
 </div>
 
-<div
-  class="modal fade"
-  id="exampleModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header" style="display: flex; align-items: center">
         <h3 class="modal-title fs-5" id="exampleModalLabel">Warning!</h3>
-        <button
-          type="button"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-          style="background-color: transparent; border: none"
-        >
+        <button type="button" data-bs-dismiss="modal" aria-label="Close"
+          style="background-color: transparent; border: none">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -159,12 +113,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close
         </button>
-        <button
-          type="button"
-          (click)="deleteProject(deleteProjectId)"
-          class="btn btn-danger"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" (click)="deleteProject(deleteProjectId)" class="btn btn-danger" data-bs-dismiss="modal">
           Delete
         </button>
       </div>
@@ -172,23 +121,13 @@
   </div>
 </div>
 
-<div
-  class="modal fade"
-  id="exampleModal2"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header" style="display: flex; align-items: center">
         <h3 class="modal-title fs-5" id="exampleModalLabel">Warning!</h3>
-        <button
-          type="button"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-          style="background-color: transparent; border: none"
-        >
+        <button type="button" data-bs-dismiss="modal" aria-label="Close"
+          style="background-color: transparent; border: none">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -199,12 +138,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close
         </button>
-        <button
-          type="button"
-          (click)="deleteSelectedProject()"
-          class="btn btn-danger"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" (click)="deleteSelectedProject()" class="btn btn-danger" data-bs-dismiss="modal">
           Delete
         </button>
       </div>
