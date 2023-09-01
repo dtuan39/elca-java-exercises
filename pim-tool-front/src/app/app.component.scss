@@ -41,10 +41,19 @@
         align-items: end;
         padding-left: 2rem;
         font-weight: 600;
+
+        .active-lang {
+          color: var(--blue);
+        }
+
+        .inactive-lang {
+          color: black;
+          cursor: pointer;
+        }
       }
 
       &__end {
-        width: 45%;
+        width: 56%;
         display: flex;
         justify-content: space-between;
         align-items: end;
@@ -75,7 +84,7 @@
       border-right: 1px solid var(--line);
       height: 100%;
 
-      padding-left: 9.5%;
+      padding-left: 8.5%;
       padding-top: 2.5%;
 
       &__big-title {

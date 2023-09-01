@@ -7,6 +7,7 @@ import { GroupService } from '../../service/group.service';
 import { Group } from 'src/app/model/group';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedService } from 'src/app/service/shared.service';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-project-detail',
   templateUrl: './project-detail.component.html',
@@ -14,35 +15,52 @@ import { SharedService } from 'src/app/service/shared.service';
 })
 export class ProjectDetailComponent {
   @ViewChild('alertPopup') alertPopup!: ElementRef;
-
+  siteLanguage = 'English';
+  languageList = [
+    { code: 'en', label: 'English' },
+    { code: 'fr', label: 'French' },
+  ];
   groups: Group[] | undefined;
   updateProject!: Project;
-  actionTitle: String = 'New Project';
-  btnSubmitContent: String = 'Create Project';
+  actionTitle: any = 'projectDetail.create.title';
+  btnSubmitContent: any = 'projectDetail.create.btnCreate';
   editMode: boolean = false;
   numberErr: string = '';
   ennDateErr: string = '';
-  globalErr: string = 'Please enter all the mandatory fields (*)';
+  globalErr: string = 'projectDetail.globalError';
 
   constructor(
     private projectService: ProjectService,
     private groupService: GroupService,
     private router: Router,
     private route: ActivatedRoute,
-    public sharedService: SharedService
+    public sharedService: SharedService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.getGroups();
-    this.globalErr = 'Please enter all the mandatory fields (*)';
+    this.globalErr = 'projectDetail.globalError';
     const projectNumber: any =
       this.route.snapshot.paramMap.get('projectNumber');
     if (projectNumber) {
       this.editMode = !this.editMode;
       this.getProjectByNumber(projectNumber);
-      this.actionTitle = 'Edit Project information';
-      this.btnSubmitContent = 'Save Changes';
+      this.actionTitle = 'projectDetail.update.title';
+      this.btnSubmitContent = 'projectDetail.update.btnUpdate';
     }
+  }
+
+  changeSiteLanguage(localeCode: string): void {
+    const selectedLanguage = this.languageList
+      .find((language) => language.code === localeCode)
+      ?.label.toString();
+    if (selectedLanguage) {
+      this.siteLanguage = selectedLanguage;
+      this.translate.use(localeCode);
+    }
+    const currentLanguage = this.translate.currentLang;
+    console.log('currentLanguage', currentLanguage);
   }
 
   public getProjectByNumber(projectNumber: string): void {
@@ -73,7 +91,7 @@ export class ProjectDetailComponent {
     console.log(addForm.value);
 
     if (addForm.invalid) {
-      this.globalErr = 'Please enter all the mandatory fields (*)';
+      this.globalErr = 'projectDetail.globalError';
       this.numberErr = '';
       return;
     }
@@ -82,7 +100,7 @@ export class ProjectDetailComponent {
     const currentTime = new Date();
 
     if (startTime < currentTime) {
-      this.ennDateErr = 'Start date must be the same or after current date';
+      this.ennDateErr = 'projectDetail.startBeforeCurrent';
       return;
     }
 
@@ -90,7 +108,7 @@ export class ProjectDetailComponent {
       const endTime = new Date(addForm.value.endDate);
 
       if (startTime >= endTime) {
-        this.ennDateErr = 'End date must be the same or after Start date';
+        this.ennDateErr = 'projectDetail.startAfterEnd';
         return;
       }
     }
@@ -104,7 +122,7 @@ export class ProjectDetailComponent {
       (error: HttpErrorResponse) => {
         console.log(error);
         if (error.error.includes('project number already existed')) {
-          this.numberErr = error.error;
+          this.numberErr = 'projectDetail.numberExist';
         }
         this.globalErr = 'Create project failed';
       }
@@ -115,7 +133,7 @@ export class ProjectDetailComponent {
     console.log(addForm.value);
 
     if (addForm.invalid) {
-      this.globalErr = 'Please enter all the mandatory fields (*)';
+      this.globalErr = 'projectDetail.globalError';
       this.numberErr = '';
       return;
     }
@@ -125,7 +143,7 @@ export class ProjectDetailComponent {
       const endTime = new Date(addForm.value.endDate);
 
       if (startTime >= endTime) {
-        this.ennDateErr = 'End date must be the same or after Start date';
+        this.ennDateErr = 'projectDetail.startAfterEnd';
         return;
       }
     }

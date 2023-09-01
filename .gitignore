@@ -55,3 +55,5 @@ target
 /pim-tool-front/.vscode
 /pim-tool-front/node_modules
 /pim-tool-front/.angular/cache/16.1.2/
+/pim-tool-front/src/assets/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/js
+/pim-tool-front/src/assets/bootstrap-5.0.2-dist/bootstrap-5.0.2-dist/css
