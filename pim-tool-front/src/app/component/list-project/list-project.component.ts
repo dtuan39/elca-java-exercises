@@ -5,6 +5,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Project, Status } from 'src/app/model/project';
 import { ProjectService } from 'src/app/service/project.service';
 import { SharedService } from 'src/app/service/shared.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: '.list-project',
@@ -25,7 +26,6 @@ export class ListProjectComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private router: Router,
-    private route: ActivatedRoute,
     private sharedService: SharedService
   ) {}
 

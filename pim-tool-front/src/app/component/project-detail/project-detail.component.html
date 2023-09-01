@@ -1,8 +1,8 @@
 <div class="new-project-container">
-  <p class="area-title">{{actionTitle}}</p>
+  <p class="area-title">{{actionTitle | translate}}</p>
   <div class="alert alert-danger alert-popup" role="alert" style="margin-top: 0.5rem"
     *ngIf="detailForm.submitted && detailForm.invalid" #alertPopup>
-    <span>{{ globalErr }}</span>
+    <span>{{ globalErr | translate }}</span>
     <button type="button" class="close" aria-label="Close" (click)="closeAlert()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -11,7 +11,7 @@
     <form #detailForm="ngForm" (ngSubmit)="editMode ? onUpdateProject(detailForm) : onAddProject(detailForm)">
 
       <div class="form-group">
-        <label for="number">Project Number <span style="color: red">*</span></label>
+        <label for="number">{{ 'projectDetail.projectNumber' | translate }} <span style="color: red">*</span></label>
         <div class="input-container">
           <div class="input-container">
             <input type="text" ngModel [readonly]="editMode" [ngModel]="editMode ? updateProject.number: null"
@@ -25,13 +25,13 @@
         <label for="number"></label>
         <div class="input-container">
           <div class="form-text" style="color: red">
-            {{ numberErr }}
+            {{ numberErr | translate }}
           </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="name">Project Name <span style="color: red">*</span></label>
+        <label for="name">{{ 'projectDetail.projectName' | translate }} <span style="color: red">*</span></label>
         <div class="input-container">
           <input type="text" [ngModel]="editMode ? updateProject.name : null" *ngIf="!editMode || editMode" name="name"
             class="form-control" id="name" required />
@@ -40,7 +40,7 @@
 
 
       <div class="form-group">
-        <label for="customer">Customer <span style="color: red">*</span></label>
+        <label for="customer">{{ 'projectDetail.customer' | translate }} <span style="color: red">*</span></label>
         <div class="input-container">
           <input type="text" [ngModel]="editMode ? updateProject.customer : null" *ngIf="!editMode || editMode"
             name="customer" class="form-control" id="customer" required />
@@ -48,7 +48,7 @@
       </div>
 
       <div class="form-group">
-        <label for="group">Group <span style="color: red">*</span></label>
+        <label for="group">{{ 'projectDetail.group' | translate }} <span style="color: red">*</span></label>
         <div class="input-container">
           <select id="groupId" name="groupId" [ngModel]="editMode ? updateProject.groupId : null"
             *ngIf="!editMode || editMode" class="short-input">
@@ -59,14 +59,14 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="member">Members</label>
+        <label for="member">{{ 'projectDetail.members' | translate }} </label>
         <div class="input-container">
           <input type="text" [ngModel]="editMode ? updateProject.members : null" *ngIf="!editMode || editMode"
             name="member" class="form-control" id="member" />
         </div>
       </div>
       <div class="form-group">
-        <label for="status">Status <span style="color: red">*</span></label>
+        <label for="status">{{ 'projectDetail.status' | translate }} <span style="color: red">*</span></label>
         <div class="input-container">
           <select id="status" name="status" [ngModel]="editMode ? updateProject.status : null"
             *ngIf="!editMode || editMode" class="short-input">
@@ -81,7 +81,7 @@
 
       <div class="form-date">
         <div class="form-group form-date__start">
-          <label for="startDate">Start date <span style="color: red">*</span></label>
+          <label for="startDate">{{ 'projectDetail.startDate' | translate }} <span style="color: red">*</span></label>
           <div class="input-container">
             <input type="date" [ngModel]="editMode ? updateProject.startDate : null" *ngIf="!editMode || editMode"
               name="startDate" class="form-control short-input" id="startDate"
@@ -90,7 +90,7 @@
         </div>
 
         <div class="form-group form-date__end">
-          <label for="endDate">End date</label>
+          <label for="endDate">{{ 'projectDetail.endDate' | translate }} </label>
           <div class="input-container">
             <input type="date" [ngModel]="editMode ? updateProject.endDate : null" *ngIf="!editMode || editMode"
               name="endDate" class="form-control short-input" id="endDate"
@@ -101,18 +101,18 @@
 
       <div style="margin: 0 !important; display: flex; justify-content: flex-end" *ngIf="ennDateErr != ''">
         <div class="form-text" style="color: red; transform: translateY(-2rem)">
-          {{ ennDateErr }}
+          {{ ennDateErr | translate}}
         </div>
       </div>
 
       <div class="form-footer">
         <div class="modal-footer cancel-btn">
           <button type="button" (click)="navigateToList()" class="btn">
-            Cancel
+            {{ 'projectDetail.btnCancel' | translate }}
           </button>
         </div>
         <div class="modal-footer create-btn">
-          <button type="submit" class="btn btn-primary">{{btnSubmitContent}}</button>
+          <button type="submit" class="btn btn-primary">{{btnSubmitContent | translate}}</button>
         </div>
       </div>
     </form>

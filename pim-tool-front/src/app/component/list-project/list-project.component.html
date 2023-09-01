@@ -1,15 +1,15 @@
 <div class="list-project-container">
-  <p class="area-title">Project List</p>
+  <p class="area-title">{{ "projectList.projectList" | translate}}</p>
   <form #searchForm="ngForm" (ngSubmit)="searchProjects(searchForm)">
     <div class="search-area">
       <input type="text" ngModel [placeholder]="
           savedSearchText
             ? savedSearchText
-            : 'Project number, name, customer name'
+            : 'projectList.search.name' | translate
         " name="searchText" />
       <select ngModel name="status" class="short-input">
         <option value="" selected disabled>
-          {{ savedStatus ? savedStatus : "Project Status" }}
+          {{ savedStatus ? savedStatus : 'projectList.search.status' | translate }}
         </option>
         <option value="NEW">NEW</option>
         <option value="PLA">PLA</option>
@@ -17,11 +17,11 @@
         <option value="FIN">FIN</option>
       </select>
       <div class="modal-footer search-btn">
-        <button type="submit" class="btn btn-primary">Search Project</button>
+        <button type="submit" class="btn btn-primary">{{'projectList.search.btnSearch' | translate}}</button>
       </div>
       <div class="modal-footer reset-btn">
         <button type="button" (click)="resetSearchHandle(searchForm)" class="btn">
-          Reset Search
+          {{'projectList.search.resetSearch' | translate}}
         </button>
       </div>
     </div>
@@ -30,12 +30,12 @@
     <thead>
       <tr>
         <th></th>
-        <th>Number</th>
-        <th>Name</th>
-        <th>Status</th>
-        <th>Customer</th>
-        <th>Start Date</th>
-        <th>Delete</th>
+        <th>{{ 'projectList.tableHeading.number' | translate }}</th>
+        <th>{{ 'projectList.tableHeading.name' | translate }}</th>
+        <th>{{ 'projectList.tableHeading.status' | translate }}</th>
+        <th>{{ 'projectList.tableHeading.customer' | translate }}</th>
+        <th>{{ 'projectList.tableHeading.start' | translate }}</th>
+        <th>{{ 'projectList.tableHeading.delete' | translate }}</th>
       </tr>
     </thead>
     <tbody>
@@ -100,21 +100,21 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header" style="display: flex; align-items: center">
-        <h3 class="modal-title fs-5" id="exampleModalLabel">Warning!</h3>
+        <h3 class="modal-title fs-5" id="exampleModalLabel">{{ 'projectList.delete.warning' | translate }}!</h3>
         <button type="button" data-bs-dismiss="modal" aria-label="Close"
           style="background-color: transparent; border: none">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="modal-body">
-        Are you sure you want to delete this project?
+        {{ 'projectList.delete.question' | translate }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
+          {{ 'projectList.delete.btnClose' | translate }}
         </button>
         <button type="button" (click)="deleteProject(deleteProjectId)" class="btn btn-danger" data-bs-dismiss="modal">
-          Delete
+          {{ 'projectList.delete.btnDelete' | translate }}
         </button>
       </div>
     </div>
@@ -125,21 +125,21 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header" style="display: flex; align-items: center">
-        <h3 class="modal-title fs-5" id="exampleModalLabel">Warning!</h3>
+        <h3 class="modal-title fs-5" id="exampleModalLabel">{{ 'projectList.delete.warning' | translate }}!</h3>
         <button type="button" data-bs-dismiss="modal" aria-label="Close"
           style="background-color: transparent; border: none">
-          <i class="fa-solid fa-xmark" ></i>
+          <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="modal-body">
-        Are you sure you want to delete all the selected project?
+        {{ 'projectList.delete.question' | translate }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">
-          Close
+          {{ 'projectList.delete.question' | translate }}
         </button>
         <button type="button" (click)="deleteSelectedProject()" class="btn btn-danger" data-bs-dismiss="modal">
-          Delete
+          {{ 'projectList.delete.question' | translate }}
         </button>
       </div>
     </div>
