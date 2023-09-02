@@ -1,7 +1,7 @@
 <div class="new-project-container">
   <p class="area-title">{{actionTitle | translate}}</p>
   <div class="alert alert-danger alert-popup" role="alert" style="margin-top: 0.5rem"
-    *ngIf="detailForm.submitted && detailForm.invalid" #alertPopup>
+    *ngIf="(detailForm.submitted && detailForm.invalid) || isFailed" #alertPopup>
     <span>{{ globalErr | translate }}</span>
     <button type="button" class="close" aria-label="Close" (click)="closeAlert()">
       <span aria-hidden="true">&times;</span>

@@ -11,4 +11,9 @@ public class ApiExceptionHandler {
     public ResponseEntity handlerDuplicatedProjectNumber(ProjectNumberExistedException projectNumberExistedException){
         return new ResponseEntity(projectNumberExistedException.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ConcurrentUpdateException.class)
+    public ResponseEntity handleConcurrentUpdate(ConcurrentUpdateException concurrentUpdateException){
+        return new ResponseEntity(concurrentUpdateException.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
