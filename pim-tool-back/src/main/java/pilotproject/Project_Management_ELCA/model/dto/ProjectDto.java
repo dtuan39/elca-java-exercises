@@ -24,4 +24,5 @@ public class ProjectDto {
         FIN
     }
     private StatusDto status;
+    private int version;
 }

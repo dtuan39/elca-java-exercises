@@ -49,7 +49,8 @@ public class Project {
     @Column
     private LocalDate endDate;
 
-    @Column(nullable = false)
+    @Version
+    @Column
     private int version;
 
     @ManyToMany(cascade = CascadeType.ALL)

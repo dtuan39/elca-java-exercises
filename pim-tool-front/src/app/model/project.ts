@@ -19,4 +19,5 @@ export interface Project {
   status: Status;
   startDate: Date;
   endDate: Date;
+  version: number;
 }

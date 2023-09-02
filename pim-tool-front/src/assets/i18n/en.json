@@ -89,6 +89,12 @@
         "startAfterEnd": "End date must be the same or after Start date",
 
         "numberExist": "project number already existed",
+
+        "createProjectFailed": "Create project failed",
+
+        "concurrentUpdate": "The project has been updated by another user. Please refresh the page and try again.",
+
+        "updateProjectFailed": "Update project failed",
         
         "projectName": "Project Name",
 

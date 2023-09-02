@@ -28,6 +28,8 @@ export class ProjectDetailComponent {
   numberErr: string = '';
   ennDateErr: string = '';
   globalErr: string = 'projectDetail.globalError';
+  projectSent!: Project;
+  isFailed: boolean = false;
 
   constructor(
     private projectService: ProjectService,
@@ -67,7 +69,7 @@ export class ProjectDetailComponent {
     this.projectService.getProjectByNumber(parseInt(projectNumber)).subscribe(
       (response: Project) => {
         this.updateProject = response;
-        console.log(this.updateProject);
+        console.log('Current project: ', response);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -124,14 +126,13 @@ export class ProjectDetailComponent {
         if (error.error.includes('project number already existed')) {
           this.numberErr = 'projectDetail.numberExist';
         }
-        this.globalErr = 'Create project failed';
+        this.isFailed = true;
+        this.globalErr = 'projectDetail.createProjectFailed';
       }
     );
   }
 
   public onUpdateProject(addForm: NgForm): void {
-    console.log(addForm.value);
-
     if (addForm.invalid) {
       this.globalErr = 'projectDetail.globalError';
       this.numberErr = '';
@@ -148,16 +149,27 @@ export class ProjectDetailComponent {
       }
     }
 
-    this.projectService.updateProject(addForm.value).subscribe(
+    //set the version of current project for the project sent to BE, cuz form's values dont contain version
+    this.projectSent = addForm.value;
+    this.projectSent.version = this.updateProject.version;
+
+    console.log('Updating values: ', this.projectSent);
+
+    this.projectService.updateProject(this.projectSent).subscribe(
       (response: Project) => {
-        console.log(response);
+        console.log('Updated project: ', response);
         this.getGroups();
         this.router.navigateByUrl('/list');
         addForm.reset();
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
-        addForm.reset();
+        console.log(error);
+        this.isFailed = true;
+        if (
+          error.error.includes('The project has been updated by another user')
+        ) {
+          this.globalErr = 'projectDetail.concurrentUpdate';
+        }
       }
     );
   }

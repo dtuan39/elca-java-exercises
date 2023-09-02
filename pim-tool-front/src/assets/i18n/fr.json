@@ -86,7 +86,13 @@
 
         "startAfterEnd": "La date de fin doit être la même ou postérieure à la date de début",
 
-        "numberExist": "le numéro de projet existait déjà",
+        "numberExist": "Le numéro de projet existait déjà",
+
+        "createProjectFailed": "La création du projet a échoué",
+
+        "concurrentUpdate": "Le projet a été mis à jour par un autre utilisateur. Veuillez actualiser la page et réessayer.",
+
+        "updateProjectFailed": "Échec de la mise à jour du projet",
 
         "projectName": "Nom du projet",
 

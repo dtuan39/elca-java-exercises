@@ -19,6 +19,7 @@ public class ApplicationMapper {
         dto.setStartDate(entity.getStartDate());
         dto.setEndDate(entity.getEndDate());
         dto.setStatus(ProjectDto.StatusDto.valueOf(entity.getStatus().toString()));
+        dto.setVersion(entity.getVersion());
         if (entity.getGroup() != null) {
             dto.setGroupLeaderVisa(entity.getGroup().getGroupLeader().getVisa());
             dto.setGroupId(entity.getGroup().getId());
@@ -37,6 +38,7 @@ public class ApplicationMapper {
         entity.setStatus(Project.Status.valueOf(projectDto.getStatus().toString()));
         entity.setStartDate(projectDto.getStartDate());
         entity.setEndDate(projectDto.getEndDate());
+        entity.setVersion(projectDto.getVersion());
         return entity;
     }
 
