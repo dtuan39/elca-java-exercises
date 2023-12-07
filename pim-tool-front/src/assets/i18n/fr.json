@@ -58,7 +58,11 @@
 
             "btnClose": "Fermer",
 
-            "btnDelete": "Supprimer"
+            "btnDelete": "Supprimer",
+
+            "itemsSelected": "éléments sélectionnés",
+
+            "deleteSelected": "Supprimer les éléments sélectionnés"
         }
     },
 
@@ -79,6 +83,16 @@
             "btnUpdate": "Sauvegarder les modifications"
 
         },
+
+        "please": "S'il te plaît",
+
+        "or": "ou",
+
+        "contactAdmin": "contactez votre administrateur",
+
+        "back": "retour à la recherche de projet",
+
+        "serverError": "Une erreur inattendue s'est produite.",
         
         "globalError": "Veuillez saisir tous les champs obligatoires (*)",
 
@@ -86,7 +100,9 @@
 
         "startAfterEnd": "La date de fin doit être la même ou postérieure à la date de début",
 
-        "numberExist": "Le numéro de projet existait déjà",
+        "numberExist": "Le numéro de projet existait déjà. Sélectionner un autre numéro de projet",
+
+        "membersError": "Les visas sélectionnés n'existent pas dans le système. Veuillez sélectionner différents visas",
 
         "createProjectFailed": "La création du projet a échoué",
 

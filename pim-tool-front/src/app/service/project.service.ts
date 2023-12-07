@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Project } from '../model/project';
+import { Project, ProjectMembers } from '../model/project';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +11,8 @@ export class ProjectService {
 
   constructor(private http: HttpClient) {}
 
-  public addProject(project: Project): Observable<Project> {
-    return this.http.post<Project>(`${this.projectUrl}/project/add`, project);
+  public addProject(ProjectMembers: ProjectMembers): Observable<ProjectMembers> {
+    return this.http.post<ProjectMembers>(`${this.projectUrl}/project/create`, ProjectMembers);
   }
 
   public getProjects(): Observable<Project[]> {
@@ -38,7 +38,7 @@ export class ProjectService {
     return this.http.get<Project>(`${this.projectUrl}/project/${number}`);
   }
 
-  public updateProject(project: Project): Observable<Project> {
-    return this.http.put<Project>(`${this.projectUrl}/project/update`, project);
+  public updateProject(ProjectMembers: ProjectMembers): Observable<Project> {
+    return this.http.put<Project>(`${this.projectUrl}?id=${ProjectMembers.projectDto.id}`, ProjectMembers);
   }
 }

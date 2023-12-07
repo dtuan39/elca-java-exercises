@@ -15,13 +15,9 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Project {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Project extends BaseEntity{
     @ManyToOne()
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
     @Column(unique = true, nullable = false)
@@ -49,25 +45,9 @@ public class Project {
     @Column
     private LocalDate endDate;
 
-    @Version
-    @Column
-    private int version;
-
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "PROJECT_EMPLOYEE",
             joinColumns = {@JoinColumn(name = "PROJECT_ID", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "EMPLOYEE_ID", referencedColumnName = "id")})
     private Set<Employee> employeeList;
-
-    @Override
-    public String toString() {
-        return "Project{" +
-                "id=" + id +
-                ", projectNumber=" + projectNumber +
-                ", name='" + name + '\'' +
-                ", customer='" + customer + '\'' +
-                ", status=" + status +
-                ", startDate=" + startDate +
-                '}';
-    }
 }

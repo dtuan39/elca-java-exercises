@@ -18,11 +18,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Employee extends BaseEntity {
     @Column(nullable = false)
     private String visa;
 
@@ -35,26 +31,4 @@ public class Employee {
     @Column(nullable = false)
     @DateTimeFormat(pattern = "MM-dd-yyyy")
     private Date birthDate;
-
-    @Column(nullable = true)
-    private int version;
-
-    @OneToOne(mappedBy = "groupLeader")
-    private Group group;
-
-    @ManyToMany(mappedBy = "employeeList")
-    private Set<Project> projectList;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Employee employee = (Employee) o;
-        return Objects.equals(id, employee.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

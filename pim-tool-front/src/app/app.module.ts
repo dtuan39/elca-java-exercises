@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -11,8 +10,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgxTranslateModule } from './translate/translate.module';
+import { AngularToastifyModule, ToastService } from 'angular-toastify';
+import { AutoCompleteModule} from 'primeng/autocomplete';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { ServerErrorComponent } from './component/server-error/server-error.component';
 @NgModule({
-  declarations: [AppComponent, ListProjectComponent, ProjectDetailComponent],
+  declarations: [AppComponent, ListProjectComponent, ProjectDetailComponent, ServerErrorComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -22,8 +27,14 @@ import { NgxTranslateModule } from './translate/translate.module';
     NgbPaginationModule,
     MatDialogModule,
     NgxTranslateModule,
+    AngularToastifyModule,
+    AutoCompleteModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [DatePipe, ToastService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+
+
