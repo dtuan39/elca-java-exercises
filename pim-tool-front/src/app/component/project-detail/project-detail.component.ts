@@ -1,18 +1,23 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormGroup, NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProjectService } from 'src/app/service/project.service';
-import { Project } from 'src/app/model/project';
+import { Project, ProjectMembers } from 'src/app/model/project';
 import { GroupService } from '../../service/group.service';
 import { Group } from 'src/app/model/group';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedService } from 'src/app/service/shared.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Employee } from 'src/app/model/employee';
+import { PrimeNGConfig } from 'primeng/api';
+import { EmployeeService } from 'src/app/service/employee.service';
+
 @Component({
   selector: 'app-project-detail',
   templateUrl: './project-detail.component.html',
   styleUrls: ['./project-detail.component.scss'],
 })
+
 export class ProjectDetailComponent {
   @ViewChild('alertPopup') alertPopup!: ElementRef;
   siteLanguage = 'English';
@@ -22,35 +27,103 @@ export class ProjectDetailComponent {
   ];
   groups: Group[] | undefined;
   updateProject!: Project;
+  updateProjectMembers!: ProjectMembers;
   actionTitle: any = 'projectDetail.create.title';
   btnSubmitContent: any = 'projectDetail.create.btnCreate';
   editMode: boolean = false;
   numberErr: string = '';
   ennDateErr: string = '';
   globalErr: string = 'projectDetail.globalError';
-  projectSent!: Project;
+  membersError: string = '';
+  projectSent!: ProjectMembers;
   isFailed: boolean = false;
+  empList: Employee[] = [];
+  selectedItem: Employee[] = [];
+  emptyMessage: "No employees found" | undefined;
+  formGroup: FormGroup | undefined;
+  selectedEmployee: number[] = [];
+  hasEmp: boolean = false;
 
   constructor(
     private projectService: ProjectService,
     private groupService: GroupService,
+    private employeeService: EmployeeService,
     private router: Router,
     private route: ActivatedRoute,
     public sharedService: SharedService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private primengConfig: PrimeNGConfig
   ) {}
 
   ngOnInit(): void {
+    this.primengConfig.ripple = true;
     this.getGroups();
+    this.getEmployees();
     this.globalErr = 'projectDetail.globalError';
     const projectNumber: any =
       this.route.snapshot.paramMap.get('projectNumber');
     if (projectNumber) {
       this.editMode = !this.editMode;
-      this.getProjectByNumber(projectNumber);
       this.actionTitle = 'projectDetail.update.title';
       this.btnSubmitContent = 'projectDetail.update.btnUpdate';
+      this.getProjectByNumber(projectNumber);
     }
+    console.log('editMode: ', this.editMode);
+  }
+
+  getEmployees() {
+    this.employeeService.getEmployees().subscribe(
+      (response) => {
+        this.hasEmp = true;
+        this.empList = response
+        console.log("list employees: ", this.empList);
+      },
+      (error: HttpErrorResponse) => {
+        this.empList = []
+        this.hasEmp = false;
+        console.log("error get employees: ", error);
+        this.navigateToErrorPage();
+      }
+    )
+  }
+
+  search($event: any) {
+    console.log("search query: ", $event.query);
+    
+    this.employeeService.searchEmployees($event.query).subscribe(
+      (response) => {
+        this.empList = response,
+        console.log("search tra ve: ", response);
+        
+        this.membersError = ''
+      },
+      (error: HttpErrorResponse) => {
+        this.empList = []
+      }
+    )
+  }
+
+  selectEmpId(event: any) {
+    var value = event.value;
+    console.log("select value: ", value);
+
+    if (!this.selectedEmployee.includes(value.id)) {
+      this.selectedEmployee.push(value.id);
+    }
+
+    console.log("selectedEmp: ", this.selectedEmployee);
+  }
+
+  unselectEmpId(event: any) {
+    var value = event.value;
+    console.log("unselect value: ", value);
+    const index = this.selectedEmployee.indexOf(value.id);
+
+    if (index !== -1) {
+      this.selectedEmployee.splice(index, 1);
+    }
+
+    console.log("selectedEmp: ", this.selectedEmployee);
   }
 
   changeSiteLanguage(localeCode: string): void {
@@ -67,14 +140,44 @@ export class ProjectDetailComponent {
 
   public getProjectByNumber(projectNumber: string): void {
     this.projectService.getProjectByNumber(parseInt(projectNumber)).subscribe(
-      (response: Project) => {
-        this.updateProject = response;
-        console.log('Current project: ', response);
+      (response: any) => {
+        this.updateProjectMembers = response;
+        this.selectedEmployee = response.listEmpId;
+        var date = new Date(response.projectDto.startDate);
+        response.projectDto.startDate = this.formatDateAfterLoadFromDb(date);
+        if (response.projectDto.endDate) {
+          date = new Date(response.projectDto.endDate);
+          response.projectDto.endDate = this.formatDateAfterLoadFromDb(date);
+        }
+        this.updateProject = response.projectDto;
+        console.log("Current project members: ", this.updateProjectMembers);
+        console.log("test proj: ", this.updateProject);
+        console.log("test mem: ", this.selectedEmployee);
+        console.log("version: ", this.updateProject.version);
+
+        // find the members from the empList that has the correct id from listEmpId and add to the selectedItem
+        response.listEmpId.forEach((e: number) => {
+          this.empList.forEach(emp => {
+            if (e == emp.id) {
+              this.selectedItem.push(emp);
+            }
+          })
+        });
+
+        console.log("selectedItem: ", this.selectedItem);
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log("error get project by project number: ", error);
+        this.navigateToErrorPage();
       }
     );
+  }
+
+  private formatDateAfterLoadFromDb(date: any): any {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return (`${year}-${month}-${day}`);
   }
 
   public getGroups(): void {
@@ -84,7 +187,8 @@ export class ProjectDetailComponent {
         console.log(this.groups);
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        console.log("error get groups: ", error);
+        this.navigateToErrorPage();
       }
     );
   }
@@ -99,7 +203,11 @@ export class ProjectDetailComponent {
     }
 
     const startTime = new Date(addForm.value.startDate);
+    console.log("startTime: ", startTime);
+
     const currentTime = new Date();
+    currentTime.setHours(6, 0, 0, 0);
+    console.log("currentTime: ", currentTime);
 
     if (startTime < currentTime) {
       this.ennDateErr = 'projectDetail.startBeforeCurrent';
@@ -115,19 +223,38 @@ export class ProjectDetailComponent {
       }
     }
 
-    this.projectService.addProject(addForm.value).subscribe(
-      (response: Project) => {
-        console.log(response);
+    if (this.empList.length == 0 && this.hasEmp == true) {
+      this.membersError = 'projectDetail.membersError';
+      return;
+    }
+
+    var ProjectMembers: ProjectMembers;
+    ProjectMembers = {
+      projectDto: addForm.value,
+      listEmpId: this.selectedEmployee
+    }
+
+    console.log('Adding values: ', ProjectMembers);
+
+    this.projectService.addProject(ProjectMembers).subscribe(
+      (response: any) => {
+        console.log("list projects: ", response);
         addForm.reset();
         this.router.navigateByUrl('/list');
       },
       (error: HttpErrorResponse) => {
         console.log(error);
+        console.log(error.error);
+
         if (error.error.includes('project number already existed')) {
           this.numberErr = 'projectDetail.numberExist';
+          this.isFailed = true;
+          this.globalErr = 'projectDetail.createProjectFailed';
+          return;
         }
-        this.isFailed = true;
-        this.globalErr = 'projectDetail.createProjectFailed';
+
+        console.log("error add project: ", error);
+        this.navigateToErrorPage();
       }
     );
   }
@@ -149,9 +276,19 @@ export class ProjectDetailComponent {
       }
     }
 
+    var ProjectMembers: ProjectMembers;
+    ProjectMembers = {
+      projectDto: addForm.value,
+      listEmpId: this.selectedEmployee
+    }
+
     //set the version of current project for the project sent to BE, cuz form's values dont contain version
-    this.projectSent = addForm.value;
-    this.projectSent.version = this.updateProject.version;
+    this.projectSent = ProjectMembers;
+    console.log("before set version: ", this.projectSent.projectDto.version);
+    this.projectSent.projectDto.version = this.updateProject.version;
+    this.projectSent.projectDto.id = this.updateProject.id;
+    console.log("loading version: ", this.updateProject.version);
+    console.log("sending version: ", this.projectSent.projectDto.version);
 
     console.log('Updating values: ', this.projectSent);
 
@@ -180,5 +317,9 @@ export class ProjectDetailComponent {
 
   public navigateToList() {
     this.router.navigateByUrl('/list');
+  }
+
+  navigateToErrorPage() {
+    this.router.navigate(['/error']);
   }
 }

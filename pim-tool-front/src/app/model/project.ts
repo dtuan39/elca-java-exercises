@@ -21,3 +21,8 @@ export interface Project {
   endDate: Date;
   version: number;
 }
+
+export interface ProjectMembers{
+  projectDto: Project;
+  listEmpId: number[];
+}
