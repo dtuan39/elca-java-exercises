@@ -18,6 +18,7 @@ import pilotproject.Project_Management_ELCA.util.ApplicationMapper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,6 +65,21 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public Long countProjects() {
+        return projectRepository.count();
+    }
+
+    @Override
+    public List<Project> getProjectsPagination(int limit, int skip) {
+        return projectRepository.getProjectsPagination(limit, skip);
+    }
+
+    @Override
+    public List<Project> searchProjectPagination(String searchText, String status, int limit, int skip) {
+        return projectRepository.searchProjectPagination(searchText, status, limit, skip);
+    }
+
+    @Override
     public Project addProject(ProjectDto dto) throws ProjectNumberExistedException {
         var existedProject = projectRepository.findProjectByNumber(dto.getNumber());
         if (existedProject != null) {
@@ -76,21 +92,34 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(rollbackFor = {ObjectOptimisticLockingFailureException.class, Exception.class})
-    public Project updateProject(ProjectDto dto) {
+    public ProjectMembersDto updateProject(ProjectMembersDto dto) {
         try {
-            Project entity = projectRepository.findProjectByNumber(dto.getNumber());
+            ProjectDto projectDto = dto.getProjectDto();
+            int[] listEmpId = dto.getListEmpId();
+
+            Project entity = projectRepository.findProjectByNumber(projectDto.getNumber());
 
             entityManager.detach(entity);
 
-            entity.setCustomer(dto.getCustomer());
-            entity.setName(dto.getName());
-            entity.setStatus(Project.Status.valueOf(dto.getStatus().toString()));
-            entity.setStartDate(dto.getStartDate());
-            entity.setEndDate(dto.getEndDate());
-            entity.setGroup(groupRepository.findById(dto.getGroupId()).orElseThrow());
-            entity.setVersion(dto.getVersion());
+            entity.setCustomer(projectDto.getCustomer());
+            entity.setName(projectDto.getName());
+            entity.setStatus(Project.Status.valueOf(projectDto.getStatus().toString()));
+            entity.setStartDate(projectDto.getStartDate());
+            entity.setEndDate(projectDto.getEndDate());
+            entity.setGroup(groupRepository.findById(projectDto.getGroupId()).orElseThrow());
+            entity.setVersion(projectDto.getVersion());
+            Set<Employee> employeeList = new HashSet<>();
+            for (int id : listEmpId) {
+                Employee employee = employeeRepository.findById((long) id).orElseThrow();
+                employeeList.add(employee);
+            }
+            entity.setEmployeeList(employeeList);
+            Project project = projectRepository.save(entity);
 
-            return projectRepository.save(entity);
+            ProjectMembersDto response = new ProjectMembersDto();
+            response.setProjectDto(mapper.projectToProjectDto(project));
+            response.setListEmpId(listEmpId);
+            return response;
         } catch (ObjectOptimisticLockingFailureException e) {
             throw new ConcurrentUpdateException("The project has been updated by another user. Please refresh the page and try again.");
         }
@@ -109,6 +138,19 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project findProjectByNumber(Integer number) {
         return projectRepository.findProjectByNumber(number);
+    }
+
+    @Override
+    public int[] findProjectMembersByNumber(Integer number) {
+        Project curProject = projectRepository.findProjectByNumber(number);
+        Set<Employee> employeeList = curProject.getEmployeeList();
+        int[] listEmpId = new int[employeeList.size()];
+        int i = 0;
+        for (Employee employee : employeeList) {
+            listEmpId[i] = employee.getId().intValue();
+            i++;
+        }
+        return listEmpId;
     }
 
     @Override

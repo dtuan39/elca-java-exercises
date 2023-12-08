@@ -1,15 +1,16 @@
+<lib-toastify-toast-container [autoClose]="2000"></lib-toastify-toast-container>
 <div class="list-project-container">
   <p class="area-title">{{ "projectList.projectList" | translate}}</p>
   <form #searchForm="ngForm" (ngSubmit)="searchProjects(searchForm)">
     <div class="search-area">
-      <input type="text" ngModel [placeholder]="
-          savedSearchText
-            ? savedSearchText
-            : 'projectList.search.name' | translate
+      <input type="text" [ngModel]="savedSearchText" [placeholder]="
+      savedSearchText != undefined && savedSearchText != null && savedSearchText != ''
+        ? savedSearchText
+        : 'projectList.search.name' | translate
         " name="searchText" />
-      <select ngModel name="status" class="short-input">
+      <select [ngModel]="savedStatus" name="status" class="short-input">
         <option value="" selected disabled>
-          {{ savedStatus ? savedStatus : 'projectList.search.status' | translate }}
+          {{ (savedStatus != undefined && savedStatus != null && savedStatus != '' && savedStatus) ? savedStatus : 'projectList.search.status' | translate }}
         </option>
         <option value="NEW">NEW</option>
         <option value="PLA">PLA</option>
@@ -51,7 +52,7 @@
         <td>{{ project.name }}</td>
         <td>{{ project.status }}</td>
         <td>{{ project.customer }}</td>
-        <td>{{ project.startDate }}</td>
+        <td>{{ formatDate(project.startDate) }}</td>
         <td>
           <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
             style="background-color: transparent" (click)="setProjectIdDelete(project.id)"
@@ -79,18 +80,12 @@
   <nav aria-label="Page navigation example" style="display: flex; justify-content: flex-end">
     <ul class="pagination">
       <li class="page-item">
-        <a class="page-link" href="" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
+        <span class="page-link" href="" aria-label="Previous" (click)="switchPagePrevious()">&laquo;</span>
       </li>
-      <li class="page-item"><a class="page-link" href="">1</a></li>
-      <li class="page-item"><a class="page-link" href="">2</a></li>
-      <li class="page-item"><a class="page-link" href="">3</a></li>
-      <li class="page-item"><a class="page-link" href="">4</a></li>
+      <li class="page-item" *ngFor="let pageNo of pagesArray; let i = index "><span class="page-link" href=""
+          [ngClass]="{'highlight-page': i + 1 == page}" (click)="switchPage(i + 1)">{{i + 1}}</span></li>
       <li class="page-item">
-        <a class="page-link" href="" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
+        <span class="page-link" href="" aria-label="Next" (click)="switchPageNext()">&raquo;</span>
       </li>
     </ul>
   </nav>

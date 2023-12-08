@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pilotproject.Project_Management_ELCA.model.dto.ProjectDto;
 import pilotproject.Project_Management_ELCA.model.dto.ProjectMembersDto;
+import pilotproject.Project_Management_ELCA.model.dto.SearchResultResponse;
 import pilotproject.Project_Management_ELCA.model.entity.Project;
 import pilotproject.Project_Management_ELCA.service.ProjectService;
 
@@ -45,18 +46,14 @@ public class ProjectController extends AbstractApplicationController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
-    @GetMapping("/search")
-    public List<ProjectDto> search(@RequestParam(required = false) String searchText, @RequestParam(required = false) String status) {
-        return projectService.searchProject(searchText, status)
-                .stream()
-                .map(mapper::projectToProjectDto)
-                .collect(Collectors.toList());
-    }
-
     @GetMapping("/{number}")
-    public ResponseEntity<ProjectDto> getProjectByNumber(@PathVariable int number) { //ResponseEntity chuyển obj về json để front end render dc ra màn hình
+    public ResponseEntity<ProjectMembersDto> getProjectByNumber(@PathVariable int number) { //ResponseEntity chuyển obj về json để front end render dc ra màn hình
         ProjectDto projectDto = mapper.projectToProjectDto(projectService.findProjectByNumber(number));
-        return ResponseEntity.ok(projectDto);
+        int[] listEmpId = projectService.findProjectMembersByNumber(number);
+        ProjectMembersDto projectMembersDto = new ProjectMembersDto();
+        projectMembersDto.setProjectDto(projectDto);
+        projectMembersDto.setListEmpId(listEmpId);
+        return ResponseEntity.ok(projectMembersDto);
     }
 
     @DeleteMapping ("/delete")
@@ -66,8 +63,37 @@ public class ProjectController extends AbstractApplicationController {
     }
 
     @PutMapping ("/update")
-    public ResponseEntity<ProjectDto> updateProject(@RequestBody ProjectDto dto){
-        ProjectDto updateProject = mapper.projectToProjectDto(projectService.updateProject(dto));
+    public ResponseEntity<ProjectMembersDto> updateProject(@RequestBody ProjectMembersDto dto){
+        ProjectMembersDto updateProject = projectService.updateProject(dto);
         return new ResponseEntity<>(updateProject, HttpStatus.OK);
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> countProjects() {
+        Long count = projectService.countProjects();
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
+    @GetMapping("/pagination")
+    public ResponseEntity<List<ProjectDto>> getProjectsPagination(@RequestParam(required = true) int limit, @RequestParam(required = false) int skip) {
+        List<ProjectDto> projects = projectService.getProjectsPagination(limit, skip)
+                .stream()
+                .map(mapper::projectToProjectDto)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
+    @GetMapping("/search-with-pagination")
+    public ResponseEntity<SearchResultResponse> searchProjectPagination(@RequestParam(required = false) String searchText, @RequestParam(required = false) String status, @RequestParam(required = true) int limit, @RequestParam(required = false) int skip) {
+        List<Project> allResults = projectService.searchProject(searchText, status);
+        List<ProjectDto> projects = projectService.searchProjectPagination(searchText, status, limit, skip)
+                .stream()
+                .map(mapper::projectToProjectDto)
+                .collect(Collectors.toList());
+        SearchResultResponse searchResultResponse = new SearchResultResponse();
+        searchResultResponse.setResults(projects);
+        searchResultResponse.setTotalCount(allResults.size());
+        return new ResponseEntity<>(searchResultResponse, HttpStatus.OK);
+    }
+
 }
