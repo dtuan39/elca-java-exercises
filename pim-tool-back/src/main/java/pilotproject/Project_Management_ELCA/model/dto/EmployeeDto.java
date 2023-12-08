@@ -11,4 +11,5 @@ public class EmployeeDto {
     private String firstName;
     private String lastName;
     private Date birthDate;
+    private int version;
 }

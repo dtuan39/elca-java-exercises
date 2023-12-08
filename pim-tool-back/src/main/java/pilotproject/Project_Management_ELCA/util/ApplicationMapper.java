@@ -56,6 +56,7 @@ public class ApplicationMapper {
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setBirthDate(entity.getBirthDate());
+        dto.setVersion(entity.getVersion());
         return dto;
     }
 

@@ -104,6 +104,8 @@ export class ProjectDetailComponent {
   }
 
   selectEmpId(event: any) {
+    console.log("selectedEmp before: ", this.selectedEmployee);
+    
     var value = event.value;
     console.log("select value: ", value);
 
@@ -111,7 +113,8 @@ export class ProjectDetailComponent {
       this.selectedEmployee.push(value.id);
     }
 
-    console.log("selectedEmp: ", this.selectedEmployee);
+    console.log("selectedEmp cua minh: ", this.selectedEmployee);
+    console.log("selectedEmp cua primeNg: ", this.selectedItem);
   }
 
   unselectEmpId(event: any) {
@@ -260,13 +263,34 @@ export class ProjectDetailComponent {
   }
 
   public onUpdateProject(addForm: NgForm): void {
+    console.log("Before checking update project: ", addForm.value);
+
     if (addForm.invalid) {
       this.globalErr = 'projectDetail.globalError';
       this.numberErr = '';
       return;
     }
 
+    // const startTime = new Date(addForm.value.startDate);
+    // if (addForm.value.endDate != null) {
+    //   const endTime = new Date(addForm.value.endDate);
+
+    //   if (startTime >= endTime) {
+    //     this.ennDateErr = 'projectDetail.startAfterEnd';
+    //     return;
+    //   }
+    // }
+
     const startTime = new Date(addForm.value.startDate);
+
+    const currentTime = new Date();
+    currentTime.setHours(1, 0, 0, 0);
+
+    if (startTime < currentTime) {
+      this.ennDateErr = 'projectDetail.startBeforeCurrent';
+      return;
+    }
+
     if (addForm.value.endDate != null) {
       const endTime = new Date(addForm.value.endDate);
 
@@ -274,6 +298,11 @@ export class ProjectDetailComponent {
         this.ennDateErr = 'projectDetail.startAfterEnd';
         return;
       }
+    }
+
+    if (this.empList.length == 0 && this.hasEmp == true) {
+      this.membersError = 'projectDetail.membersError';
+      return;
     }
 
     var ProjectMembers: ProjectMembers;
@@ -293,7 +322,7 @@ export class ProjectDetailComponent {
     console.log('Updating values: ', this.projectSent);
 
     this.projectService.updateProject(this.projectSent).subscribe(
-      (response: Project) => {
+      (response: ProjectMembers) => {
         console.log('Updated project: ', response);
         this.getGroups();
         this.router.navigateByUrl('/list');
@@ -321,5 +350,9 @@ export class ProjectDetailComponent {
 
   navigateToErrorPage() {
     this.router.navigate(['/error']);
+  }
+
+  refreshPage() {
+    location.reload();
   }
 }
