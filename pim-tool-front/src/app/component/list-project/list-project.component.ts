@@ -51,14 +51,10 @@ export class ListProjectComponent implements OnInit {
     console.log("saved status: ", this.savedStatus);
 
     if ((this.savedSearchText != undefined || this.savedStatus != undefined) && (this.savedSearchText != '' || this.savedStatus != '')) {
-      console.log("vo 1");
-      
       console.log(this.savedSearchText);
       console.log(this.savedStatus);
       this.searchProjectsAfterNavigated(this.savedSearchText, this.savedStatus);
     } else {
-      console.log("vo 2");
-
       this.getProjectsCount();
       this.switchPage(this.page);
     }
@@ -123,26 +119,10 @@ export class ListProjectComponent implements OnInit {
     return Array.from({ length: pageQuantity }, (_, index) => index + 1);
   }
 
-  public getProjects(): void {
-    this.projectService.getProjects().subscribe(
-      (response: Project[]) => {
-        console.log(response);
-
-        this.projects = response;
-        this.projects.sort((a, b) => a.number - b.number);
-      },
-      (error: HttpErrorResponse) => {
-        console.log("error get projects: ", error);
-        this.navigateToErrorPage();
-      }
-    );
-  }
-
   public loadProjectsPagination( skip: number): void {
     this.projectService.getProjectsPagination( this.limit, skip).subscribe(
       (response: Project[]) => {
         this.projects = response;
-        this.projects.sort((a, b) => a.number - b.number);
       },
       (error: HttpErrorResponse) => {
         console.log("error get projects pagination: ", error);
@@ -236,12 +216,16 @@ export class ListProjectComponent implements OnInit {
     this.projectService.deleteProject(projectId).subscribe(
       (response: void) => {
         console.log(response);
-        this.getProjects();
         this.switchPage(this.page);
       },
       (error: HttpErrorResponse) => {
-        console.log("error delete single projects: ", error);
-        this.navigateToErrorPage();
+        if (error.error.includes('The project has been deleted by another user')) {
+          this._toastService.info('The project has been deleted by another user. Please refresh the page');
+          return;
+        }else{
+          console.log("error delete single projects: ", error);
+          this.navigateToErrorPage();
+        }
       }
     );
 
@@ -254,7 +238,11 @@ export class ListProjectComponent implements OnInit {
         (response: void) => {
           console.log(response);
           this.getProjectsCount();
-          this.loadProjectsPagination(0);
+          if ((this.savedSearchText != undefined || this.savedStatus != undefined) && (this.savedSearchText != '' || this.savedStatus != '')) {
+            this.page = 1;
+            this.sharedService.setPage(1);
+          }
+          this.switchPage(this.page);
         },
         (error: HttpErrorResponse) => {
           console.log(project.id);

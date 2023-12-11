@@ -156,6 +156,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public void deleteSingleProject(Long id) {
+        Project curProject = projectRepository.findById(id).orElseThrow(
+                () -> new ConcurrentUpdateException("The project has been deleted by another user. Please refresh the page and try again.")
+        );
         projectRepository.deleteProjectById(id);
     }
 }
