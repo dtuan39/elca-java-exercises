@@ -88,13 +88,9 @@ export class ProjectDetailComponent {
   }
 
   search($event: any) {
-    console.log("search query: ", $event.query);
-    
     this.employeeService.searchEmployees($event.query).subscribe(
       (response) => {
         this.empList = response,
-        console.log("search tra ve: ", response);
-        
         this.membersError = ''
       },
       (error: HttpErrorResponse) => {
@@ -104,15 +100,10 @@ export class ProjectDetailComponent {
   }
 
   selectEmpId(event: any) {
-    console.log("selectedEmp before: ", this.selectedEmployee);
-    
     var value = event.value;
-    console.log("select value: ", value);
-
     if (!this.selectedEmployee.includes(value.id)) {
       this.selectedEmployee.push(value.id);
     }
-
     console.log("selectedEmp cua minh: ", this.selectedEmployee);
     console.log("selectedEmp cua primeNg: ", this.selectedItem);
   }
@@ -237,8 +228,6 @@ export class ProjectDetailComponent {
       listEmpId: this.selectedEmployee
     }
 
-    console.log('Adding values: ', ProjectMembers);
-
     this.projectService.addProject(ProjectMembers).subscribe(
       (response: any) => {
         console.log("list projects: ", response);
@@ -246,9 +235,6 @@ export class ProjectDetailComponent {
         this.router.navigateByUrl('/list');
       },
       (error: HttpErrorResponse) => {
-        console.log(error);
-        console.log(error.error);
-
         if (error.error.includes('project number already existed')) {
           this.numberErr = 'projectDetail.numberExist';
           this.isFailed = true;
@@ -270,16 +256,6 @@ export class ProjectDetailComponent {
       this.numberErr = '';
       return;
     }
-
-    // const startTime = new Date(addForm.value.startDate);
-    // if (addForm.value.endDate != null) {
-    //   const endTime = new Date(addForm.value.endDate);
-
-    //   if (startTime >= endTime) {
-    //     this.ennDateErr = 'projectDetail.startAfterEnd';
-    //     return;
-    //   }
-    // }
 
     const startTime = new Date(addForm.value.startDate);
 
@@ -329,13 +305,14 @@ export class ProjectDetailComponent {
         addForm.reset();
       },
       (error: HttpErrorResponse) => {
-        console.log(error);
         this.isFailed = true;
-        if (
-          error.error.includes('The project has been updated by another user')
-        ) {
+        if (error.error.includes('The project has been updated by another user')) {
           this.globalErr = 'projectDetail.concurrentUpdate';
+          return;
         }
+
+        console.log("error update project: ", error);
+        this.navigateToErrorPage();
       }
     );
   }
